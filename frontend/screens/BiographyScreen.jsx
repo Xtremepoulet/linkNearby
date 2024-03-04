@@ -1,20 +1,34 @@
-import { Pressable, StyleSheet, Text, View, Image, TextInput, KeyboardAvoidingView, Platform } from 'react-native';
+import React from 'react';
+import { Pressable, StyleSheet, Text, View, TextInput, KeyboardAvoidingView, Platform, Dimensions } from 'react-native';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+
+const windowHeight = Dimensions.get('window').height;
 
 export default function BiographyScreen({ navigation }) {
     return (
         <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
             style={styles.container}
         >
-            <Text>Biography Screen</Text>
+            <View style={styles.header}>
+                <Pressable
+                    onPress={() => navigation.navigate('BirthdateScreen')}
+                >
+                    <FontAwesome name="arrow-left" size={24} style={styles.arrowIcon} />
+                </Pressable>
+                <Text style={styles.headerText}>Parles nous de toi</Text>
+            </View>
+            <Text>écris nous un petit texte sur toi et tes passions!</Text>
+            <TextInput></TextInput>
+            <View style={styles.bottom}>
 
-            <Pressable
-                style={styles.button}
-                title="Go to ActivateLocalisationScreen"
-                onPress={() => navigation.navigate('ActivateLocalisationScreen')}
-            >
-                <Text>go to Choose ur ActivateLocalisation area</Text>
-            </Pressable>
-
+                <Pressable
+                    style={styles.button}
+                    title="Go to PassionsScreen"
+                    onPress={() => navigation.navigate('ActivateLocalisationScreen')}
+                >
+                    <Text style={styles.texteblanc}>Next</Text>
+                </Pressable>
+            </View>
         </KeyboardAvoidingView>
     );
 }
@@ -23,23 +37,38 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
-        justifyContent: 'center',
+        justifyContent: 'flex-start',
+        paddingTop: 40,
         backgroundColor: 'white'
     },
-    img: {
-        width: '100%',
-        height: '50%'
-
+    header: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        paddingHorizontal: 20,
+        marginBottom: 20,
     },
-    text: {
-        textAlign: 'left',
-        fontSize: 40,
+    arrowIcon: {
+        marginRight: 10,
+        marginBottom: 2,
+    },
+    headerText: {
+        fontSize: 24,
         fontWeight: 'bold',
+        marginBottom: 10,
+    },
+    bottom: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: '100%',
+        marginTop: windowHeight * 0.6, // Descend légèrement la vue bottom
     },
     input: {
-        margin: 12,
+        marginVertical: 12,
         borderBottomWidth: 1,
-        width: '80%'
+        width: '80%',
+        fontSize: 18,
+        paddingHorizontal: 10,
     },
     button: {
         alignItems: 'center',
@@ -48,9 +77,10 @@ const styles = StyleSheet.create({
         width: '80%',
         borderRadius: 5,
         elevation: 3,
-        backgroundColor: 'red',
+        backgroundColor: '#F98F22',
+        marginTop: 20,
     },
     texteblanc: {
         color: 'white'
     }
-})
+});
