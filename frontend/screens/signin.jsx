@@ -1,10 +1,11 @@
 import React, { useState } from "react"
-import { StyleSheet, Text, TextInput, View, TouchableOpacity, KeyboardAvoidingView, Platform } from 'react-native';
+import { StyleSheet, Text, TextInput, View, TouchableOpacity, KeyboardAvoidingView, Platform, Image } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import Constants from 'expo-constants';
 import { UseDispatch, useDispatch } from "react-redux";
 import { addToken } from "../reducers/users";
 const CONNECTION_BACKEND = Constants.expoConfig?.extra?.CONNECTION_BACKEND;
+import logoLinkNearby from '../assets/linkNearbyBackNone.webp';
 
 
 const Signin = ({ navigation }) => {
@@ -60,33 +61,31 @@ const Signin = ({ navigation }) => {
 
 
     return (
-        <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={styles.container}>
+        <KeyboardAvoidingView
+            behavior={Platform.OS === "ios" ? "padding" : "position"}
+            style={styles.container}
+            keyboardVerticalOffset={Platform.OS === "ios" ? 70 : 20}
+        >
+
             {/* top section */}
-            <View style={styles.top_container}>
-                <Text style={styles.app_title}>LINKNEARBY</Text>
+            <View style={styles.header}>
+                <Image source={logoLinkNearby} style={styles.logo} />
+                <Text style={styles.h1}>LINKNEARBY</Text>
             </View>
 
             {/* bottom section */}
-            <View style={styles.bottom_container}>
+            <View style={styles.body}>
                 <View style={styles.input_container}>
-                    <LinearGradient colors={['#F98F22', '#FFA105']} style={styles.gradiant_input}>
-                        <TextInput value={email} onChangeText={(value) => setEmail(value.toLocaleLowerCase())} style={styles.input} placeholder="Email..."></TextInput>
-                    </LinearGradient>
-                    {!email_is_valid && <Text style={styles.invalid_message}>INVALID EMAIL</Text>}
+                    <TextInput value={email} onChangeText={(value) => setEmail(value.toLocaleLowerCase())} style={styles.text_input} placeholder="Email..."></TextInput>
+                    {!email_is_valid && <Text style={styles.invalid_message}>Email non valide</Text>}
                 </View>
-
                 <View style={styles.input_container}>
-                    <LinearGradient colors={['#F98F22', '#FFA105']} style={styles.gradiant_input}>
-                        <TextInput value={password} onChangeText={(value) => setPassword(value)} style={styles.input} placeholder="password..."></TextInput>
-                    </LinearGradient>
-                    {!password_is_valid && <Text style={styles.invalid_message}>INVALID PASSWORD</Text>}
+                    <TextInput value={password} onChangeText={(value) => setPassword(value)} style={styles.text_input} placeholder="password..."></TextInput>
+                    {!password_is_valid && <Text style={styles.invalid_message}>Mot de passe incorrect</Text>}
                 </View>
-
-                <LinearGradient colors={['#F98F22', '#FFA105']} style={styles.gradiant_button}>
-                    <TouchableOpacity style={styles.signup_button} onPress={() => user_signin()}>
-                        <Text>Connect</Text>
-                    </TouchableOpacity>
-                </LinearGradient>
+                <TouchableOpacity style={styles.signup_button} onPress={() => user_signin()}>
+                    <Text style={styles.text_button}>Connect</Text>
+                </TouchableOpacity>
             </View>
         </KeyboardAvoidingView>
     );
@@ -98,71 +97,69 @@ export default Signin;
 
 const styles = StyleSheet.create({
     container: {
-        width: '100%',
-        height: '100%',
         flex: 1,
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        gap: 20,
-        padding: 25,
-        marginBottom: 50,
+        backgroundColor: 'white',
+        justifyContent: 'space-between'
     },
-
+    logo: {
+        width: 80,
+        height: 80,
+        marginRight: 10
+    },
+    h1: {
+        fontSize: 40,
+        fontWeight: 'bold',
+        color: 'black'
+    },
     input_container: {
-        width: '100%',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
+        width: '80%',
+        height: 50,
+        margin: 10,
+        borderRadius: 20,
+        backgroundColor: '#FFA53F',
+        // elevation: 10,
     },
-
     invalid_message: {
         color: '#b91414',
+        fontSize: 12,
+        paddingLeft: 10,
+        fontWeight: 'bold',
     },
-
-    gradiant_input: {
-        width: '90%',
-        borderRadius: 15,
+    body: {
+        alignItems: 'center',
+        height: '30%',
     },
-
-    input: {
+    text_input: {
         width: '100%',
+        height: '100%',
         padding: 10,
-        color: '#353439',
+        color: 'white',
+        // display: 'flex',
+        // justifyContent: 'center',
+        // alignItems: 'center',
     },
-
-    top_container: {
-        width: '100%',
-        display: 'flex',
+    header: {
         justifyContent: 'center',
         alignItems: 'center',
-        gap: 25,
-        padding: 20,
-    },
-
-    app_title: {
-        fontSize: 32,
-    },
-
-    bottom_container: {
+        flexDirection: 'row',
+        marginTop: 70,
+        height: '10%',
         width: '100%',
-        display: 'flex',
-        justifyContent: 'space-around',
-        alignItems: 'center',
-        gap: 10,
     },
-
     signup_button: {
-        width: '50%',
-        alignSelf: 'center',
+        marginTop: 20,
+        width: '40%',
+        height: 60,
         display: 'flex',
-        justifyContent: 'center',
         alignItems: 'center',
+        justifyContent: 'center',
         padding: 10,
+        backgroundColor: '#FFA53F',
+        borderRadius: 20,
     },
-
-    gradiant_button: {
-        width: '50%',
-        borderRadius: 50,
+    text_button: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        color: 'white'
     }
-
 });

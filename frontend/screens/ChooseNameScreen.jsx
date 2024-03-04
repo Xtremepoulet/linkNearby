@@ -10,7 +10,11 @@ export default function ChooseNameScreen({ navigation }) {
             style={styles.container}
         >
             <View style={styles.header}>
-                <FontAwesome name="arrow-left" size={24} style={styles.arrowIcon} />
+                <Pressable
+                    onPress={() => navigation.navigate('signupScreen')}
+                >
+                    <FontAwesome name="arrow-left" size={24} style={styles.arrowIcon} />
+                </Pressable>
                 <Text style={styles.headerText}>Comment tu t'appelles ?</Text>
             </View>
             <View style={styles.bottom}>
