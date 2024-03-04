@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { StyleSheet, Text, TextInput, View, TouchableOpacity} from 'react-native';
+import { StyleSheet, Text, TextInput, View, TouchableOpacity, KeyboardAvoidingView, Platform} from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 
 
@@ -31,7 +31,7 @@ const Signup = () => {
 
 
     return(
-            <LinearGradient colors={['#e8f4f7', '#e8f4f7']} style={styles.container}>
+        <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={styles.container}>
             {/* top section */}
                 <View style={styles.top_container}>
                     <Text style={styles.app_title}>LINKNEARBY</Text>
@@ -45,7 +45,7 @@ const Signup = () => {
                     </LinearGradient>
                     {email_is_valid ? console.log('invalid email') : <Text style={styles.invalid_message}>INVALID EMAIL</Text>}
                     </View>
-                    
+
                     <View style={styles.input_container}>
                         <LinearGradient colors={['#F98F22', '#FFA105']} style={styles.gradiant_input}>
                             <TextInput onChangeText={(value) => setPassword(value)} style={styles.input} placeholder="password..."></TextInput>
@@ -59,7 +59,7 @@ const Signup = () => {
                         </TouchableOpacity>
                     </LinearGradient>
                 </View>
-            </LinearGradient>
+            </KeyboardAvoidingView>
     );
 }
 
@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
     container: {
       width: '100%',
       height: '100%',
-      display: 'flex',
+      flex: 1,
       justifyContent: 'space-between',
       alignItems: 'center',
       gap: 20,
