@@ -1,9 +1,12 @@
 import React, { useState } from "react"
 import { StyleSheet, Text, TextInput, View, TouchableOpacity, KeyboardAvoidingView, Platform } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-
+import Constants from 'expo-constants';
 
 const Signup = ({ navigation }) => {
+
+    // const { CONNECTION_BACKEND } = Constants.manifest2.extra;
+    // console.log(CONNECTION_BACKEND)
 
     const [email, setEmail] = useState(null);
     const [password, setPassword] = useState(null);
@@ -15,17 +18,26 @@ const Signup = ({ navigation }) => {
     const password_regex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
 
 
-    const user_test = {
-        password: 'YayaLe69!',
-        email: 'yaya@gmail.com',
-    }
 
-    const user_signup = () => {
-        if (!email_regex.test(email) || email === user_test.email) {
+    const user_signup = async () => {
+        if (!email_regex.test(email) || !password_regex.test(password)) {
             setEmail_is_valid(false);
-        }
-        if (password === user_test.password || !password_regex.test(password)) {
             setPassword_is_valid(false);
+            return;
+        }
+
+        const user_infos = { email: email, password: password}
+
+        const fetching_data = await fetch('http://10.9.0.37:3000/auth/signup', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(user_infos)
+        })
+
+        const user_response = await fetching_data.json();
+        
+        if(user_response.result){
+            console.log(user_response.token)
         }
     }
 
@@ -44,19 +56,19 @@ const Signup = ({ navigation }) => {
             >
                 <Text>ChooseNameScreen</Text>
             </TouchableOpacity>
-
+            
             {/* bottom section */}
             <View style={styles.bottom_container}>
                 <View style={styles.input_container}>
                     <LinearGradient colors={['#F98F22', '#FFA105']} style={styles.gradiant_input}>
-                        <TextInput onChangeText={(value) => setEmail(value.toLocaleLowerCase())} style={styles.input} placeholder="Email..."></TextInput>
+                        <TextInput value={email} onChangeText={(value) => setEmail(value.toLocaleLowerCase())} style={styles.input} placeholder="Email..."></TextInput>
                     </LinearGradient>
                     {email_is_valid ? console.log('invalid email') : <Text style={styles.invalid_message}>INVALID EMAIL</Text>}
                 </View>
 
                 <View style={styles.input_container}>
                     <LinearGradient colors={['#F98F22', '#FFA105']} style={styles.gradiant_input}>
-                        <TextInput onChangeText={(value) => setPassword(value)} style={styles.input} placeholder="password..."></TextInput>
+                        <TextInput value={password} onChangeText={(value) => setPassword(value)} style={styles.input} placeholder="password..."></TextInput>
                     </LinearGradient>
                     {password_is_valid ? console.log('invalid password') : <Text style={styles.invalid_message}>INVALID PASSWORD</Text>}
                 </View>
