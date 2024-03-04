@@ -4,7 +4,7 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 const windowHeight = Dimensions.get('window').height;
 
-export default function PassionsScreen({ navigation }) {
+export default function ChooseNameScreen({ navigation }) {
     return (
         <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
             style={styles.container}
@@ -13,7 +13,6 @@ export default function PassionsScreen({ navigation }) {
                 <FontAwesome name="arrow-left" size={24} style={styles.arrowIcon} />
                 <Text style={styles.headerText}>Comment tu t'appelles ?</Text>
             </View>
-
             <View style={styles.bottom}>
                 <TextInput placeholder='Name' style={styles.input}></TextInput>
 
@@ -45,7 +44,7 @@ const styles = StyleSheet.create({
     },
     arrowIcon: {
         marginRight: 10,
-        marginTop: -2,
+        marginBottom: 2,
     },
     headerText: {
         fontSize: 24,
@@ -57,6 +56,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         width: '100%',
+        marginTop: windowHeight * 0.1, // Descend légèrement la vue bottom
     },
     input: {
         marginVertical: 12,
