@@ -8,7 +8,7 @@ const windowHeight = Dimensions.get('window').height;
 export default function PassionsScreen({ navigation }) {
     const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
     const [birthdate, setBirthdate] = useState('');
-    const [age, setAge] = useState('');
+    console.log(birthdate)
 
     const showDatePicker = () => {
         setDatePickerVisibility(true);
@@ -33,6 +33,7 @@ export default function PassionsScreen({ navigation }) {
                 mode="date"
                 onConfirm={handleConfirm}
                 onCancel={hideDatePicker}
+                date={birthdate !== '' ? new Date(birthdate) : new Date()}
             />
 
             <View style={styles.header}>
