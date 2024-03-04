@@ -6,12 +6,20 @@ export default function FirstLoginScreen({ navigation }) {
             style={styles.container}
         >
             <Text>First Login Screen</Text>
+
             <Pressable
                 style={styles.button}
                 title="Go to SecondLoginScreen"
                 onPress={() => navigation.navigate('signupScreen')}
             >
                 <Text>Go to Second Login Screen</Text>
+            </Pressable>
+            <Pressable
+                style={styles.button}
+                title="Go to SecondLoginScreen"
+                onPress={() => navigation.navigate('signinScreen')}
+            >
+                <Text>Connexion</Text>
             </Pressable>
         </KeyboardAvoidingView>
     );
