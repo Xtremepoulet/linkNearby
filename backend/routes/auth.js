@@ -19,6 +19,7 @@ router.post('/signin', async (req, res) => {
         return res.status(400).json({ result: false, message: 'Missing email or password' });
     }
 
+
     try {
         const user = await User.findOne({ email: req.body.email });
         if (user && await bcrypt.compare(req.body.password, user.hash)) {
@@ -37,22 +38,22 @@ router.post('/signin', async (req, res) => {
 
 
 
-router.post('/signup', async(req, res, next) => {
-    if(!checkBody(req.body, ['email', 'password'])){
-        return res.status(400).json({ result: false, message: 'Missing email or password'});
+router.post('/signup', async (req, res, next) => {
+    if (!checkBody(req.body, ['email', 'password'])) {
+        return res.status(400).json({ result: false, message: 'Missing email or password' });
     }
 
     const { email, password } = req.body;
 
     try {
-        const password_regex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/; 
-        const email_regex = /^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})$/; 
+        const password_regex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
+        const email_regex = /^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})$/;
         const user = await User.findOne({ email: email });
 
         //si le user email existe dans la base de donnée ou que le format n'est pas respecté 
-        if(user || !password_regex.test(password) || !email_regex.test(email)){
-            return res.status(400).json({ result: false, message: 'user already exist'})
-        }else {
+        if (user || !password_regex.test(password) || !email_regex.test(email)) {
+            return res.status(400).json({ result: false, message: 'user already exist' })
+        } else {
             const hash = bcrypt.hashSync(password, 10);
             const new_user = new User({
                 email,
@@ -63,7 +64,7 @@ router.post('/signup', async(req, res, next) => {
                 res.json({ result: true, token: token });
             });
         }
-    }catch{
+    } catch {
         return res.status(500).json({ result: false, message: 'Internal server error' });
     }
 });

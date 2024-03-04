@@ -2,14 +2,15 @@ import React, { useState } from "react"
 import { StyleSheet, Text, TextInput, View, TouchableOpacity, KeyboardAvoidingView, Platform } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import Constants from 'expo-constants';
+const CONNECTION_BACKEND = Constants.expoConfig?.extra?.CONNECTION_BACKEND;
 
 
 
 
-const Signin = () => {
+const Signin = ({ navigation }) => {
 
-    const [email, setEmail] = useState(null);
-    const [password, setPassword] = useState(null);
+    const [email, setEmail] = useState('cerisier.jeremy@gmail.com');
+    const [password, setPassword] = useState('123@Jeremy');
     const [password_is_valid, setPassword_is_valid] = useState(true);
     const [email_is_valid, setEmail_is_valid] = useState(true);
 
@@ -19,23 +20,39 @@ const Signin = () => {
 
 
     const user_signin = async () => {
-        if (!email_regex.test(email) || email === user_test.email) {
+        if (!email_regex.test(email)) {
             setEmail_is_valid(false);
             return
         }
-        if (password === user_test.password || !password_regex.test(password)) {
+        if (!password_regex.test(password)) {
             setPassword_is_valid(false);
             return
         }
 
 
 
+        const response = await fetch(`${CONNECTION_BACKEND}/auth/signin`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ email, password })
+        });
 
-        // const response = await fetch('http://
+        const result = await response.json();
+
+        if (result.result) {
+            navigation.navigate('TabNavigator')
+            setEmail_is_valid(true);
+            setPassword_is_valid(true);
+        } else {
+            console.log('erreur de connexion')
+            setEmail_is_valid(false);
+            setPassword_is_valid(false);
+        }
 
     }
-    const { CONNECTION_BACKEND } = Constants.manifest2.extra;
-    console.log(CONNECTION_BACKEND);
+
 
 
 
@@ -51,14 +68,14 @@ const Signin = () => {
             <View style={styles.bottom_container}>
                 <View style={styles.input_container}>
                     <LinearGradient colors={['#F98F22', '#FFA105']} style={styles.gradiant_input}>
-                        <TextInput onChangeText={(value) => setEmail(value.toLocaleLowerCase())} style={styles.input} placeholder="Email..."></TextInput>
+                        <TextInput value={email} onChangeText={(value) => setEmail(value.toLocaleLowerCase())} style={styles.input} placeholder="Email..."></TextInput>
                     </LinearGradient>
                     {!email_is_valid && <Text style={styles.invalid_message}>INVALID EMAIL</Text>}
                 </View>
 
                 <View style={styles.input_container}>
                     <LinearGradient colors={['#F98F22', '#FFA105']} style={styles.gradiant_input}>
-                        <TextInput onChangeText={(value) => setPassword(value)} style={styles.input} placeholder="password..."></TextInput>
+                        <TextInput value={password} onChangeText={(value) => setPassword(value)} style={styles.input} placeholder="password..."></TextInput>
                     </LinearGradient>
                     {!password_is_valid && <Text style={styles.invalid_message}>INVALID PASSWORD</Text>}
                 </View>

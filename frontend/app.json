@@ -27,7 +27,7 @@
       "favicon": "./assets/favicon.png"
     },
     "extra": {
-      "CONNECTION_BACKEND": "http://localhost:3000/"
+      "CONNECTION_BACKEND": "http://10.9.1.124:3000"
     }
   }
 }
