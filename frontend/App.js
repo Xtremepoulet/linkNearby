@@ -18,7 +18,11 @@ import PassionScreen from './screens/PassionScreen';
 import BiographyScreen from './screens/BiographyScreen';
 import ActivateLocalisationScreen from './screens/ActivateLocalisationScreen';
 
-
+//redux persist 
+import React from 'react';
+import { Provider } from 'react-redux';
+import { PersistGate } from 'redux-persist/integration/react';
+import { store, persistor } from './store';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -60,20 +64,24 @@ const TabNavigator = () => {
 
 export default function App() {
   return (
-    <NavigationContainer>
-      <Stack.Navigator screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="FirstLoginScreen" component={FirstLoginScreen} />
-        <Stack.Screen name="signinScreen" component={Signin} />
-        <Stack.Screen name="signupScreen" component={Signup} />
-        <Stack.Screen name="ChooseNameScreen" component={ChooseNameScreen} />
-        <Stack.Screen name="BirthdateScreen" component={BirthdateScreen} />
-        <Stack.Screen name="PassionScreen" component={PassionScreen} />
-        <Stack.Screen name="BiographyScreen" component={BiographyScreen} />
-        <Stack.Screen name="ActivateLocalisationScreen" component={ActivateLocalisationScreen} />
+    <Provider store={store}>
+      <PersistGate loading={null} persistor={persistor}>
+        <NavigationContainer>
+          <Stack.Navigator screenOptions={{ headerShown: false }}>
+            <Stack.Screen name="FirstLoginScreen" component={FirstLoginScreen} />
+            <Stack.Screen name="signinScreen" component={Signin} />
+            <Stack.Screen name="signupScreen" component={Signup} />
+            <Stack.Screen name="ChooseNameScreen" component={ChooseNameScreen} />
+            <Stack.Screen name="BirthdateScreen" component={BirthdateScreen} />
+            <Stack.Screen name="PassionScreen" component={PassionScreen} />
+            <Stack.Screen name="BiographyScreen" component={BiographyScreen} />
+            <Stack.Screen name="ActivateLocalisationScreen" component={ActivateLocalisationScreen} />
 
 
-        <Stack.Screen name="TabNavigator" component={TabNavigator} />
-      </Stack.Navigator>
-    </NavigationContainer>
+            <Stack.Screen name="TabNavigator" component={TabNavigator} />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </PersistGate>
+    </Provider>
   );
 }

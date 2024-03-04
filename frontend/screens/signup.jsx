@@ -2,13 +2,14 @@ import React, { useState } from "react"
 import { StyleSheet, Text, TextInput, View, TouchableOpacity, KeyboardAvoidingView, Platform } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import Constants from 'expo-constants';
+import { useSelector } from "react-redux";
+
 const CONNECTION_BACKEND = Constants.expoConfig?.extra?.CONNECTION_BACKEND;
 
 const Signup = ({ navigation }) => {
 
-    // const { CONNECTION_BACKEND } = Constants.manifest2.extra;
-    // console.log(CONNECTION_BACKEND)
-    
+    const username = useSelector((state) => state.users.value.username);
+
     const [email, setEmail] = useState(null);
     const [password, setPassword] = useState(null);
     const [password_is_valid, setPassword_is_valid] = useState(true);
@@ -18,9 +19,11 @@ const Signup = ({ navigation }) => {
     // Minimum eight characters, at least one letter, one number and one special character:
     const password_regex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
 
-
+    console.log(username)
+   
 
     const user_signup = async () => {
+        console.log('ok')
         if (!email_regex.test(email) || !password_regex.test(password)) {
             setEmail_is_valid(false);
             setPassword_is_valid(false);
@@ -40,6 +43,8 @@ const Signup = ({ navigation }) => {
         if(user_response.result){
             console.log(user_response.token)
         }
+
+        
     }
 
 
@@ -64,14 +69,14 @@ const Signup = ({ navigation }) => {
                     <LinearGradient colors={['#F98F22', '#FFA105']} style={styles.gradiant_input}>
                         <TextInput value={email} onChangeText={(value) => setEmail(value.toLocaleLowerCase())} style={styles.input} placeholder="Email..."></TextInput>
                     </LinearGradient>
-                    {email_is_valid ? console.log('invalid email') : <Text style={styles.invalid_message}>INVALID EMAIL</Text>}
+                    {email_is_valid ? '' : <Text style={styles.invalid_message}>INVALID EMAIL</Text>}
                 </View>
 
                 <View style={styles.input_container}>
                     <LinearGradient colors={['#F98F22', '#FFA105']} style={styles.gradiant_input}>
                         <TextInput value={password} onChangeText={(value) => setPassword(value)} style={styles.input} placeholder="password..."></TextInput>
                     </LinearGradient>
-                    {password_is_valid ? console.log('invalid password') : <Text style={styles.invalid_message}>INVALID PASSWORD</Text>}
+                    {password_is_valid ? '' : <Text style={styles.invalid_message}>INVALID PASSWORD</Text>}
                 </View>
 
                 <LinearGradient colors={['#F98F22', '#FFA105']} style={styles.gradiant_button}>
