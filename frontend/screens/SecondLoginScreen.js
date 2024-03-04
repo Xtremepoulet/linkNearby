@@ -6,7 +6,7 @@ export default function SecondLoginScreen({ navigation }) {
             style={styles.container}
         >
             <Text>Second Login Screen</Text>
-
+        
             <Pressable
                 style={styles.button}
                 title="Go to ChooseNameScreen"
