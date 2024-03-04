@@ -2,12 +2,14 @@ import React, { useState } from "react"
 import { StyleSheet, Text, TextInput, View, TouchableOpacity, KeyboardAvoidingView, Platform } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import Constants from 'expo-constants';
+import { UseDispatch, useDispatch } from "react-redux";
+import { addToken } from "../reducers/users";
 const CONNECTION_BACKEND = Constants.expoConfig?.extra?.CONNECTION_BACKEND;
 
 
-
-
 const Signin = ({ navigation }) => {
+
+    const dispatch = useDispatch();
 
     const [email, setEmail] = useState('cerisier.jeremy@gmail.com');
     const [password, setPassword] = useState('123@Jeremy');
@@ -42,7 +44,8 @@ const Signin = ({ navigation }) => {
         const result = await response.json();
 
         if (result.result) {
-            navigation.navigate('TabNavigator')
+            dispatch(addToken(result.token));
+            navigation.navigate('TabNavigator');
             setEmail_is_valid(true);
             setPassword_is_valid(true);
         } else {

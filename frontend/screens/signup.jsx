@@ -2,13 +2,14 @@ import React, { useState } from "react"
 import { StyleSheet, Text, TextInput, View, TouchableOpacity, KeyboardAvoidingView, Platform } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import Constants from 'expo-constants';
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { addToken } from "../reducers/users";
 
 const CONNECTION_BACKEND = Constants.expoConfig?.extra?.CONNECTION_BACKEND;
 
 const Signup = ({ navigation }) => {
 
-    const username = useSelector((state) => state.users.value.username);
+    const dispatch = useDispatch();
 
     const [email, setEmail] = useState(null);
     const [password, setPassword] = useState(null);
@@ -19,11 +20,8 @@ const Signup = ({ navigation }) => {
     // Minimum eight characters, at least one letter, one number and one special character:
     const password_regex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
 
-    console.log(username)
-   
 
     const user_signup = async () => {
-        console.log('ok')
         if (!email_regex.test(email) || !password_regex.test(password)) {
             setEmail_is_valid(false);
             setPassword_is_valid(false);
@@ -41,27 +39,18 @@ const Signup = ({ navigation }) => {
         const user_response = await fetching_data.json();
         
         if(user_response.result){
-            console.log(user_response.token)
+            dispatch(addToken(user_response.token))
+            navigation.navigate('ChooseNameScreen')
         }
-
-        
     }
 
-
+    
     return (
         <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={styles.container}>
             {/* top section */}
             <View style={styles.top_container}>
                 <Text style={styles.app_title}>LINKNEARBY</Text>
             </View>
-
-            <TouchableOpacity
-                style={styles.button}
-                title="Go to ChooseNameScreen"
-                onPress={() => navigation.navigate('ChooseNameScreen')}
-            >
-                <Text>ChooseNameScreen</Text>
-            </TouchableOpacity>
             
             {/* bottom section */}
             <View style={styles.bottom_container}>
