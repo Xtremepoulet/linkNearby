@@ -2,6 +2,7 @@ import React, { useState } from "react"
 import { StyleSheet, Text, TextInput, View, TouchableOpacity, KeyboardAvoidingView, Platform } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import Constants from 'expo-constants';
+const CONNECTION_BACKEND = Constants.expoConfig?.extra?.CONNECTION_BACKEND;
 
 const Signup = ({ navigation }) => {
 
@@ -17,7 +18,7 @@ const Signup = ({ navigation }) => {
     // Minimum eight characters, at least one letter, one number and one special character:
     const password_regex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
 
-
+    
 
     const user_signup = async () => {
         if (!email_regex.test(email) || !password_regex.test(password)) {
@@ -28,7 +29,7 @@ const Signup = ({ navigation }) => {
 
         const user_infos = { email: email, password: password}
 
-        const fetching_data = await fetch('http://10.9.0.37:3000/auth/signup', {
+        const fetching_data = await fetch(`${CONNECTION_BACKEND}/auth/signup`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(user_infos)
