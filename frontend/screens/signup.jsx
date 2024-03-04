@@ -8,7 +8,7 @@ const Signup = ({ navigation }) => {
 
     // const { CONNECTION_BACKEND } = Constants.manifest2.extra;
     // console.log(CONNECTION_BACKEND)
-
+    
     const [email, setEmail] = useState(null);
     const [password, setPassword] = useState(null);
     const [password_is_valid, setPassword_is_valid] = useState(true);
@@ -18,7 +18,7 @@ const Signup = ({ navigation }) => {
     // Minimum eight characters, at least one letter, one number and one special character:
     const password_regex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
 
-    
+
 
     const user_signup = async () => {
         if (!email_regex.test(email) || !password_regex.test(password)) {
