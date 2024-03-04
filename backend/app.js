@@ -6,12 +6,18 @@ const logger = require('morgan');
 const cors = require('cors');
 
 const indexRouter = require('./routes/index');
-const usersRouter = require('./routes/users');
+
+const bcrypt = require('bcrypt');
+const hash = bcrypt.hashSync('password', 10);
+
+//middleWare
+const verifyToken = require('./middleware/auth');
 
 const app = express();
 app.use(cors());
 //routes jeremy
 
+const authRouter = require('./routes/auth.js');
 
 
 
@@ -50,8 +56,6 @@ app.use(cors());
 
 
 
-
-
 //end yanis routes
 
 app.use(logger('dev'));
@@ -61,6 +65,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
+app.use('/auth', authRouter);
+
 
 module.exports = app;

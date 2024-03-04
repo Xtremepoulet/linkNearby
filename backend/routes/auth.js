@@ -1,24 +1,37 @@
 var express = require('express');
 var router = express.Router();
+//Shema 
 require('../models/connection');
+
+//modules cheackBody
 const { checkBody } = require('../modules/checkBody');
+
+//Gestion mot de passe et token
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+
+//Database
+const User = require('../models/user');
 
 
 router.post('/signin', async (req, res) => {
-    if (!checkBody(req.body, ['email', 'password'])) {
-        res.json({ result: false, error: 'Missing or empty fields' });
-        return;
+    if (!checkBody(req.body, ['email', 'hash'])) {
+        return res.status(400).json({ result: false, message: 'Missing email or password' });
     }
 
-    const user = await User.findOne({ username: req.body.email });
+    try {
+        const user = await User.findOne({ email: req.body.email });
+        if (user && await bcrypt.compare(req.body.hash, user.hash)) {
 
-    User.findOne({ username: req.body.email }).then(data => {
-        if (data && bcrypt.compareSync(req.body.password, data.password)) {
-            res.json({ result: true, token: data.token });
+            // Génération du JWT
+            const token = jwt.sign({ userId: user._id }, process.env.TOKEN_SECRET, { expiresIn: '24h' });
+            res.json({ result: true, token: token });
         } else {
-            res.json({ result: false, error: 'User not found or wrong password' });
+            res.status(401).json({ result: false, message: 'Incorrect email or password' });
         }
-    });
+    } catch (error) {
+        res.status(500).json({ result: false, message: 'Internal server error' });
+    }
 });
 
 
