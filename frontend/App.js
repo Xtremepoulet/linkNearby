@@ -5,6 +5,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 import Signup from './screens/signup';
+import Signin from './screens/signin.jsx';
 
 import HomeScreen from './screens/HomeScreen';
 import MapScreen from './screens/MapScreen';
@@ -62,6 +63,7 @@ export default function App() {
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen name="FirstLoginScreen" component={FirstLoginScreen} />
+        <Stack.Screen name="signinScreen" component={Signin} />
         <Stack.Screen name="signupScreen" component={Signup} />
         <Stack.Screen name="ChooseNameScreen" component={ChooseNameScreen} />
         <Stack.Screen name="BirthdateScreen" component={BirthdateScreen} />

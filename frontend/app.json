@@ -25,6 +25,9 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "CONNECTION_BACKEND": "http://localhost:3000/"
     }
   }
 }

@@ -1,9 +1,12 @@
 import React, { useState } from "react"
 import { StyleSheet, Text, TextInput, View, TouchableOpacity, KeyboardAvoidingView, Platform } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
+import Constants from 'expo-constants';
 
 
-const Signup = ({ navigation }) => {
+
+
+const Signin = () => {
 
     const [email, setEmail] = useState(null);
     const [password, setPassword] = useState(null);
@@ -15,19 +18,26 @@ const Signup = ({ navigation }) => {
     const password_regex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
 
 
-    const user_test = {
-        password: 'YayaLe69!',
-        email: 'yaya@gmail.com',
-    }
-
-    const user_signup = () => {
+    const user_signin = async () => {
         if (!email_regex.test(email) || email === user_test.email) {
             setEmail_is_valid(false);
+            return
         }
         if (password === user_test.password || !password_regex.test(password)) {
             setPassword_is_valid(false);
+            return
         }
+
+
+
+
+        // const response = await fetch('http://
+
     }
+    const { CONNECTION_BACKEND } = Constants.manifest.extra;
+    console.log(CONNECTION_BACKEND);
+
+
 
 
     return (
@@ -37,33 +47,25 @@ const Signup = ({ navigation }) => {
                 <Text style={styles.app_title}>LINKNEARBY</Text>
             </View>
 
-            <TouchableOpacity
-                style={styles.button}
-                title="Go to ChooseNameScreen"
-                onPress={() => navigation.navigate('ChooseNameScreen')}
-            >
-                <Text>ChooseNameScreen</Text>
-            </TouchableOpacity>
-
             {/* bottom section */}
             <View style={styles.bottom_container}>
                 <View style={styles.input_container}>
                     <LinearGradient colors={['#F98F22', '#FFA105']} style={styles.gradiant_input}>
                         <TextInput onChangeText={(value) => setEmail(value.toLocaleLowerCase())} style={styles.input} placeholder="Email..."></TextInput>
                     </LinearGradient>
-                    {email_is_valid ? console.log('invalid email') : <Text style={styles.invalid_message}>INVALID EMAIL</Text>}
+                    {!email_is_valid && <Text style={styles.invalid_message}>INVALID EMAIL</Text>}
                 </View>
 
                 <View style={styles.input_container}>
                     <LinearGradient colors={['#F98F22', '#FFA105']} style={styles.gradiant_input}>
                         <TextInput onChangeText={(value) => setPassword(value)} style={styles.input} placeholder="password..."></TextInput>
                     </LinearGradient>
-                    {password_is_valid ? console.log('invalid password') : <Text style={styles.invalid_message}>INVALID PASSWORD</Text>}
+                    {!password_is_valid && <Text style={styles.invalid_message}>INVALID PASSWORD</Text>}
                 </View>
 
                 <LinearGradient colors={['#F98F22', '#FFA105']} style={styles.gradiant_button}>
-                    <TouchableOpacity style={styles.signup_button} onPress={() => user_signup()}>
-                        <Text>Signup</Text>
+                    <TouchableOpacity style={styles.signup_button} onPress={() => user_signin()}>
+                        <Text>Connect</Text>
                     </TouchableOpacity>
                 </LinearGradient>
             </View>
@@ -72,7 +74,7 @@ const Signup = ({ navigation }) => {
 }
 
 
-export default Signup;
+export default Signin;
 
 
 const styles = StyleSheet.create({
@@ -84,6 +86,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         gap: 20,
         padding: 25,
+        marginBottom: 50,
     },
 
     input_container: {

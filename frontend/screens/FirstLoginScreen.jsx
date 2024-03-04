@@ -1,24 +1,25 @@
-import React from 'react';
 import { Pressable, StyleSheet, Text, View, Image, TextInput, KeyboardAvoidingView, Platform } from 'react-native';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
-export default function PassionsScreen({ navigation }) {
+export default function FirstLoginScreen({ navigation }) {
     return (
         <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
             style={styles.container}
         >
-            <FontAwesome />
-            <View style={styles.header}>
-                <Text style={styles.headerText}>Comment tu t'appelles ?</Text>
-                <TextInput placeholder='Name' style={styles.input}></TextInput>
-            </View>
+            <Text>First Login Screen</Text>
 
             <Pressable
                 style={styles.button}
-                title="Go to PassionsScreen"
-                onPress={() => navigation.navigate('BirthdateScreen')}
+                title="Go to SecondLoginScreen"
+                onPress={() => navigation.navigate('signupScreen')}
             >
-                <Text style={styles.texteblanc}>Next</Text>
+                <Text>Go to Second Login Screen</Text>
+            </Pressable>
+            <Pressable
+                style={styles.button}
+                title="Go to SecondLoginScreen"
+                onPress={() => navigation.navigate('signinScreen')}
+            >
+                <Text>Connexion</Text>
             </Pressable>
         </KeyboardAvoidingView>
     );
@@ -31,16 +32,15 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         backgroundColor: 'white'
     },
-    header: {
-        alignItems: 'center',
-        justifyContent: 'center',
-        marginBottom: 20,
+    img: {
+        width: '100%',
+        height: '50%'
+
     },
-    headerText: {
-        textAlign: 'center',
-        fontSize: 24,
+    text: {
+        textAlign: 'left',
+        fontSize: 40,
         fontWeight: 'bold',
-        marginBottom: 10,
     },
     input: {
         margin: 12,
@@ -56,7 +56,5 @@ const styles = StyleSheet.create({
         elevation: 3,
         backgroundColor: 'red',
     },
-    texteblanc: {
-        color: 'white'
-    }
-});
+
+})
