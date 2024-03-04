@@ -15,13 +15,13 @@ const User = require('../models/user');
 
 
 router.post('/signin', async (req, res) => {
-    if (!checkBody(req.body, ['email', 'hash'])) {
+    if (!checkBody(req.body, ['email', 'password'])) {
         return res.status(400).json({ result: false, message: 'Missing email or password' });
     }
 
     try {
         const user = await User.findOne({ email: req.body.email });
-        if (user && await bcrypt.compare(req.body.hash, user.hash)) {
+        if (user && await bcrypt.compare(req.body.password, user.hash)) {
 
             // Génération du JWT
             const token = jwt.sign({ userId: user._id }, process.env.TOKEN_SECRET, { expiresIn: '24h' });
