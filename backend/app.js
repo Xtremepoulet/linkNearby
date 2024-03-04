@@ -10,6 +10,49 @@ const usersRouter = require('./routes/users');
 
 const app = express();
 app.use(cors());
+//routes jeremy
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//end jeremy routes 
+
+//yanis routes
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//end yanis routes
 
 app.use(logger('dev'));
 app.use(express.json());
