@@ -50,7 +50,6 @@ const Signin = ({ navigation }) => {
             setEmail_is_valid(false);
             setPassword_is_valid(false);
         }
-
     }
 
 

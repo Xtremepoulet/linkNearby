@@ -1,26 +1,31 @@
 import { Pressable, StyleSheet, Text, View, Image, TextInput, KeyboardAvoidingView, Platform } from 'react-native';
+import logoLinkNearby from '../assets/linkNearbyBackNone.webp';
 
 export default function FirstLoginScreen({ navigation }) {
     return (
         <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
             style={styles.container}
         >
-            <Text>First Login Screen</Text>
-
-            <Pressable
-                style={styles.button}
-                title="Go to SecondLoginScreen"
-                onPress={() => navigation.navigate('signupScreen')}
-            >
-                <Text>Go to Second Login Screen</Text>
-            </Pressable>
-            <Pressable
-                style={styles.button}
-                title="Go to SecondLoginScreen"
-                onPress={() => navigation.navigate('signinScreen')}
-            >
-                <Text>Connexion</Text>
-            </Pressable>
+            <View style={styles.header}>
+                <Image source={logoLinkNearby} style={styles.logo} />
+                <Text style={styles.h1}>LINK NEARBY</Text>
+            </View>
+            <View style={styles.body}>
+                <Pressable
+                    style={styles.button}
+                    title="Go to SecondLoginScreen"
+                    onPress={() => navigation.navigate('signupScreen')}
+                >
+                    <Text style={styles.text}>Créer un compte</Text>
+                </Pressable>
+                <Pressable
+                    style={styles.button}
+                    title="Go to signin screen"
+                    onPress={() => navigation.navigate('signinScreen')}
+                >
+                    <Text style={styles.text}>Connexion</Text>
+                </Pressable>
+            </View>
         </KeyboardAvoidingView>
     );
 }
@@ -28,9 +33,27 @@ export default function FirstLoginScreen({ navigation }) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        alignItems: 'center',
+        backgroundColor: 'white',
+        justifyContent: 'space-between'
+    },
+    header: {
         justifyContent: 'center',
-        backgroundColor: 'white'
+        alignItems: 'center',
+        flexDirection: 'row',
+        marginTop: 70,
+        // backgroundColor: 'blue',
+        height: '10%',
+        width: '100%',
+    },
+    h1: {
+        fontSize: 40,
+        fontWeight: 'bold',
+        color: 'black'
+    },
+    logo: {
+        width: 80,
+        height: 80,
+        marginRight: 10
     },
     img: {
         width: '100%',
@@ -38,9 +61,9 @@ const styles = StyleSheet.create({
 
     },
     text: {
-        textAlign: 'left',
-        fontSize: 40,
+        fontSize: 20,
         fontWeight: 'bold',
+        color: 'white'
     },
     input: {
         margin: 12,
@@ -52,9 +75,15 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         paddingVertical: 12,
         width: '80%',
-        borderRadius: 5,
+        height: 70,
+        margin: 20,
+        borderRadius: 20,
         elevation: 3,
-        backgroundColor: 'red',
+        backgroundColor: '#FFA53F',
     },
+    body: {
+        alignItems: 'center',
+        height: '30%',
+    }
 
 })
