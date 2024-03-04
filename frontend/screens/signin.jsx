@@ -34,7 +34,7 @@ const Signin = () => {
         // const response = await fetch('http://
 
     }
-    const { CONNECTION_BACKEND } = Constants.manifest.extra;
+    const { CONNECTION_BACKEND } = Constants.manifest2.extra;
     console.log(CONNECTION_BACKEND);
 
 
