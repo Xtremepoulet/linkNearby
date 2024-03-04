@@ -2,8 +2,7 @@ const mongoose = require('mongoose');
 
 const userSchema = mongoose.Schema({
   email: { type: String, required: true, unique: true, lowercase: true, index: true },
-  token: String,
-  hash: String,
+  hash: { type: String, required: true},
   birthdate: Date,
   location: [{ latitude: Number, longitude: Number }],
   bio: String,
