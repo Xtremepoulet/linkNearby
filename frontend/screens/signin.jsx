@@ -110,7 +110,7 @@ const styles = StyleSheet.create({
         fontSize: 40,
         fontWeight: 'bold',
         color: 'black'
-    },
+    },                    
     input_container: {
         width: '80%',
         height: 50,

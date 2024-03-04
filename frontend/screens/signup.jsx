@@ -22,6 +22,7 @@ const Signup = ({ navigation }) => {
 
 
     const user_signup = async () => {
+        console.log('ok')
         if (!email_regex.test(email) || !password_regex.test(password)) {
             setEmail_is_valid(false);
             setPassword_is_valid(false);
@@ -40,7 +41,6 @@ const Signup = ({ navigation }) => {
         
         if(user_response.result){
             dispatch(addToken(user_response.token))
-            navigation.navigate('ChooseNameScreen')
         }
     }
 
