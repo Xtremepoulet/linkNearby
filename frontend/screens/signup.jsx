@@ -1,19 +1,19 @@
 import React, { useState } from "react"
-import { StyleSheet, Text, TextInput, View, TouchableOpacity, KeyboardAvoidingView, Platform} from 'react-native';
+import { StyleSheet, Text, TextInput, View, TouchableOpacity, KeyboardAvoidingView, Platform } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 
 
-const Signup = () => {
+const Signup = ({ navigation }) => {
 
     const [email, setEmail] = useState(null);
     const [password, setPassword] = useState(null);
     const [password_is_valid, setPassword_is_valid] = useState(true);
     const [email_is_valid, setEmail_is_valid] = useState(true);
 
-    const email_regex = /^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})$/; 
+    const email_regex = /^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})$/;
     // Minimum eight characters, at least one letter, one number and one special character:
-    const password_regex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/; 
-    
+    const password_regex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
+
 
     const user_test = {
         password: 'YayaLe69!',
@@ -21,45 +21,53 @@ const Signup = () => {
     }
 
     const user_signup = () => {
-        if(!email_regex.test(email) || email === user_test.email){
+        if (!email_regex.test(email) || email === user_test.email) {
             setEmail_is_valid(false);
         }
-        if(password === user_test.password || !password_regex.test(password)){
+        if (password === user_test.password || !password_regex.test(password)) {
             setPassword_is_valid(false);
         }
     }
 
 
-    return(
+    return (
         <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={styles.container}>
             {/* top section */}
-                <View style={styles.top_container}>
-                    <Text style={styles.app_title}>LINKNEARBY</Text>
-                </View>
+            <View style={styles.top_container}>
+                <Text style={styles.app_title}>LINKNEARBY</Text>
+            </View>
 
-                {/* bottom section */}
-                <View style={styles.bottom_container}>
-                    <View style={styles.input_container}>
+            <TouchableOpacity
+                style={styles.button}
+                title="Go to ChooseNameScreen"
+                onPress={() => navigation.navigate('ChooseNameScreen')}
+            >
+                <Text>ChooseNameScreen</Text>
+            </TouchableOpacity>
+
+            {/* bottom section */}
+            <View style={styles.bottom_container}>
+                <View style={styles.input_container}>
                     <LinearGradient colors={['#F98F22', '#FFA105']} style={styles.gradiant_input}>
                         <TextInput onChangeText={(value) => setEmail(value.toLocaleLowerCase())} style={styles.input} placeholder="Email..."></TextInput>
                     </LinearGradient>
                     {email_is_valid ? console.log('invalid email') : <Text style={styles.invalid_message}>INVALID EMAIL</Text>}
-                    </View>
-
-                    <View style={styles.input_container}>
-                        <LinearGradient colors={['#F98F22', '#FFA105']} style={styles.gradiant_input}>
-                            <TextInput onChangeText={(value) => setPassword(value)} style={styles.input} placeholder="password..."></TextInput>
-                        </LinearGradient>
-                        {password_is_valid ? console.log('invalid password') : <Text style={styles.invalid_message}>INVALID PASSWORD</Text>}
-                    </View>
-
-                    <LinearGradient colors={['#F98F22', '#FFA105']} style={styles.gradiant_button}>
-                    <TouchableOpacity style={styles.signup_button} onPress={() => user_signup()}>
-                            <Text>Signup</Text>
-                        </TouchableOpacity>
-                    </LinearGradient>
                 </View>
-            </KeyboardAvoidingView>
+
+                <View style={styles.input_container}>
+                    <LinearGradient colors={['#F98F22', '#FFA105']} style={styles.gradiant_input}>
+                        <TextInput onChangeText={(value) => setPassword(value)} style={styles.input} placeholder="password..."></TextInput>
+                    </LinearGradient>
+                    {password_is_valid ? console.log('invalid password') : <Text style={styles.invalid_message}>INVALID PASSWORD</Text>}
+                </View>
+
+                <LinearGradient colors={['#F98F22', '#FFA105']} style={styles.gradiant_button}>
+                    <TouchableOpacity style={styles.signup_button} onPress={() => user_signup()}>
+                        <Text>Signup</Text>
+                    </TouchableOpacity>
+                </LinearGradient>
+            </View>
+        </KeyboardAvoidingView>
     );
 }
 
@@ -69,13 +77,13 @@ export default Signup;
 
 const styles = StyleSheet.create({
     container: {
-      width: '100%',
-      height: '100%',
-      flex: 1,
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      gap: 20,
-      padding: 25,
+        width: '100%',
+        height: '100%',
+        flex: 1,
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        gap: 20,
+        padding: 25,
     },
 
     input_container: {
@@ -135,5 +143,4 @@ const styles = StyleSheet.create({
         borderRadius: 50,
     }
 
-  });
-  
+});
