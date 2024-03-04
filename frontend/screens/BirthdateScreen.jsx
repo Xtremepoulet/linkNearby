@@ -5,7 +5,7 @@ import DateTimePickerModal from "react-native-modal-datetime-picker";
 
 const windowHeight = Dimensions.get('window').height;
 
-export default function PassionsScreen({ navigation }) {
+export default function BirthdateScreen({ navigation }) {
     const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
     const [birthdate, setBirthdate] = useState('');
     console.log(birthdate)
@@ -37,7 +37,11 @@ export default function PassionsScreen({ navigation }) {
             />
 
             <View style={styles.header}>
-                <FontAwesome name="arrow-left" size={24} style={styles.arrowIcon} />
+                <Pressable
+                    onPress={() => navigation.navigate('ChooseNameScreen')}
+                >
+                    <FontAwesome name="arrow-left" size={24} style={styles.arrowIcon} />
+                </Pressable>
                 <Text style={styles.headerText}>Quel est ton âge ?</Text>
             </View>
 
