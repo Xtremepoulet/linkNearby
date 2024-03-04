@@ -4,12 +4,13 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
+import Signup from './screens/signup';
+
 import HomeScreen from './screens/HomeScreen';
 import MapScreen from './screens/MapScreen';
 import ParametersScreen from './screens/ParametersScreen';
 import MessagesScreen from './screens/MessagesScreen';
 import FirstLoginScreen from './screens/FirstLoginScreen';
-import SecondLoginScreen from './screens/SecondLoginScreen';
 import ChooseNameScreen from './screens/ChooseNameScreen';
 import BirthdateScreen from './screens/BirthdateScreen';
 import PassionScreen from './screens/PassionScreen';
@@ -61,7 +62,7 @@ export default function App() {
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen name="FirstLoginScreen" component={FirstLoginScreen} />
-        <Stack.Screen name="SecondLoginScreen" component={SecondLoginScreen} />
+        <Stack.Screen name="signupScreen" component={Signup} />
         <Stack.Screen name="ChooseNameScreen" component={ChooseNameScreen} />
         <Stack.Screen name="BirthdateScreen" component={BirthdateScreen} />
         <Stack.Screen name="PassionScreen" component={PassionScreen} />

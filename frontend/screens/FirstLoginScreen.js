@@ -9,7 +9,7 @@ export default function FirstLoginScreen({ navigation }) {
             <Pressable
                 style={styles.button}
                 title="Go to SecondLoginScreen"
-                onPress={() => navigation.navigate('SecondLoginScreen')}
+                onPress={() => navigation.navigate('signupScreen')}
             >
                 <Text>Go to Second Login Screen</Text>
             </Pressable>
