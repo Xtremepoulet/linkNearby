@@ -44,7 +44,7 @@ router.post('/signup', async (req, res, next) => {
     }
 
     const { email, password } = req.body;
-
+    
     try {
         const password_regex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
         const email_regex = /^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})$/;
