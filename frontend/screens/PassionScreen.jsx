@@ -2,23 +2,23 @@ import React, { useEffect } from 'react';
 import { Pressable, StyleSheet, Text, View, TextInput, KeyboardAvoidingView, Platform, Dimensions, ScrollView, SafeAreaView } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { useState } from 'react';
-import Constants from 'expo-constants';
-const CONNECTION_BACKEND = Constants.expoConfig?.extra?.CONNECTION_BACKEND;
 import * as Haptics from 'expo-haptics';
-
 const windowHeight = Dimensions.get('window').height;
 
-export default function PassionScreen({ navigation }) {
+import Constants from 'expo-constants';
+const CONNECTION_BACKEND = Constants.expoConfig?.extra?.CONNECTION_BACKEND;
 
-    const [passions, setPassions] = useState([])
+
+
+export default function PassionScreen({ navigation }) {
     const [selectedPassions, setSelectedPassions] = useState([])
+    const [passions, setPassions] = useState([])
+
 
     useEffect(() => {
         getPassions();
     }
         , []);
-
-
 
     const getPassions = async () => {
         try {
@@ -30,7 +30,7 @@ export default function PassionScreen({ navigation }) {
             });
             const result = await response.json();
             if (result.result) {
-                setPassions(result.passions);
+                setPassions(result.passions)
             } else {
                 console.log('Erreur de connexion');
             }
@@ -39,13 +39,25 @@ export default function PassionScreen({ navigation }) {
         }
     }
 
+
+
+
     const handleSetPassion = (passion) => {
         if (selectedPassions.includes(passion)) {
             Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
             setSelectedPassions(selectedPassions.filter((item) => item !== passion));
         } else if (selectedPassions.length < 10) {
+
             Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
             setSelectedPassions([...selectedPassions, passion]);
+        }
+    }
+
+    const handleNext = () => {
+        if (selectedPassions.length >= 3) {
+            navigation.navigate('BiographyScreen');
+        } else {
+            alert('Il faut selectionner au moins 3 passions');
         }
     }
 
@@ -90,7 +102,7 @@ export default function PassionScreen({ navigation }) {
                 <Pressable
                     style={styles.button}
                     title="Go to PassionsScreen"
-                    onPress={() => navigation.navigate('BiographyScreen')}
+                    onPress={() => handleNext()}
                 >
                     <Text style={styles.texteblanc}>Next</Text>
                 </Pressable>
