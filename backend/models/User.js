@@ -7,6 +7,7 @@ const userSchema = mongoose.Schema({
   birthdate: Date,
   location: [{ latitude: Number, longitude: Number }],
   bio: String,
+  uri: String,
   userPassion: [{ type: mongoose.Schema.Types.ObjectId, ref: 'userPassion' }],
   gender: { type: String, enum: ['homme', 'femme'], },
   isConnected: Boolean,
