@@ -1,9 +1,15 @@
 import { Pressable, StyleSheet, Text, View, Image, TextInput, KeyboardAvoidingView, Platform, SafeAreaView } from 'react-native';
 import logoLinkNearby from '../assets/linkNearbyBackNone.webp';
+import { useDispatch, useSelector } from 'react-redux';
+
 
 export default function FirstLoginScreen({ navigation }) {
 
     const Container = Platform.OS === 'ios' ? SafeAreaView : View;
+    const dispatch = useDispatch();
+
+
+
 
     return (
         <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
