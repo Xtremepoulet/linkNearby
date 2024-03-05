@@ -80,7 +80,17 @@ export default function ChoosePhotoScreen({ navigation }) {
 
 
             <Camera style={styles.camera_container}>
-                
+                <View>
+
+                </View>
+
+                <View>
+                    <Pressable
+                        onPress={() => navigation.navigate('BiographyScreen')}
+                    >
+                        <FontAwesome name="arrow-left" size={24} style={styles.arrowIcon} />
+                    </Pressable>
+                </View>
             </Camera>
 
             <Text> --- or ---</Text>
