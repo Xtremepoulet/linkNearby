@@ -23,7 +23,6 @@ const Signup = ({ navigation }) => {
 
 
     const user_signup = async () => {
-        console.log('ok')
         if (!email_regex.test(email) || !password_regex.test(password)) {
             setEmail_is_valid(false);
             setPassword_is_valid(false);
@@ -59,7 +58,6 @@ const Signup = ({ navigation }) => {
                 <View style={styles.header}>
                     <Image source={logoLinkNearby} style={styles.logo} />
                     <Text onPress={() => {
-                        console.log('oui')
                         navigation.navigate('ChooseNameScreen')
                     }} style={styles.h1}>LINKNEARBY</Text>
                 </View>
