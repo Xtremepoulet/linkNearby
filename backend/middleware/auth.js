@@ -1,26 +1,36 @@
 const jwt = require('jsonwebtoken');
 
 
-const verifyToken = (req, res, next) => {
-    // Récupérer le token de l'en-tête
-    const authHeader = req.headers.authorization;
-    const token = authHeader && authHeader.split(' ')[1];
+function verifyToken(token) {
 
-    // Vérifier si le token est présent
-    if (token == null) {
-        return res.sendStatus(401);
+    try {
+      const decoded = jwt.verify(token, process.env.TOKEN_SECRET);
+      return { success: true, data: decoded };
+    } catch (error) {
+      return { success: false, error: error.message };
     }
+  }
 
-    // Vérifier la validité du token
-    jwt.verify(token, process.env.TOKEN_SECRET, (err, user) => {
-        if (err) {
-            return res.sendStatus(403);
-        }
 
-        // Si le token est valide, ajouter l'utilisateur au contexte de la requête
-        req.user = user;
-        next();
-    });
-};
 
-module.exports = verifyToken;
+function authenticateToken(req, res, next) {
+    const token = req.headers['authorization'];
+   
+    console.log(token)
+  
+    if (!token) {
+      return res.sendStatus(401);
+    }
+  
+    const result = verifyToken(token);
+  
+    if (!result.success) {
+      return res.status(403).json({ error: result.error });
+    }
+    
+    req.user = result.data;
+    next();
+  }
+
+
+module.exports = { authenticateToken };

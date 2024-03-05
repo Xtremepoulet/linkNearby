@@ -1,9 +1,21 @@
+import { useEffect } from 'react';
 import { Pressable, StyleSheet, Text, View, Image, TextInput, KeyboardAvoidingView, Platform } from 'react-native';
 import { UseSelector, useSelector } from 'react-redux';
+import Constants from 'expo-constants';
+
+const CONNECTION_BACKEND = Constants.expoConfig?.extra?.CONNECTION_BACKEND;
 
 export default function HomeScreen({ navigation }) {
-
+    
     const token = useSelector((state) => state.users.value.token);
+
+    const user_infos = { name: 'hello'}
+    useEffect(() => {
+        fetch(`${CONNECTION_BACKEND}/user/infos`,{
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json', 'authorization': 'aaaaaa' },
+        })
+    }, [])
 
     return (
         <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'}

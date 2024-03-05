@@ -6,6 +6,8 @@ require('../models/connection');
 //modules cheackBody
 const { checkBody } = require('../modules/checkBody');
 
+
+
 //Gestion mot de passe et token
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
@@ -26,6 +28,7 @@ router.post('/signin', async (req, res) => {
 
             // Génération du JWT
             const token = jwt.sign({ userId: user._id }, process.env.TOKEN_SECRET, { expiresIn: '24h' });
+            console.log(token)
             res.json({ result: true, token: token });
         } else {
             res.status(401).json({ result: false, message: 'Incorrect email or password' });
@@ -35,8 +38,7 @@ router.post('/signin', async (req, res) => {
     }
 });
 
-
-
+    
 
 router.post('/signup', async (req, res, next) => {
     if (!checkBody(req.body, ['email', 'password'])) {

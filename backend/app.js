@@ -18,42 +18,13 @@ app.use(cors());
 //routes jeremy
 
 const authRouter = require('./routes/auth.js');
-
-
-
-
-
-
-
-
-
-
-
-
+const userRouter = require('./routes/user.js');
 
 
 
 //end jeremy routes 
 
 //yanis routes
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 //end yanis routes
@@ -66,6 +37,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/auth', authRouter);
+app.use('/user', userRouter);
 
 
 module.exports = app;
