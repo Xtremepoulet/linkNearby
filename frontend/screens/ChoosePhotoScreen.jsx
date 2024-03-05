@@ -74,6 +74,7 @@ export default function ChoosePhotoScreen({ navigation }) {
           if (result && result.assets[0].mimeType === 'image/jpeg') {
             console.log('Document picked:', result.assets[0].uri);
             dispatch(defineUri(result.assets[0].uri))
+            setIsPhoto_taken(true)
             // const formData = new FormData();
             // formData.append('photoFromFront', {
             //     uri: result.assets[0].uri,
@@ -98,7 +99,7 @@ export default function ChoosePhotoScreen({ navigation }) {
                     uri: uri,
                     }}
                 />      
-                            <Pressable
+                <Pressable
                     style={styles.button}
                     onPress={() => setIsPhoto_taken(false)}
                 >
