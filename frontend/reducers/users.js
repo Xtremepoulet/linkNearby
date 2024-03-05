@@ -11,20 +11,16 @@ export const usersSlice = createSlice({
     addToken: (state, action) => {
       state.value.token = action.payload;
     },
-
     deleteToken: (state, action) => {
       state.value.token = null;
     },
-
     defineName: (state, action) => {
       state.value.name = action.payload;
       console.log(state.value.name)
-
     },
     defineGender: (state, action) => {
       state.value.gender = action.payload;
       console.log(state.value.gender)
-
     },
     defineBirthdate: (state, action) => {
       state.value.birthdate = action.payload;

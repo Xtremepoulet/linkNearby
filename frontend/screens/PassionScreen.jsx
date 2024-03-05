@@ -46,7 +46,6 @@ export default function PassionScreen({ navigation }) {
         if (userPassions.includes(passion)) {
             Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
             dispatch(removePassions(passion));
-
         } else if (userPassions.length < 10) {
             Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
             dispatch(addPassions(passion));
