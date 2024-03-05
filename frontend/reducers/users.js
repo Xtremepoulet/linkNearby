@@ -33,6 +33,8 @@ export const usersSlice = createSlice({
     },
     defineBiography: (state, action) => {
       state.value.bio = action.payload;
+      console.log(state.value.bio)
+
     },
   },
 });
