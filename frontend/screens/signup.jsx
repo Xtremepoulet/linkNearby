@@ -1,9 +1,10 @@
 import React, { useState } from "react"
-import { StyleSheet, Text, TextInput, View, TouchableOpacity, KeyboardAvoidingView, Platform, Pressable } from 'react-native';
+import { StyleSheet, Text, TextInput, View, TouchableOpacity, KeyboardAvoidingView, Platform, Pressable, SafeAreaView, Image } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import Constants from 'expo-constants';
 import { useDispatch, useSelector } from "react-redux";
 import { addToken } from "../reducers/users";
+import logoLinkNearby from '../assets/linkNearbyBackNone.webp';
 
 const CONNECTION_BACKEND = Constants.expoConfig?.extra?.CONNECTION_BACKEND;
 
@@ -41,46 +42,44 @@ const Signup = ({ navigation }) => {
 
         if (user_response.result) {
             dispatch(addToken(user_response.token))
+            navigation.navigate('chooseNameScreen');
         }
     }
 
-
+    const Container = Platform.OS === 'ios' ? SafeAreaView : View;
     return (
-        <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={styles.container}>
-            {/* top section */}
-            <View style={styles.top_container}>
-                <Text style={styles.app_title}>LINKNEARBY</Text>
-            </View>
-            <Pressable
-                style={styles.button}
-                title="Go to PassionsScreen"
-                onPress={() => navigation.navigate('ChooseNameScreen')}
-            >
-                <Text style={styles.texteblanc}>Next</Text>
-            </Pressable>
-            {/* bottom section */}
-            <View style={styles.bottom_container}>
-                <View style={styles.input_container}>
-                    <LinearGradient colors={['#F98F22', '#FFA105']} style={styles.gradiant_input}>
-                        <TextInput value={email} onChangeText={(value) => setEmail(value.toLocaleLowerCase())} style={styles.input} placeholder="Email..."></TextInput>
-                    </LinearGradient>
-                    {email_is_valid ? '' : <Text style={styles.invalid_message}>INVALID EMAIL</Text>}
-                </View>
 
-                <View style={styles.input_container}>
-                    <LinearGradient colors={['#F98F22', '#FFA105']} style={styles.gradiant_input}>
-                        <TextInput value={password} onChangeText={(value) => setPassword(value)} style={styles.input} placeholder="password..."></TextInput>
-                    </LinearGradient>
-                    {password_is_valid ? '' : <Text style={styles.invalid_message}>INVALID PASSWORD</Text>}
+        <KeyboardAvoidingView
+            behavior={Platform.OS === "ios" ? "padding" : "height"}
+            style={styles.container}
+            keyboardVerticalOffset={Platform.OS === "ios" ? 90 : 20} // Ajusté pour iOS
+        >
+            <Container style={styles.container}>
+                {/* top section */}
+                <View style={styles.header}>
+                    <Image source={logoLinkNearby} style={styles.logo} />
+                    <Text onPress={() => {
+                        console.log('oui')
+                        navigation.navigate('ChooseNameScreen')
+                    }} style={styles.h1}>LINKNEARBY</Text>
                 </View>
-
-                <LinearGradient colors={['#F98F22', '#FFA105']} style={styles.gradiant_button}>
+                {/* bottom section */}
+                <View style={styles.body}>
+                    <View style={styles.input_container}>
+                        <TextInput value={email} onChangeText={(value) => setEmail(value.toLocaleLowerCase())} style={styles.text_input} placeholder="Email..."></TextInput>
+                        {!email_is_valid && <Text style={styles.invalid_message}>Email non valide</Text>}
+                    </View>
+                    <View style={styles.input_container}>
+                        <TextInput value={password} onChangeText={(value) => setPassword(value)} style={styles.text_input} placeholder="password..."></TextInput>
+                        {!password_is_valid && <Text style={styles.invalid_message}>Mot de passe incorrect</Text>}
+                    </View>
                     <TouchableOpacity style={styles.signup_button} onPress={() => user_signup()}>
-                        <Text>Signup</Text>
+                        <Text style={styles.text_button}>Signup</Text>
                     </TouchableOpacity>
-                </LinearGradient>
-            </View>
+                </View>
+            </Container>
         </KeyboardAvoidingView>
+
     );
 }
 
@@ -90,70 +89,72 @@ export default Signup;
 
 const styles = StyleSheet.create({
     container: {
-        width: '100%',
-        height: '100%',
         flex: 1,
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        gap: 20,
-        padding: 25,
+        backgroundColor: 'white',
+        // justifyContent: 'space-between',
     },
+    logo: {
+        width: 100,
+        height: 100,
+        marginBottom: 20,
+        // backgroundColor: 'red',
+    },
+    h1: {
+        fontSize: 50,
+        fontWeight: 'bold',
+        color: 'black',
+        // backgroundColor: 'blue',
 
+    },
     input_container: {
-        width: '100%',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
+        width: '80%',
+        height: 50,
+        margin: 10,
+        borderRadius: 20,
+        backgroundColor: '#FFA53F',
+        // elevation: 10,
     },
-
     invalid_message: {
         color: '#b91414',
+        fontSize: 12,
+        paddingLeft: 10,
+        fontWeight: 'bold',
     },
-
-    gradiant_input: {
-        width: '90%',
-        borderRadius: 15,
+    body: {
+        alignItems: 'center',
+        // backgroundColor: 'yellow',
+        height: '40%',
     },
-
-    input: {
+    text_input: {
         width: '100%',
+        height: '100%',
         padding: 10,
-        color: '#353439',
-    },
+        color: 'white',
 
-    top_container: {
-        width: '100%',
-        display: 'flex',
+    },
+    header: {
         justifyContent: 'center',
         alignItems: 'center',
-        gap: 25,
-        padding: 20,
-    },
-
-    app_title: {
-        fontSize: 32,
-    },
-
-    bottom_container: {
+        // marginTop: '50%',
+        height: '70%',
         width: '100%',
-        display: 'flex',
-        justifyContent: 'space-around',
-        alignItems: 'center',
-        gap: 10,
+        // backgroundColor: 'green',
     },
-
     signup_button: {
-        width: '50%',
-        alignSelf: 'center',
+        marginTop: 20,
+        width: '40%',
+        height: 60,
         display: 'flex',
-        justifyContent: 'center',
         alignItems: 'center',
+        justifyContent: 'center',
         padding: 10,
+        backgroundColor: '#FFA53F',
+        borderRadius: 20,
+
     },
-
-    gradiant_button: {
-        width: '50%',
-        borderRadius: 50,
+    text_button: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        color: 'white'
     }
-
 });

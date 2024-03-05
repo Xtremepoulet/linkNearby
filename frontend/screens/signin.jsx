@@ -1,18 +1,15 @@
 import React, { useEffect, useState } from "react"
 import { StyleSheet, Text, TextInput, View, TouchableOpacity, KeyboardAvoidingView, Platform, Image, SafeAreaView } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
 import Constants from 'expo-constants';
 import { UseDispatch, useDispatch } from "react-redux";
 import { addToken } from "../reducers/users";
 const CONNECTION_BACKEND = Constants.expoConfig?.extra?.CONNECTION_BACKEND;
 import logoLinkNearby from '../assets/linkNearbyBackNone.webp';
-import { Keyboard, Animated } from 'react-native';
 
 
 
 
 const Signin = ({ navigation }) => {
-    const [headerHeight] = useState(new Animated.Value(1));
 
     const dispatch = useDispatch();
 
@@ -62,92 +59,36 @@ const Signin = ({ navigation }) => {
 
     const Container = Platform.OS === 'ios' ? SafeAreaView : View;
 
-    useEffect(() => {
-        const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => {
-            setTimeout(() => {
-                Animated.timing(headerHeight, {
-                    toValue: 0,
-                    duration: 150,
-                    useNativeDriver: true,
-                }).start();
-            }); // Délai de 100ms
-        });
-
-        const keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', () => {
-            Animated.timing(headerHeight, {
-                toValue: 1,
-                duration: 600,
-                useNativeDriver: true,
-            }).start();
-        });
-
-        return () => {
-            keyboardDidShowListener.remove();
-            keyboardDidHideListener.remove();
-        };
-    }, []);
-
-
 
     return (
 
-        // <KeyboardAvoidingView
-        //     behavior={Platform.OS === "ios" ? "padding" : "height"}
-        //     style={styles.container}
-        //     keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 20} // Ajusté pour iOS
-        // >
-        <Container style={styles.container}>
-            {/* top section */}
-            <Animated.View
-                style={[
-                    styles.header,
-                    {
-                        transform: [
-                            {
-                                translateY: headerHeight.interpolate({
-                                    inputRange: [0, 1],
-                                    outputRange: [-130, 0], // Déplace l'en-tête vers le haut
-                                }),
-                            },
-                        ],
-                    },
-                ]}
-            >
-                <Image source={logoLinkNearby} style={styles.logo} />
-                <Text style={styles.h1}>LINKNEARBY</Text>
-            </Animated.View>
-
-            {/* bottom section */}
-            <Animated.View
-                style={[
-                    styles.body,
-                    {
-                        transform: [
-                            {
-                                translateY: headerHeight.interpolate({
-                                    inputRange: [0, 1],
-                                    outputRange: [-300, 0], // Déplace l'en-tête vers le haut
-                                }),
-                            },
-
-                        ],
-                    },
-                ]}
-            >
-                <View style={styles.input_container}>
-                    <TextInput value={email} onChangeText={(value) => setEmail(value.toLocaleLowerCase())} style={styles.text_input} placeholder="Email..."></TextInput>
-                    {!email_is_valid && <Text style={styles.invalid_message}>Email non valide</Text>}
+        <KeyboardAvoidingView
+            behavior={Platform.OS === "ios" ? "padding" : "height"}
+            style={styles.container}
+            keyboardVerticalOffset={Platform.OS === "ios" ? 90 : 20} // Ajusté pour iOS
+        >
+            <Container style={styles.container}>
+                {/* top section */}
+                <View style={styles.header}>
+                    <Image source={logoLinkNearby} style={styles.logo} />
+                    <Text style={styles.h1}>LINKNEARBY</Text>
                 </View>
-                <View style={styles.input_container}>
-                    <TextInput value={password} onChangeText={(value) => setPassword(value)} style={styles.text_input} placeholder="password..."></TextInput>
-                    {!password_is_valid && <Text style={styles.invalid_message}>Mot de passe incorrect</Text>}
+                {/* bottom section */}
+                <View style={styles.body}>
+                    <View style={styles.input_container}>
+                        <TextInput value={email} onChangeText={(value) => setEmail(value.toLocaleLowerCase())} style={styles.text_input} placeholder="Email..."></TextInput>
+                        {!email_is_valid && <Text style={styles.invalid_message}>Email non valide</Text>}
+                    </View>
+                    <View style={styles.input_container}>
+                        <TextInput value={password} onChangeText={(value) => setPassword(value)} style={styles.text_input} placeholder="password..."></TextInput>
+                        {!password_is_valid && <Text style={styles.invalid_message}>Mot de passe incorrect</Text>}
+                    </View>
+                    <TouchableOpacity style={styles.signup_button} onPress={() => user_signin()}>
+                        <Text style={styles.text_button}>Connect</Text>
+                    </TouchableOpacity>
                 </View>
-                <TouchableOpacity style={styles.signup_button} onPress={() => user_signin()}>
-                    <Text style={styles.text_button}>Connect</Text>
-                </TouchableOpacity>
-            </Animated.View>
-        </Container>
-        // </KeyboardAvoidingView>
+            </Container>
+        </KeyboardAvoidingView>
 
     );
 }
