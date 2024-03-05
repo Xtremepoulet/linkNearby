@@ -2,17 +2,20 @@ import React, { useEffect } from 'react';
 import { Pressable, StyleSheet, Text, View, TextInput, KeyboardAvoidingView, Platform, Dimensions, ScrollView, SafeAreaView } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import * as Haptics from 'expo-haptics';
-const windowHeight = Dimensions.get('window').height;
-
+import { addPassions, removePassions } from '../reducers/users';
 import Constants from 'expo-constants';
-const CONNECTION_BACKEND = Constants.expoConfig?.extra?.CONNECTION_BACKEND;
 
+const CONNECTION_BACKEND = Constants.expoConfig?.extra?.CONNECTION_BACKEND;
+const windowHeight = Dimensions.get('window').height;
 
 
 export default function PassionScreen({ navigation }) {
-    const [selectedPassions, setSelectedPassions] = useState([])
+
     const [passions, setPassions] = useState([])
+    const dispatch = useDispatch();
+    const userPassions = useSelector((state) => state.users.value.passions);
 
 
     useEffect(() => {
@@ -39,22 +42,19 @@ export default function PassionScreen({ navigation }) {
         }
     }
 
-
-
-
     const handleSetPassion = (passion) => {
-        if (selectedPassions.includes(passion)) {
+        if (userPassions.includes(passion)) {
             Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-            setSelectedPassions(selectedPassions.filter((item) => item !== passion));
-        } else if (selectedPassions.length < 10) {
+            dispatch(removePassions(passion));
 
+        } else if (userPassions.length < 10) {
             Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-            setSelectedPassions([...selectedPassions, passion]);
+            dispatch(addPassions(passion));
         }
     }
 
     const handleNext = () => {
-        if (selectedPassions.length >= 3) {
+        if (userPassions.length >= 3) {
             navigation.navigate('BiographyScreen');
         } else {
             alert('Il faut selectionner au moins 3 passions');
@@ -64,7 +64,7 @@ export default function PassionScreen({ navigation }) {
     const listePassions = passions
         .sort((a, b) => a.name.localeCompare(b.name))
         .map((passion, index) => {
-            const isSelected = selectedPassions.includes(passion._id);
+            const isSelected = userPassions.includes(passion._id);
             return (
                 <Pressable key={index} onPress={() => handleSetPassion(passion._id)} style={[styles.passionBody, isSelected && styles.passionSelected]}>
                     <Text style={styles.passionTexte}>{passion.name} {passion.emoji}</Text>
@@ -73,11 +73,7 @@ export default function PassionScreen({ navigation }) {
         });
 
 
-
-
-
     return (
-
         <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
             style={styles.container}
         >
@@ -90,15 +86,14 @@ export default function PassionScreen({ navigation }) {
                     </Pressable>
                     <Text style={styles.headerText}>Partage nous tes passions</Text>
                 </View>
-                <Text>Selectionne nous jusqu'à 10 de passions</Text>
-                <Text style={styles.compteur}>{selectedPassions.length}</Text>
+                <Text>Choisis jusqu'à 10 passions</Text>
+                <Text style={styles.compteur}>{userPassions.length}</Text>
 
                 <View style={styles.containerEmoji}>
                     <ScrollView contentContainerStyle={styles.containerScroll}>
                         {listePassions}
                     </ScrollView>
                 </View>
-
                 <Pressable
                     style={styles.button}
                     title="Go to PassionsScreen"

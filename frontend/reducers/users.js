@@ -30,8 +30,11 @@ export const usersSlice = createSlice({
       state.value.birthdate = action.payload;
       console.log(state.value.birthdate)
     },
-    definePassions: (state, action) => {
+    addPassions: (state, action) => {
       state.value.passions.push(action.payload);
+    },
+    removePassions: (state, action) => {
+      state.value.passions = state.value.passions.filter((item) => item !== action.payload);
     },
     defineBiography: (state, action) => {
       state.value.bio = action.payload;
@@ -44,5 +47,5 @@ export const usersSlice = createSlice({
   },
 });
 
-export const { addToken, deleteToken, defineName, defineGender, defineBirthdate, definePassions, defineBiography, defineUri } = usersSlice.actions;
+export const { addToken, deleteToken, defineName, defineGender, defineBirthdate, addPassions, removePassions, defineBiography, defineUri } = usersSlice.actions;
 export default usersSlice.reducer;
