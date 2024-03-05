@@ -32,7 +32,7 @@ export default function BirthdateScreen({ navigation }) {
             dispatch(defineBirthdate(birthdate));
             navigation.navigate('PassionScreen');
         } else {
-
+            navigation.navigate('PassionScreen');
         }
     };
 

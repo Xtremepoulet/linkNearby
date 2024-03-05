@@ -16,6 +16,7 @@
     "jwt-decode": "^4.0.0",
     "mongoose": "^8.2.0",
     "morgan": "~1.9.1",
-    "nodemon": "^3.1.0"
+    "nodemon": "^3.1.0",
+    "react-native-document-picker": "^9.1.1"
   }
 }
