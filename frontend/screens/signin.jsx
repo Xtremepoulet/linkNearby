@@ -62,30 +62,30 @@ const Signin = ({ navigation }) => {
 
     const Container = Platform.OS === 'ios' ? SafeAreaView : View;
 
-    useEffect(() => {
-        const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => {
-            setTimeout(() => {
-                Animated.timing(headerHeight, {
-                    toValue: 0,
-                    duration: 150,
-                    useNativeDriver: true,
-                }).start();
-            }); // Délai de 100ms
-        });
+    // useEffect(() => {
+    //     const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => {
+    //         setTimeout(() => {
+    //             Animated.timing(headerHeight, {
+    //                 toValue: 0,
+    //                 duration: 150,
+    //                 useNativeDriver: true,
+    //             }).start();
+    //         }); // Délai de 100ms
+    //     });
 
-        const keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', () => {
-            Animated.timing(headerHeight, {
-                toValue: 1,
-                duration: 600,
-                useNativeDriver: true,
-            }).start();
-        });
+    //     const keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', () => {
+    //         Animated.timing(headerHeight, {
+    //             toValue: 1,
+    //             duration: 600,
+    //             useNativeDriver: true,
+    //         }).start();
+    //     });
 
-        return () => {
-            keyboardDidShowListener.remove();
-            keyboardDidHideListener.remove();
-        };
-    }, []);
+    //     return () => {
+    //         keyboardDidShowListener.remove();
+    //         keyboardDidHideListener.remove();
+    //     };
+    // }, []);
 
 
 
@@ -98,7 +98,7 @@ const Signin = ({ navigation }) => {
         // >
         <Container style={styles.container}>
             {/* top section */}
-            <Animated.View
+            {/* <Animated.View
                 style={[
                     styles.header,
                     {
@@ -112,13 +112,13 @@ const Signin = ({ navigation }) => {
                         ],
                     },
                 ]}
-            >
-                <Image source={logoLinkNearby} style={styles.logo} />
-                <Text style={styles.h1}>LINKNEARBY</Text>
-            </Animated.View>
+            > */}
+            <Image source={logoLinkNearby} style={styles.logo} />
+            <Text style={styles.h1}>LINKNEARBY</Text>
+            {/* </Animated.View> */}
 
             {/* bottom section */}
-            <Animated.View
+            {/* <Animated.View
                 style={[
                     styles.body,
                     {
@@ -129,22 +129,23 @@ const Signin = ({ navigation }) => {
                                     outputRange: [-300, 0], // Déplace l'en-tête vers le haut
                                 }),
                             },
+
                         ],
                     },
                 ]}
-            >
-                <View style={styles.input_container}>
-                    <TextInput value={email} onChangeText={(value) => setEmail(value.toLocaleLowerCase())} style={styles.text_input} placeholder="Email..."></TextInput>
-                    {!email_is_valid && <Text style={styles.invalid_message}>Email non valide</Text>}
-                </View>
-                <View style={styles.input_container}>
-                    <TextInput value={password} onChangeText={(value) => setPassword(value)} style={styles.text_input} placeholder="password..."></TextInput>
-                    {!password_is_valid && <Text style={styles.invalid_message}>Mot de passe incorrect</Text>}
-                </View>
-                <TouchableOpacity style={styles.signup_button} onPress={() => user_signin()}>
-                    <Text style={styles.text_button}>Connect</Text>
-                </TouchableOpacity>
-            </Animated.View>
+            > */}
+            <View style={styles.input_container}>
+                <TextInput value={email} onChangeText={(value) => setEmail(value.toLocaleLowerCase())} style={styles.text_input} placeholder="Email..."></TextInput>
+                {!email_is_valid && <Text style={styles.invalid_message}>Email non valide</Text>}
+            </View>
+            <View style={styles.input_container}>
+                <TextInput value={password} onChangeText={(value) => setPassword(value)} style={styles.text_input} placeholder="password..."></TextInput>
+                {!password_is_valid && <Text style={styles.invalid_message}>Mot de passe incorrect</Text>}
+            </View>
+            <TouchableOpacity style={styles.signup_button} onPress={() => user_signin()}>
+                <Text style={styles.text_button}>Connect</Text>
+            </TouchableOpacity>
+            {/* </Animated.View> */}
         </Container>
         // </KeyboardAvoidingView>
 
