@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 const windowHeight = Dimensions.get('window').height;
 
-export default function ChooseNameScreen({ navigation }) {
+export default function ChooseGenderScreen({ navigation }) {
     const dispatch = useDispatch();
 
 
@@ -19,19 +19,32 @@ export default function ChooseNameScreen({ navigation }) {
         >
             <View style={styles.header}>
                 <Pressable
-                    onPress={() => navigation.navigate('signupScreen')}
+                    onPress={() => navigation.navigate('ChooseNameScreen')}
                 >
                     <FontAwesome name="arrow-left" size={24} style={styles.arrowIcon} />
                 </Pressable>
-                <Text style={styles.headerText}>Comment tu t'appelles ?</Text>
+                <Text style={styles.headerText}>foufoune ou zbeub zbeub</Text>
             </View>
             <View style={styles.bottom}>
-                <TextInput placeholder='Name' style={styles.input}></TextInput>
+                <Pressable
+                    style={styles.genderButton}
+                    title="Go to PassionsScreen"
+                    onPress={() => navigation.navigate('BirthdateScreen')}
+                >
+                    <Text style={styles.texteblanc}>femme</Text>
+                </Pressable>
+                <Pressable
+                    style={styles.genderButton}
+                    title="Go to PassionsScreen"
+                    onPress={() => navigation.navigate('BirthdateScreen')}
+                >
+                    <Text style={styles.texteblanc}>homme</Text>
+                </Pressable>
 
                 <Pressable
                     style={styles.button}
                     title="Go to PassionsScreen"
-                    onPress={() => navigation.navigate('ChooseGenderScreen')}
+                    onPress={() => navigation.navigate('BirthdateScreen')}
                 >
                     <Text style={styles.texteblanc}>Next</Text>
                 </Pressable>
@@ -89,5 +102,15 @@ const styles = StyleSheet.create({
     },
     texteblanc: {
         color: 'white'
+    },
+    genderButton: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingVertical: 12,
+        width: '80%',
+        borderRadius: 5,
+        elevation: 3,
+        backgroundColor: 'blue',
+        marginTop: 20,
     }
 });
