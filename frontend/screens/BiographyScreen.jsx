@@ -11,14 +11,14 @@ export default function BiographyScreen({ navigation }) {
         >
             <View style={styles.header}>
                 <Pressable
-                    onPress={() => navigation.navigate('BirthdateScreen')}
+                    onPress={() => navigation.navigate('PassionScreen')}
                 >
                     <FontAwesome name="arrow-left" size={24} style={styles.arrowIcon} />
                 </Pressable>
                 <Text style={styles.headerText}>Parles nous de toi</Text>
             </View>
             <Text>écris nous un petit texte sur toi et tes passions!</Text>
-            <TextInput></TextInput>
+            <TextInput placeholder='parles nous de toi 🔫' ></TextInput>
             <View style={styles.bottom}>
 
                 <Pressable
