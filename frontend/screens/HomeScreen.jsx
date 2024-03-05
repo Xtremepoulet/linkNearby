@@ -6,14 +6,14 @@ import Constants from 'expo-constants';
 const CONNECTION_BACKEND = Constants.expoConfig?.extra?.CONNECTION_BACKEND;
 
 export default function HomeScreen({ navigation }) {
-    
-    const token = useSelector((state) => state.users.value.token);
 
+    const token = useSelector((state) => state.users.value.token);
+    
     const user_infos = { name: 'hello'}
     useEffect(() => {
-        fetch(`${CONNECTION_BACKEND}/user/infos`,{
+        fetch(`${CONNECTION_BACKEND}/user/authorisation`,{
             method: 'GET',
-            headers: { 'Content-Type': 'application/json', 'authorization': 'aaaaaa' },
+            headers: { 'Content-Type': 'application/json', 'authorization': token },
         })
     }, [])
 
