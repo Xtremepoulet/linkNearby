@@ -17,9 +17,12 @@ const Signup = ({ navigation }) => {
     const [password_is_valid, setPassword_is_valid] = useState(true);
     const [email_is_valid, setEmail_is_valid] = useState(true);
 
+
+
     const email_regex = /^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})$/;
     // Minimum eight characters, at least one letter, one number and one special character:
     const password_regex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
+
 
 
     const user_signup = async () => {
