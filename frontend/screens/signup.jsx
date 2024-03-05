@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { StyleSheet, Text, TextInput, View, TouchableOpacity, KeyboardAvoidingView, Platform } from 'react-native';
+import { StyleSheet, Text, TextInput, View, TouchableOpacity, KeyboardAvoidingView, Platform, Pressable } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import Constants from 'expo-constants';
 import { useDispatch, useSelector } from "react-redux";
@@ -29,7 +29,7 @@ const Signup = ({ navigation }) => {
             return;
         }
 
-        const user_infos = { email: email, password: password}
+        const user_infos = { email: email, password: password }
 
         const fetching_data = await fetch(`${CONNECTION_BACKEND}/auth/signup`, {
             method: 'POST',
@@ -38,20 +38,26 @@ const Signup = ({ navigation }) => {
         })
 
         const user_response = await fetching_data.json();
-        
-        if(user_response.result){
+
+        if (user_response.result) {
             dispatch(addToken(user_response.token))
         }
     }
 
-    
+
     return (
         <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={styles.container}>
             {/* top section */}
             <View style={styles.top_container}>
                 <Text style={styles.app_title}>LINKNEARBY</Text>
             </View>
-            
+            <Pressable
+                style={styles.button}
+                title="Go to PassionsScreen"
+                onPress={() => navigation.navigate('ChooseNameScreen')}
+            >
+                <Text style={styles.texteblanc}>Next</Text>
+            </Pressable>
             {/* bottom section */}
             <View style={styles.bottom_container}>
                 <View style={styles.input_container}>

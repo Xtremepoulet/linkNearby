@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { StyleSheet, Text, TextInput, View, TouchableOpacity, KeyboardAvoidingView, Platform, Image } from 'react-native';
+import { StyleSheet, Text, TextInput, View, TouchableOpacity, KeyboardAvoidingView, Platform, Image, SafeAreaView } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import Constants from 'expo-constants';
 import { UseDispatch, useDispatch } from "react-redux";
@@ -58,36 +58,39 @@ const Signin = ({ navigation }) => {
 
 
 
-
+    const Container = Platform.OS === 'ios' ? SafeAreaView : View;
 
     return (
+
         <KeyboardAvoidingView
             behavior={Platform.OS === "ios" ? "padding" : "height"}
             style={styles.container}
-            keyboardVerticalOffset={Platform.OS === "ios" ? 70 : 20}
+            keyboardVerticalOffset={Platform.OS === "ios" ? 5 : 20}
         >
-            
-            {/* top section */}
-            <View style={styles.header}>
-                <Image source={logoLinkNearby} style={styles.logo} />
-                <Text style={styles.h1}>LINKNEARBY</Text>
-            </View>
+            <Container style={styles.container}>
+                {/* top section */}
+                <View style={styles.header}>
+                    <Image source={logoLinkNearby} style={styles.logo} />
+                    <Text style={styles.h1}>LINKNEARBY</Text>
+                </View>
 
-            {/* bottom section */}
-            <View style={styles.body}>
-                <View style={styles.input_container}>
-                    <TextInput value={email} onChangeText={(value) => setEmail(value.toLocaleLowerCase())} style={styles.text_input} placeholder="Email..."></TextInput>
-                    {!email_is_valid && <Text style={styles.invalid_message}>Email non valide</Text>}
+                {/* bottom section */}
+                <View style={styles.body}>
+                    <View style={styles.input_container}>
+                        <TextInput value={email} onChangeText={(value) => setEmail(value.toLocaleLowerCase())} style={styles.text_input} placeholder="Email..."></TextInput>
+                        {!email_is_valid && <Text style={styles.invalid_message}>Email non valide</Text>}
+                    </View>
+                    <View style={styles.input_container}>
+                        <TextInput value={password} onChangeText={(value) => setPassword(value)} style={styles.text_input} placeholder="password..."></TextInput>
+                        {!password_is_valid && <Text style={styles.invalid_message}>Mot de passe incorrect</Text>}
+                    </View>
+                    <TouchableOpacity style={styles.signup_button} onPress={() => user_signin()}>
+                        <Text style={styles.text_button}>Connect</Text>
+                    </TouchableOpacity>
                 </View>
-                <View style={styles.input_container}>
-                    <TextInput value={password} onChangeText={(value) => setPassword(value)} style={styles.text_input} placeholder="password..."></TextInput>
-                    {!password_is_valid && <Text style={styles.invalid_message}>Mot de passe incorrect</Text>}
-                </View>
-                <TouchableOpacity style={styles.signup_button} onPress={() => user_signin()}>
-                    <Text style={styles.text_button}>Connect</Text>
-                </TouchableOpacity>
-            </View>
+            </Container>
         </KeyboardAvoidingView>
+
     );
 }
 
@@ -100,6 +103,7 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: 'white',
         justifyContent: 'space-between',
+        justifyContent: 'space-between',
     },
     logo: {
         width: 80,
@@ -110,7 +114,7 @@ const styles = StyleSheet.create({
         fontSize: 40,
         fontWeight: 'bold',
         color: 'black'
-    },                    
+    },
     input_container: {
         width: '80%',
         height: 50,
@@ -127,23 +131,18 @@ const styles = StyleSheet.create({
     },
     body: {
         alignItems: 'center',
-        height: '30%',
     },
     text_input: {
         width: '100%',
         height: '100%',
         padding: 10,
         color: 'white',
-        // display: 'flex',
-        // justifyContent: 'center',
-        // alignItems: 'center',
     },
     header: {
         justifyContent: 'center',
         alignItems: 'center',
         flexDirection: 'row',
-        marginTop: 70,
-        height: '10%',
+        marginTop: 20,
         width: '100%',
     },
     signup_button: {
