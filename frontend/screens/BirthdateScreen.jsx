@@ -1,11 +1,14 @@
-import React, { useState } from 'react';
 import { StyleSheet, Text, View, TextInput, KeyboardAvoidingView, Platform, Dimensions, Pressable } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
+import { useDispatch } from 'react-redux';
+import { useState } from 'react';
+import { defineName } from '../reducers/users';
 
 const windowHeight = Dimensions.get('window').height;
 
 export default function BirthdateScreen({ navigation }) {
+    const dispatch = useDispatch();
     const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
     const [birthdate, setBirthdate] = useState('');
     console.log(birthdate)
@@ -47,7 +50,7 @@ export default function BirthdateScreen({ navigation }) {
 
             <View style={styles.header}>
                 <Pressable
-                    onPress={() => navigation.navigate('ChooseNameScreen')}
+                    onPress={() => navigation.navigate('ChooseGenderScreen')}
                 >
                     <FontAwesome name="arrow-left" size={24} style={styles.arrowIcon} />
                 </Pressable>

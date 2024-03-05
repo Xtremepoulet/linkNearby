@@ -1,16 +1,28 @@
 import React from 'react';
 import { Pressable, StyleSheet, Text, View, TextInput, KeyboardAvoidingView, Platform, Dimensions } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { useState } from 'react';
+import { defineGender } from '../reducers/users';
 
 const windowHeight = Dimensions.get('window').height;
 
 export default function ChooseGenderScreen({ navigation }) {
     const dispatch = useDispatch();
+    const [gender, setGender] = useState('');
 
 
+    const nextPage = () => {
+        if (gender) {
+            dispatch(defineGender(gender));
+            navigation.navigate('ChooseGenderScreen')
+        } else {
 
+        }
 
+    };
+
+    navigation.navigate('BirthdateScreen')
 
 
     return (
@@ -28,14 +40,14 @@ export default function ChooseGenderScreen({ navigation }) {
             <View style={styles.bottom}>
                 <Pressable
                     style={styles.genderButton}
-                    title="Go to PassionsScreen"
+                    title="choose femme"
                     onPress={() => navigation.navigate('BirthdateScreen')}
                 >
                     <Text style={styles.texteblanc}>femme</Text>
                 </Pressable>
                 <Pressable
                     style={styles.genderButton}
-                    title="Go to PassionsScreen"
+                    title="choose male"
                     onPress={() => navigation.navigate('BirthdateScreen')}
                 >
                     <Text style={styles.texteblanc}>homme</Text>
@@ -44,7 +56,7 @@ export default function ChooseGenderScreen({ navigation }) {
                 <Pressable
                     style={styles.button}
                     title="Go to PassionsScreen"
-                    onPress={() => navigation.navigate('BirthdateScreen')}
+                    onPress={() => nextPage()}
                 >
                     <Text style={styles.texteblanc}>Next</Text>
                 </Pressable>
