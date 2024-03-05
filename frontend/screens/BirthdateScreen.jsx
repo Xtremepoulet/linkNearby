@@ -36,6 +36,7 @@ export default function BirthdateScreen({ navigation }) {
         }
     };
 
+
     return (
         <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
             style={styles.container}
