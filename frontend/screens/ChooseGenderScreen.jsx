@@ -1,38 +1,25 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Pressable, StyleSheet, Text, View, TextInput, KeyboardAvoidingView, Platform, Dimensions } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { useDispatch } from 'react-redux';
-import { useState } from 'react';
 import { defineGender } from '../reducers/users';
 
 const windowHeight = Dimensions.get('window').height;
 
 export default function ChooseGenderScreen({ navigation }) {
     const dispatch = useDispatch();
-    const [gender, setGender] = useState('');
+    const [selectedGender, setSelectedGender] = useState('');
 
-    const femme = () => {
-        setGender('femme')
+    const selectGender = (gender) => {
+        setSelectedGender(gender);
     }
-
-    const homme = () => {
-        setGender('homme')
-    }
-
-
-
 
     const nextPage = () => {
-        if (gender) {
-            dispatch(defineGender(gender));
+        if (selectedGender) {
+            dispatch(defineGender(selectedGender));
             navigation.navigate('BirthdateScreen')
-        } else {
-
         }
-
     };
-
-
 
     return (
         <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -48,16 +35,16 @@ export default function ChooseGenderScreen({ navigation }) {
             </View>
             <View style={styles.bottom}>
                 <Pressable
-                    style={styles.genderButton}
+                    style={[styles.genderButton, selectedGender === 'femme' ? styles.selectedButton : null]}
                     title="choose femme"
-                    onPress={() => femme()}
+                    onPress={() => selectGender('femme')}
                 >
                     <Text style={styles.texteblanc}>femme</Text>
                 </Pressable>
                 <Pressable
-                    style={styles.genderButton}
+                    style={[styles.genderButton, selectedGender === 'homme' ? styles.selectedButton : null]}
                     title="choose male"
-                    onPress={() => homme()}
+                    onPress={() => selectGender('homme')}
                 >
                     <Text style={styles.texteblanc}>homme</Text>
                 </Pressable>
@@ -131,7 +118,11 @@ const styles = StyleSheet.create({
         width: '80%',
         borderRadius: 5,
         elevation: 3,
-        backgroundColor: 'blue',
+        backgroundColor: 'purple',
         marginTop: 20,
-    }
+    },
+    selectedButton: {
+        backgroundColor: 'black',
+
+    },
 });

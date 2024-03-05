@@ -1,13 +1,56 @@
-import React from 'react';
-import { Pressable, StyleSheet, Text, View, TextInput, KeyboardAvoidingView, Platform, Dimensions } from 'react-native';
+import React, { useEffect } from 'react';
+import { Pressable, StyleSheet, Text, View, TextInput, KeyboardAvoidingView, Platform, Dimensions, ScrollView } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import { useDispatch } from 'react-redux';
-import { defineName } from '../reducers/users';
 import { useState } from 'react';
+import Constants from 'expo-constants';
+const CONNECTION_BACKEND = Constants.expoConfig?.extra?.CONNECTION_BACKEND;
 
 const windowHeight = Dimensions.get('window').height;
 
 export default function PassionScreen({ navigation }) {
+
+    const [passions, setPassions] = useState([])
+
+    useEffect(() => {
+        getPassions();
+    }
+        , []);
+
+    const getPassions = async () => {
+        try {
+            const response = await fetch(`${CONNECTION_BACKEND}/user/passions`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+            const result = await response.json();
+            if (result.result) {
+                setPassions(result.passions);
+            } else {
+                console.log('Erreur de connexion');
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const listePassions = passions.map((passion, index) => {
+        return (
+            <View key={index} style={styles.passionBody}>
+                <Pressable
+                    onPress={() => console.log('ok')}>
+                    <Text style={styles.passionTexte}>{passion.name}  {passion.emoji}</Text>
+
+                </Pressable>
+            </View>
+        )
+    })
+
+
+
+
+
     return (
         <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
             style={styles.container}
@@ -21,6 +64,13 @@ export default function PassionScreen({ navigation }) {
                 <Text style={styles.headerText}>Partage nous tes passions</Text>
             </View>
             <Text>Selectionne nous jusqu'à (nb) de passions</Text>
+
+            <View style={styles.containerEmoji}>
+                <ScrollView contentContainerStyle={styles.containerScroll}>
+                    {listePassions}
+                </ScrollView>
+            </View>
+
 
             <View style={styles.bottom}>
 
@@ -60,11 +110,10 @@ const styles = StyleSheet.create({
         marginBottom: 10,
     },
     bottom: {
-        flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
         width: '100%',
-        marginTop: windowHeight * 0.6, // Descend légèrement la vue bottom
+        // marginTop: windowHeight * 0.6, // Descend légèrement la vue bottom
     },
     input: {
         marginVertical: 12,
@@ -85,5 +134,31 @@ const styles = StyleSheet.create({
     },
     texteblanc: {
         color: 'white'
-    }
+    },
+    passionBody: {
+        padding: 5,
+        margin: 2,
+        backgroundColor: '#F98F22',
+        borderRadius: 20,
+        // width: 'auto',
+        // height: 20,
+        alignItems: 'center', // Centre le contenu horizontalement
+        justifyContent: 'center',
+        alignSelf: 'flex-start',
+    },
+    passionTexte: {
+        color: 'white',
+        fontSize: 13,
+    },
+    containerEmoji: {
+        justifyContent: 'center',
+        width: '100%',
+        marginTop: 20,
+    },
+    containerScroll: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+    },
 });

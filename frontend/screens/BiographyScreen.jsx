@@ -2,13 +2,24 @@ import React from 'react';
 import { Pressable, StyleSheet, Text, View, TextInput, KeyboardAvoidingView, Platform, Dimensions } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { useDispatch } from 'react-redux';
-import { defineName } from '../reducers/users';
+import { defineBiography } from '../reducers/users';
 import { useState } from 'react';
 
 const windowHeight = Dimensions.get('window').height;
 
 export default function BiographyScreen({ navigation }) {
     const dispatch = useDispatch();
+    const [bio, setBio] = useState('');
+
+
+
+
+
+
+    const handleNext = () => {
+        dispatch(defineBiography(bio));
+        navigation.navigate('ChoosePhotoScreen')
+    };
 
     return (
         <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -23,13 +34,13 @@ export default function BiographyScreen({ navigation }) {
                 <Text style={styles.headerText}>Parles nous de toi</Text>
             </View>
             <Text>écris nous un petit texte sur toi et tes passions!</Text>
-            <TextInput placeholder='parles nous de toi 🔫' ></TextInput>
+            <TextInput maxLength={500} onChangeText={(value) => setBio(value)} value={bio} placeholder='parles nous de toi 🔫' ></TextInput>
             <View style={styles.bottom}>
 
                 <Pressable
                     style={styles.button}
                     title="Go to PassionsScreen"
-                    onPress={() => navigation.navigate('ChoosePhotoScreen')}
+                    onPress={() => handleNext()}
                 >
                     <Text style={styles.texteblanc}>Next</Text>
                 </Pressable>
