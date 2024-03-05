@@ -22,32 +22,19 @@ router.post('/user_informations', authenticateToken, async (req, res, next) => {
         return res.status(400).json({ result: false, message: 'Missing informations' });
     }
 
-    try{    
-        
-        //si un userId est renvoyé par le middleware, alors l'authorisation est correct 
-        if(req.user.userId){
-            const user = await User.findOne({ _id: req.user.userId});
-            if(user){
-                
-                const filter = { _id: req.user.userId };
-                console.log(filter)
-                const updateUser = {
-                    $set: {
-                      name: name,
-                      birthdate: new Date(),
-                      passions: ['velo'],
-                      bio: 'biographie for test',
-                      gender: 'dragon',
-                    },
-                  };
-
-                  console.log(updateUser)
-                  const result = await User.updateMany(filter, updateDoc);
-                  res.json({ result: true});
+    try {    
+        // If a userId is returned by the middleware, then the authorization is correct 
+        if (req.user.userId) {
+            const user = await User.findOne({ _id: req.user.userId });
+            if (user) {
+                const result = await User.updateMany(
+                    { userId: req.user.userId },
+                    { $set: { name: 'jeremy' } }
+                );
+                res.json({ result: true });
             }
         }
-        
-    }catch{
+    } catch (error) {
         return res.status(500).json({ result: false, message: 'Internal server error' });
     }
 })
