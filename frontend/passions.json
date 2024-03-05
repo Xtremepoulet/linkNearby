@@ -1,0 +1,482 @@
+[
+    {
+        "name": "Lecture",
+        "emoji": "📚"
+    },
+    {
+        "name": "Musique",
+        "emoji": "🎵"
+    },
+    {
+        "name": "Cinéma",
+        "emoji": "🎬"
+    },
+    {
+        "name": "Cuisine",
+        "emoji": "👩‍🍳"
+    },
+    {
+        "name": "Voyage",
+        "emoji": "✈️"
+    },
+    {
+        "name": "Photographie",
+        "emoji": "📷"
+    },
+    {
+        "name": "Art",
+        "emoji": "🎨"
+    },
+    {
+        "name": "Yoga",
+        "emoji": "🧘"
+    },
+    {
+        "name": "Jardinage",
+        "emoji": "🌱"
+    },
+    {
+        "name": "Randonnée",
+        "emoji": "🥾"
+    },
+    {
+        "name": "Astronomie",
+        "emoji": "🔭"
+    },
+    {
+        "name": "Jeux vidéo",
+        "emoji": "🎮"
+    },
+    {
+        "name": "Danse",
+        "emoji": "💃"
+    },
+    {
+        "name": "Plongée sous-marine",
+        "emoji": "🤿"
+    },
+    {
+        "name": "Ski",
+        "emoji": "⛷"
+    },
+    {
+        "name": "Échecs",
+        "emoji": "♟"
+    },
+    {
+        "name": "Magie",
+        "emoji": "🎩"
+    },
+    {
+        "name": "Stand-up",
+        "emoji": "🎤"
+    },
+    {
+        "name": "Cosplay",
+        "emoji": "🦸‍♂️"
+    },
+    {
+        "name": "Potager urbain",
+        "emoji": "🏡"
+    },
+    {
+        "name": "Chasse aux fantômes",
+        "emoji": "👻"
+    },
+    {
+        "name": "Collection de cactus",
+        "emoji": "🌵"
+    },
+    {
+        "name": "Parler aux plantes",
+        "emoji": "🌿"
+    },
+    {
+        "name": "Tricot",
+        "emoji": "🧶"
+    },
+    {
+        "name": "Origami",
+        "emoji": "🐦"
+    },
+    {
+        "name": "Parkour",
+        "emoji": "🤸"
+    },
+    {
+        "name": "Amateur de thé",
+        "emoji": "🍵"
+    },
+    {
+        "name": "Sculpture de ballons",
+        "emoji": "🎈"
+    },
+    {
+        "name": "Fabrication de savon",
+        "emoji": "🧼"
+    },
+    {
+        "name": "Bénévolat",
+        "emoji": "👐"
+    },
+    {
+        "name": "Cueillette de champignons",
+        "emoji": "🍄"
+    },
+    {
+        "name": "Course de drones",
+        "emoji": "🚁"
+    },
+    {
+        "name": "Caféologie",
+        "emoji": "☕"
+    },
+    {
+        "name": "Langue des signes",
+        "emoji": "🤟"
+    },
+    {
+        "name": "Amateur de piquant",
+        "emoji": "🌶️"
+    },
+    {
+        "name": "Voyage dans le temps (théorique)",
+        "emoji": "⏳"
+    },
+    {
+        "name": "Chasseur d'aurores boréales",
+        "emoji": "🌌"
+    },
+    {
+        "name": "Géocaching",
+        "emoji": "📍"
+    },
+    {
+        "name": "Podcasts",
+        "emoji": "🎧"
+    },
+    {
+        "name": "Calligraphie",
+        "emoji": "✒️"
+    },
+    {
+        "name": "Élevage de fourmis",
+        "emoji": "🐜"
+    },
+    {
+        "name": "Concours de barbe",
+        "emoji": "🧔"
+    },
+    {
+        "name": "Construction de maquettes",
+        "emoji": "🛠️"
+    },
+    {
+        "name": "Création de meme",
+        "emoji": "😂"
+    },
+    {
+        "name": "Impression 3D",
+        "emoji": "🖨️"
+    },
+    {
+        "name": "Pilotage de cerf-volant",
+        "emoji": "🪁"
+    },
+    {
+        "name": "Fabrication de bijoux",
+        "emoji": "💍"
+    },
+    {
+        "name": "Courses de trottinettes",
+        "emoji": "🛴"
+    },
+    {
+        "name": "Marathon de séries",
+        "emoji": "📺"
+    },
+    {
+        "name": "Observation d'OVNI",
+        "emoji": "🛸"
+    },
+    {
+        "name": "Fabrication de fromage",
+        "emoji": "🧀"
+    },
+    {
+        "name": "Culte du café",
+        "emoji": "☕"
+    },
+    {
+        "name": "Bricolage de gadgets",
+        "emoji": "🔧"
+    },
+    {
+        "name": "Tatouage temporaire",
+        "emoji": "🎨"
+    },
+    {
+        "name": "Aquascaping",
+        "emoji": "🐠"
+    },
+    {
+        "name": "Vlogging",
+        "emoji": "📹"
+    },
+    {
+        "name": "Dressage de perroquets",
+        "emoji": "🦜"
+    },
+    {
+        "name": "Méditation quantique",
+        "emoji": "🌀"
+    },
+    {
+        "name": "Cueillette de baies",
+        "emoji": "🫐"
+    },
+    {
+        "name": "Ballet aquatique",
+        "emoji": "💧"
+    },
+    {
+        "name": "Élevage de fourmis",
+        "emoji": "🐜"
+    },
+    {
+        "name": "Concours de barbe",
+        "emoji": "🧔"
+    },
+    {
+        "name": "Construction de maquettes",
+        "emoji": "🛠️"
+    },
+    {
+        "name": "Création de meme",
+        "emoji": "😂"
+    },
+    {
+        "name": "Impression 3D",
+        "emoji": "🖨️"
+    },
+    {
+        "name": "Pilotage de cerf-volant",
+        "emoji": "🪁"
+    },
+    {
+        "name": "Fabrication de bijoux",
+        "emoji": "💍"
+    },
+    {
+        "name": "Courses de trottinettes",
+        "emoji": "🛴"
+    },
+    {
+        "name": "Marathon de séries",
+        "emoji": "📺"
+    },
+    {
+        "name": "Observation d'OVNI",
+        "emoji": "🛸"
+    },
+    {
+        "name": "Fabrication de fromage",
+        "emoji": "🧀"
+    },
+    {
+        "name": "Culte du café",
+        "emoji": "☕"
+    },
+    {
+        "name": "Bricolage de gadgets",
+        "emoji": "🔧"
+    },
+    {
+        "name": "Tatouage temporaire",
+        "emoji": "🎨"
+    },
+    {
+        "name": "Aquascaping",
+        "emoji": "🐠"
+    },
+    {
+        "name": "Vlogging",
+        "emoji": "📹"
+    },
+    {
+        "name": "Dressage de perroquets",
+        "emoji": "🦜"
+    },
+    {
+        "name": "Méditation quantique",
+        "emoji": "🌀"
+    },
+    {
+        "name": "Cueillette de baies",
+        "emoji": "🫐"
+    },
+    {
+        "name": "Ballet aquatique",
+        "emoji": "💧"
+    },
+    {
+        "name": "Philosophie",
+        "emoji": "📖"
+    },
+    {
+        "name": "Méditation",
+        "emoji": "🧘‍♂️"
+    },
+    {
+        "name": "Écriture",
+        "emoji": "✍️"
+    },
+    {
+        "name": "Langues étrangères",
+        "emoji": "🗣️"
+    },
+    {
+        "name": "Volontariat",
+        "emoji": "👐"
+    },
+    {
+        "name": "Développement personnel",
+        "emoji": "🌱"
+    },
+    {
+        "name": "Investissement",
+        "emoji": "💹"
+    },
+    {
+        "name": "Course à pied",
+        "emoji": "🏃‍♂️"
+    },
+    {
+        "name": "Cyclisme",
+        "emoji": "🚴‍♀️"
+    },
+    {
+        "name": "Natation",
+        "emoji": "🏊‍♂️"
+    },
+    {
+        "name": "Pilates",
+        "emoji": "🤸‍♀️"
+    },
+    {
+        "name": "Tennis",
+        "emoji": "🎾"
+    },
+    {
+        "name": "Basketball",
+        "emoji": "🏀"
+    },
+    {
+        "name": "Football",
+        "emoji": "⚽"
+    },
+    {
+        "name": "Golf",
+        "emoji": "🏌️‍♂️"
+    },
+    {
+        "name": "Escalade",
+        "emoji": "🧗‍♀️"
+    },
+    {
+        "name": "Voile",
+        "emoji": "⛵"
+    },
+    {
+        "name": "Équitation",
+        "emoji": "🏇"
+    },
+    {
+        "name": "Pêche",
+        "emoji": "🎣"
+    },
+    {
+        "name": "Plongée libre",
+        "emoji": "🤿"
+    },
+    {
+        "name": "Architecture",
+        "emoji": "🏛️"
+    },
+    {
+        "name": "Ingénierie",
+        "emoji": "🔧"
+    },
+    {
+        "name": "Enseignement",
+        "emoji": "🍎"
+    },
+    {
+        "name": "Médecine",
+        "emoji": "⚕️"
+    },
+    {
+        "name": "Recherche scientifique",
+        "emoji": "🔬"
+    },
+    {
+        "name": "Droit",
+        "emoji": "⚖️"
+    },
+    {
+        "name": "Informatique",
+        "emoji": "💻"
+    },
+    {
+        "name": "Artisanat",
+        "emoji": "🛠️"
+    },
+    {
+        "name": "Graphisme",
+        "emoji": "🎨"
+    },
+    {
+        "name": "Cuisine professionnelle",
+        "emoji": "👨‍🍳"
+    },
+    {
+        "name": "Agriculture",
+        "emoji": "🌾"
+    },
+    {
+        "name": "Journalisme",
+        "emoji": "📰"
+    },
+    {
+        "name": "Psychologie",
+        "emoji": "🧠"
+    },
+    {
+        "name": "Finance",
+        "emoji": "💹"
+    },
+    {
+        "name": "Sécurité informatique",
+        "emoji": "🔒"
+    },
+    {
+        "name": "Marketing digital",
+        "emoji": "📈"
+    },
+    {
+        "name": "Photographie professionnelle",
+        "emoji": "📸"
+    },
+    {
+        "name": "Traduction",
+        "emoji": "🈺"
+    },
+    {
+        "name": "Urbanisme",
+        "emoji": "🏙️"
+    },
+    {
+        "name": "Hôtellerie",
+        "emoji": "🏨"
+    }
+]
