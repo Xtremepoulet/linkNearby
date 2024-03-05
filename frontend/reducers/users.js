@@ -20,10 +20,13 @@ export const usersSlice = createSlice({
       state.value.name = action.payload;
     },
     defineGender: (state, action) => {
-      state.value.name = action.payload;
+      state.value.gender = action.payload;
+      console.log(state.value.gender)
+
     },
     defineBirthdate: (state, action) => {
       state.value.birthdate = action.payload;
+      console.log(state.value.birthdate)
     },
     definePassions: (state, action) => {
       state.value.passions.push(action.payload);

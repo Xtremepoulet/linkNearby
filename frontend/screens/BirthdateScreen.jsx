@@ -3,7 +3,7 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { useDispatch } from 'react-redux';
 import { useState } from 'react';
-import { defineName } from '../reducers/users';
+import { defineBirthdate } from '../reducers/users';
 
 const windowHeight = Dimensions.get('window').height;
 
@@ -11,7 +11,6 @@ export default function BirthdateScreen({ navigation }) {
     const dispatch = useDispatch();
     const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
     const [birthdate, setBirthdate] = useState('');
-    console.log(birthdate)
 
     const showDatePicker = () => {
         setBirthdate('')
@@ -29,7 +28,8 @@ export default function BirthdateScreen({ navigation }) {
     };
 
     const handleNext = () => {
-        if (birthdate !== '') {
+        if (birthdate) {
+            dispatch(defineBirthdate(birthdate));
             navigation.navigate('PassionScreen');
         } else {
 

@@ -18,6 +18,8 @@ import PassionScreen from './screens/PassionScreen';
 import BiographyScreen from './screens/BiographyScreen';
 import ActivateLocalisationScreen from './screens/ActivateLocalisationScreen';
 import ChooseGenderScreen from './screens/ChooseGenderScreen';
+import ChoosePhotoScreen from './screens/ChoosePhotoScreen.jsx';
+
 
 ChooseGenderScreen
 
@@ -80,6 +82,8 @@ export default function App() {
             <Stack.Screen name="BiographyScreen" component={BiographyScreen} />
             <Stack.Screen name="ActivateLocalisationScreen" component={ActivateLocalisationScreen} />
             <Stack.Screen name="ChooseGenderScreen" component={ChooseGenderScreen} />
+            <Stack.Screen name="ChoosePhotoScreen" component={ChoosePhotoScreen} />
+
 
 
             <Stack.Screen name="TabNavigator" component={TabNavigator} />

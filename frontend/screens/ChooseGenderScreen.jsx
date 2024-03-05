@@ -11,18 +11,27 @@ export default function ChooseGenderScreen({ navigation }) {
     const dispatch = useDispatch();
     const [gender, setGender] = useState('');
 
+    const femme = () => {
+        setGender('femme')
+    }
+
+    const homme = () => {
+        setGender('homme')
+    }
+
+
+
 
     const nextPage = () => {
         if (gender) {
             dispatch(defineGender(gender));
-            navigation.navigate('ChooseGenderScreen')
+            navigation.navigate('BirthdateScreen')
         } else {
 
         }
 
     };
 
-    navigation.navigate('BirthdateScreen')
 
 
     return (
@@ -41,14 +50,14 @@ export default function ChooseGenderScreen({ navigation }) {
                 <Pressable
                     style={styles.genderButton}
                     title="choose femme"
-                    onPress={() => navigation.navigate('BirthdateScreen')}
+                    onPress={() => femme()}
                 >
                     <Text style={styles.texteblanc}>femme</Text>
                 </Pressable>
                 <Pressable
                     style={styles.genderButton}
                     title="choose male"
-                    onPress={() => navigation.navigate('BirthdateScreen')}
+                    onPress={() => homme()}
                 >
                     <Text style={styles.texteblanc}>homme</Text>
                 </Pressable>

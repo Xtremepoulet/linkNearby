@@ -7,7 +7,7 @@ import { useState } from 'react';
 
 const windowHeight = Dimensions.get('window').height;
 
-export default function BiographyScreen({ navigation }) {
+export default function ChoosePhotoScreen({ navigation }) {
     const dispatch = useDispatch();
 
     return (
@@ -16,20 +16,20 @@ export default function BiographyScreen({ navigation }) {
         >
             <View style={styles.header}>
                 <Pressable
-                    onPress={() => navigation.navigate('PassionScreen')}
+                    onPress={() => navigation.navigate('BiographyScreen')}
                 >
                     <FontAwesome name="arrow-left" size={24} style={styles.arrowIcon} />
                 </Pressable>
                 <Text style={styles.headerText}>Parles nous de toi</Text>
             </View>
-            <Text>écris nous un petit texte sur toi et tes passions!</Text>
-            <TextInput placeholder='parles nous de toi 🔫' ></TextInput>
+            <Text>Pas besoin d'être sur votre 31, votre sourire represente déjà le 21!</Text>
+
             <View style={styles.bottom}>
 
                 <Pressable
                     style={styles.button}
                     title="Go to PassionsScreen"
-                    onPress={() => navigation.navigate('ChoosePhotoScreen')}
+                    onPress={() => navigation.navigate('ActivateLocalisationScreen')}
                 >
                     <Text style={styles.texteblanc}>Next</Text>
                 </Pressable>
