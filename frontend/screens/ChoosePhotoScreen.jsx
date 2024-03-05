@@ -4,11 +4,35 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { useDispatch } from 'react-redux';
 import { defineName } from '../reducers/users';
 import { useState } from 'react';
+import * as DocumentPicker from 'expo-document-picker';
+
 
 const windowHeight = Dimensions.get('window').height;
 
 export default function ChoosePhotoScreen({ navigation }) {
     const dispatch = useDispatch();
+
+    const [fileResponse, setFileResponse] = useState([]);
+
+    const pickDocument = async () => {
+        try {
+          const result = await DocumentPicker.getDocumentAsync({
+             type: '*/*'// You can specify the file types you want to pick
+          });
+            
+          if (result.assets[0].mimeType === 'image/jpeg') {
+            console.log('Document picked:', result.assets[0].uri);
+          } else {
+            console.log('Document picking cancelled');
+            // console.log(result.assets[0].mimeType)
+          }
+        } catch (error) {
+          console.error('Error picking document:', error);
+        }
+      };
+
+
+
 
     return (
         <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -22,8 +46,15 @@ export default function ChoosePhotoScreen({ navigation }) {
                 </Pressable>
                 <Text style={styles.headerText}>Parles nous de toi</Text>
             </View>
-            <Text>Pas besoin d'être sur votre 31, votre sourire represente déjà le 21!</Text>
+            <Text>Picture handler</Text>
 
+            <Pressable
+                    style={styles.button}
+                    title="Go to PassionsScreen"
+                    onPress={() => pickDocument()}
+                >
+                    <Text style={styles.texteblanc}>ADDING PIC</Text>
+                </Pressable>
             <View style={styles.bottom}>
 
                 <Pressable
