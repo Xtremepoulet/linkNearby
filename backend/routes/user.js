@@ -28,8 +28,22 @@ router.post('/user_informations', authenticateToken, async (req, res, next) => {
             const user = await User.findOne({ _id: req.user.userId });
             if (user) {
                 const result = await User.updateMany(
-                    { userId: req.user.userId },
-                    { $set: { name: 'jeremy' } }
+                    { _id: req.user.userId },
+                    { $set: { 
+                        name: name, 
+                        birthdate: '1990-01-01', 
+                        gender: gender,
+                        bio: bio, 
+                    },
+                    $push: { 
+                        location: { 
+                            latitude: latitude, // Sample latitude value
+                            longitude: longitude // Sample longitude value
+                        } 
+                    },
+                    
+                }
+                    
                 );
                 res.json({ result: true });
             }
@@ -38,6 +52,7 @@ router.post('/user_informations', authenticateToken, async (req, res, next) => {
         return res.status(500).json({ result: false, message: 'Internal server error' });
     }
 })
+
 
 
 module.exports = router; 
