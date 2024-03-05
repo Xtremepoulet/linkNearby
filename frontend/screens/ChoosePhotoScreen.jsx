@@ -19,7 +19,7 @@ export default function ChoosePhotoScreen({ navigation }) {
           const result = await DocumentPicker.getDocumentAsync({
              type: '*/*'// You can specify the file types you want to pick
           });
-            
+       
           if (result.assets[0].mimeType === 'image/jpeg') {
             console.log('Document picked:', result.assets[0].uri);
           } else {
