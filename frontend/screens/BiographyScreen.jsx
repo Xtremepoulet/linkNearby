@@ -1,10 +1,15 @@
 import React from 'react';
 import { Pressable, StyleSheet, Text, View, TextInput, KeyboardAvoidingView, Platform, Dimensions } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import { useDispatch } from 'react-redux';
+import { defineName } from '../reducers/users';
+import { useState } from 'react';
 
 const windowHeight = Dimensions.get('window').height;
 
 export default function BiographyScreen({ navigation }) {
+    const dispatch = useDispatch();
+
     return (
         <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
             style={styles.container}
