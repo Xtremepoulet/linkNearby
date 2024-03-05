@@ -154,7 +154,7 @@ const styles = StyleSheet.create({
         margin: 2,
         backgroundColor: '#ECEEEE',
         borderRadius: 20,
-        alignItems: 'center', // Centre le contenu horizontalement
+        alignItems: 'center',
         justifyContent: 'center',
         alignSelf: 'flex-start',
         paddingHorizontal: 10,
