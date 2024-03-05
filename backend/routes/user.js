@@ -14,7 +14,7 @@ router.get('/authorisation', authenticateToken, (req, res, next) => {
 })
 
 
-
+//quand on appel la route, ne pas oublier de passer le token en header 
 router.post('/user_informations', authenticateToken, async (req, res, next) => {
     const { name, birthdate, passions, bio, latitude, longitude, gender } = req.body;
     
@@ -22,35 +22,40 @@ router.post('/user_informations', authenticateToken, async (req, res, next) => {
         return res.status(400).json({ result: false, message: 'Missing informations' });
     }
 
-    try{    
-        
-        //si un userId est renvoyé par le middleware, alors l'authorisation est correct 
-        if(req.user.userId){
-            const user = await User.findOne({ _id: req.user.userId});
-            if(user){
-                
-                const filter = { _id: req.user.userId };
-                console.log(filter)
-                const updateUser = {
-                    $set: {
-                      name: name,
-                      birthdate: new Date(),
-                      passions: ['velo'],
-                      bio: 'biographie for test',
-                      gender: 'dragon',
+    try {    
+        // If a userId is returned by the middleware, then the authorization is correct 
+        if (req.user.userId) {
+            const user = await User.findOne({ _id: req.user.userId });
+            if (user) {
+                const result = await User.updateOne(
+                    { _id: req.user.userId },
+                    { $set: { 
+                        name: name, 
+                        birthdate: '1990-01-01', 
+                        gender: gender,
+                        bio: bio, 
+                        updatedAt: new Date(),
                     },
-                  };
-
-                  console.log(updateUser)
-                  const result = await User.updateMany(filter, updateDoc);
-                  res.json({ result: true});
+                    $push: { 
+                        location: { 
+                            latitude: latitude, // Sample latitude value
+                            longitude: longitude // Sample longitude value
+                        },
+                        userPassion: passions,
+                    },
+                   
+                    
+                }
+                    
+                );
+                res.json({ result: true });
             }
         }
-        
-    }catch{
+    } catch (error) {
         return res.status(500).json({ result: false, message: 'Internal server error' });
     }
 })
+
 
 
 module.exports = router; 

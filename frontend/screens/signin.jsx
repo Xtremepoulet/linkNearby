@@ -63,25 +63,27 @@ const Signin = ({ navigation }) => {
     const Container = Platform.OS === 'ios' ? SafeAreaView : View;
 
     useEffect(() => {
-        const keyboardWillShowListener = Keyboard.addListener('keyboardWillShow', () => {
-            Animated.timing(headerHeight, {
-                toValue: 0,
-                duration: 250,
-                useNativeDriver: true,
-            }).start();
+        const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => {
+            setTimeout(() => {
+                Animated.timing(headerHeight, {
+                    toValue: 0,
+                    duration: 150,
+                    useNativeDriver: true,
+                }).start();
+            }); // Délai de 100ms
         });
 
-        const keyboardWillHideListener = Keyboard.addListener('keyboardWillHide', () => {
+        const keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', () => {
             Animated.timing(headerHeight, {
                 toValue: 1,
-                duration: 300,
+                duration: 600,
                 useNativeDriver: true,
             }).start();
         });
 
         return () => {
-            keyboardWillShowListener.remove();
-            keyboardWillHideListener.remove();
+            keyboardDidShowListener.remove();
+            keyboardDidHideListener.remove();
         };
     }, []);
 
@@ -127,6 +129,7 @@ const Signin = ({ navigation }) => {
                                     outputRange: [-300, 0], // Déplace l'en-tête vers le haut
                                 }),
                             },
+
                         ],
                     },
                 ]}
@@ -166,7 +169,7 @@ const styles = StyleSheet.create({
         // backgroundColor: 'red',
     },
     h1: {
-        fontSize: '60%',
+        fontSize: 50,
         fontWeight: 'bold',
         color: 'black',
         // backgroundColor: 'blue',
