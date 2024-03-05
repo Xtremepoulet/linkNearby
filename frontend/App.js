@@ -17,6 +17,9 @@ import BirthdateScreen from './screens/BirthdateScreen';
 import PassionScreen from './screens/PassionScreen';
 import BiographyScreen from './screens/BiographyScreen';
 import ActivateLocalisationScreen from './screens/ActivateLocalisationScreen';
+import ChooseGenderScreen from './screens/ChooseGenderScreen';
+
+ChooseGenderScreen
 
 //redux persist 
 import React from 'react';
@@ -76,6 +79,7 @@ export default function App() {
             <Stack.Screen name="PassionScreen" component={PassionScreen} />
             <Stack.Screen name="BiographyScreen" component={BiographyScreen} />
             <Stack.Screen name="ActivateLocalisationScreen" component={ActivateLocalisationScreen} />
+            <Stack.Screen name="ChooseGenderScreen" component={ChooseGenderScreen} />
 
 
             <Stack.Screen name="TabNavigator" component={TabNavigator} />
