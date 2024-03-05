@@ -25,7 +25,7 @@ function authenticateToken(req, res, next) {
     const result = verifyToken(token);
   
     if (!result.success) {
-      return res.status(403).json({ error: result.error });
+      return res.status(403).json({ result: false, error: result.error});
     }
     
     req.user = result.data;
