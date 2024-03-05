@@ -18,6 +18,8 @@ export const usersSlice = createSlice({
 
     defineName: (state, action) => {
       state.value.name = action.payload;
+      console.log(state.value.name)
+
     },
     defineGender: (state, action) => {
       state.value.gender = action.payload;

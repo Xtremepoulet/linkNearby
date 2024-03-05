@@ -1,27 +1,44 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Pressable, StyleSheet, Text, View, TextInput, KeyboardAvoidingView, Platform, Dimensions } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { useDispatch } from 'react-redux';
-import { useState } from 'react';
 import { defineName } from '../reducers/users';
 
 const windowHeight = Dimensions.get('window').height;
+
 export default function ChooseNameScreen({ navigation }) {
     const dispatch = useDispatch();
     const [name, setName] = useState('');
 
+    const regex = /^[a-zA-Z\- ]{3,20}$/;
 
-    const nextPage = () => {
-        if (name) {
-            dispatch(defineName(name));
-            navigation.navigate('ChooseGenderScreen')
-        } else {
+    const capitalizeAfterSpecialChars = (string) => {
+        return string.replace(/[-\s]+(.)?/g, function (match, group1) {
+            if (group1) {
+                return match.toUpperCase();
+            } else {
+                return match;
+            }
+        });
+    }
 
+    const handleNameChange = (value) => {
+        setName(capitalizeAfterSpecialChars(value));
+    }
+    const handleTextChange = (inputText) => {
+        // Regex pour vérifier si l'entrée contient uniquement des lettres
+        if (/^[a-zA-Z]*$/.test(inputText)) {
+            setText(inputText);
         }
-
     };
 
 
+    const nextPage = () => {
+        if (regex.test(name)) {
+            dispatch(defineName(name));
+            navigation.navigate('ChooseGenderScreen')
+        }
+    };
 
     return (
         <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -36,8 +53,12 @@ export default function ChooseNameScreen({ navigation }) {
                 <Text style={styles.headerText}>Comment tu t'appelles ?</Text>
             </View>
             <View style={styles.bottom}>
-                <TextInput placeholder='Name' style={styles.input} onChangeText={(value) => setName(value)} value={name}></TextInput>
-
+                <TextInput
+                    placeholder='Name'
+                    style={styles.input}
+                    onChangeText={(value) => handleNameChange(value)}
+                    value={name}
+                />
                 <Pressable
                     style={styles.button}
                     title="Go to PassionsScreen"

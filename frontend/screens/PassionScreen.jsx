@@ -1,20 +1,24 @@
 import React, { useEffect } from 'react';
-import { Pressable, StyleSheet, Text, View, TextInput, KeyboardAvoidingView, Platform, Dimensions, ScrollView } from 'react-native';
+import { Pressable, StyleSheet, Text, View, TextInput, KeyboardAvoidingView, Platform, Dimensions, ScrollView, SafeAreaView } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { useState } from 'react';
 import Constants from 'expo-constants';
 const CONNECTION_BACKEND = Constants.expoConfig?.extra?.CONNECTION_BACKEND;
+import * as Haptics from 'expo-haptics';
 
 const windowHeight = Dimensions.get('window').height;
 
 export default function PassionScreen({ navigation }) {
 
     const [passions, setPassions] = useState([])
+    const [selectedPassions, setSelectedPassions] = useState([])
 
     useEffect(() => {
         getPassions();
     }
         , []);
+
+
 
     const getPassions = async () => {
         try {
@@ -35,44 +39,53 @@ export default function PassionScreen({ navigation }) {
         }
     }
 
-    const listePassions = passions.map((passion, index) => {
-        return (
-            <View key={index} style={styles.passionBody}>
-                <Pressable
-                    onPress={() => console.log('ok')}>
-                    <Text style={styles.passionTexte}>{passion.name}  {passion.emoji}</Text>
+    const handleSetPassion = (passion) => {
+        if (selectedPassions.includes(passion)) {
+            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+            setSelectedPassions(selectedPassions.filter((item) => item !== passion));
+        } else if (selectedPassions.length < 10) {
+            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+            setSelectedPassions([...selectedPassions, passion]);
+        }
+    }
 
+    const listePassions = passions
+        .sort((a, b) => a.name.localeCompare(b.name))
+        .map((passion, index) => {
+            const isSelected = selectedPassions.includes(passion._id);
+            return (
+                <Pressable key={index} onPress={() => handleSetPassion(passion._id)} style={[styles.passionBody, isSelected && styles.passionSelected]}>
+                    <Text style={styles.passionTexte}>{passion.name} {passion.emoji}</Text>
                 </Pressable>
-            </View>
-        )
-    })
+            );
+        });
 
 
 
 
 
     return (
+
         <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
             style={styles.container}
         >
-            <View style={styles.header}>
-                <Pressable
-                    onPress={() => navigation.navigate('BirthdateScreen')}
-                >
-                    <FontAwesome name="arrow-left" size={24} style={styles.arrowIcon} />
-                </Pressable>
-                <Text style={styles.headerText}>Partage nous tes passions</Text>
-            </View>
-            <Text>Selectionne nous jusqu'à (nb) de passions</Text>
+            <SafeAreaView style={styles.container}>
+                <View style={styles.header}>
+                    <Pressable
+                        onPress={() => navigation.navigate('BirthdateScreen')}
+                    >
+                        <FontAwesome name="arrow-left" size={24} style={styles.arrowIcon} />
+                    </Pressable>
+                    <Text style={styles.headerText}>Partage nous tes passions</Text>
+                </View>
+                <Text>Selectionne nous jusqu'à 10 de passions</Text>
+                <Text style={styles.compteur}>{selectedPassions.length}</Text>
 
-            <View style={styles.containerEmoji}>
-                <ScrollView contentContainerStyle={styles.containerScroll}>
-                    {listePassions}
-                </ScrollView>
-            </View>
-
-
-            <View style={styles.bottom}>
+                <View style={styles.containerEmoji}>
+                    <ScrollView contentContainerStyle={styles.containerScroll}>
+                        {listePassions}
+                    </ScrollView>
+                </View>
 
                 <Pressable
                     style={styles.button}
@@ -81,8 +94,9 @@ export default function PassionScreen({ navigation }) {
                 >
                     <Text style={styles.texteblanc}>Next</Text>
                 </Pressable>
-            </View>
+            </SafeAreaView>
         </KeyboardAvoidingView>
+
     );
 }
 
@@ -107,14 +121,8 @@ const styles = StyleSheet.create({
     headerText: {
         fontSize: 24,
         fontWeight: 'bold',
-        marginBottom: 10,
     },
-    bottom: {
-        justifyContent: 'center',
-        alignItems: 'center',
-        width: '100%',
-        // marginTop: windowHeight * 0.6, // Descend légèrement la vue bottom
-    },
+
     input: {
         marginVertical: 12,
         borderBottomWidth: 1,
@@ -125,12 +133,12 @@ const styles = StyleSheet.create({
     button: {
         alignItems: 'center',
         justifyContent: 'center',
-        paddingVertical: 12,
-        width: '80%',
         borderRadius: 5,
-        elevation: 3,
         backgroundColor: '#F98F22',
         marginTop: 20,
+        height: 50,
+        width: 200,
+
     },
     texteblanc: {
         color: 'white'
@@ -138,22 +146,22 @@ const styles = StyleSheet.create({
     passionBody: {
         padding: 5,
         margin: 2,
-        backgroundColor: '#F98F22',
+        backgroundColor: '#ECEEEE',
         borderRadius: 20,
-        // width: 'auto',
-        // height: 20,
         alignItems: 'center', // Centre le contenu horizontalement
         justifyContent: 'center',
         alignSelf: 'flex-start',
+        paddingHorizontal: 10,
     },
     passionTexte: {
-        color: 'white',
+        color: 'black',
         fontSize: 13,
     },
     containerEmoji: {
         justifyContent: 'center',
         width: '100%',
         marginTop: 20,
+        height: windowHeight * 0.65,
     },
     containerScroll: {
         justifyContent: 'center',
@@ -161,4 +169,14 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         flexWrap: 'wrap',
     },
+    passionSelected: {
+        backgroundColor: '#F98F22',
+    },
+    compteur: {
+        fontSize: 30,
+        fontWeight: 'bold',
+        color: '#F98F22',
+        marginTop: 20,
+        // marginBottom: 20,
+    }
 });
