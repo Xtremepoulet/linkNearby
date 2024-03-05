@@ -1,11 +1,15 @@
 import { Pressable, StyleSheet, Text, View, Image, TextInput, KeyboardAvoidingView, Platform } from 'react-native';
+import { UseSelector, useSelector } from 'react-redux';
 
 export default function HomeScreen({ navigation }) {
+
+    const token = useSelector((state) => state.users.value.token);
+
     return (
         <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
             style={styles.container}
         >
-            <Text>Home</Text>
+            <Text>home</Text>
         </KeyboardAvoidingView>
     );
 }

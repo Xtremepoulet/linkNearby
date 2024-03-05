@@ -63,7 +63,7 @@ const Signin = ({ navigation }) => {
     return (
 
         <KeyboardAvoidingView
-            behavior={Platform.OS === "ios" ? "padding" : "position"}
+            behavior={Platform.OS === "ios" ? "padding" : "height"}
             style={styles.container}
             keyboardVerticalOffset={Platform.OS === "ios" ? 5 : 20}
         >
@@ -102,6 +102,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: 'white',
+        justifyContent: 'space-between',
         justifyContent: 'space-between',
     },
     logo: {

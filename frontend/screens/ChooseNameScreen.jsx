@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         width: '100%',
-        marginTop: windowHeight * 0.1, // Descend légèrement la vue bottom
+        marginTop: windowHeight * 0.1,
     },
     input: {
         marginVertical: 12,

@@ -11,6 +11,7 @@ export default function BirthdateScreen({ navigation }) {
     console.log(birthdate)
 
     const showDatePicker = () => {
+        setBirthdate('')
         setDatePickerVisibility(true);
     };
 
@@ -19,9 +20,17 @@ export default function BirthdateScreen({ navigation }) {
     };
 
     const handleConfirm = (date) => {
-        console.warn("A date has been picked: ", date);
+        console.log("A date has been picked: ", date);
         setBirthdate(date.toLocaleDateString());
         hideDatePicker();
+    };
+
+    const handleNext = () => {
+        if (birthdate !== '') {
+            navigation.navigate('PassionScreen');
+        } else {
+
+        }
     };
 
     return (
@@ -47,7 +56,6 @@ export default function BirthdateScreen({ navigation }) {
 
             <View style={styles.bottom}>
 
-
                 <Pressable
                     style={styles.button}
                     onPress={showDatePicker}
@@ -61,7 +69,7 @@ export default function BirthdateScreen({ navigation }) {
 
                 <Pressable
                     style={[styles.button, { marginTop: 20 }]}
-                    onPress={() => navigation.navigate('PassionScreen')}
+                    onPress={handleNext}
                 >
                     <Text style={styles.texteblanc}>Suivant</Text>
                 </Pressable>
