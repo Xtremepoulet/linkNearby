@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
 
     },
     h1: {
-        fontSize: '50%',
+        fontSize: 50,
         fontWeight: 'bold',
         color: 'black'
     },
