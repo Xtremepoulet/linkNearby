@@ -4,20 +4,21 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
-import Signup from './screens/signup';
-import Signin from './screens/signin.jsx';
 
-import HomeScreen from './screens/HomeScreen';
-import MapScreen from './screens/MapScreen';
-import ParametersScreen from './screens/ParametersScreen';
-import MessagesScreen from './screens/MessagesScreen';
-import FirstLoginScreen from './screens/FirstLoginScreen';
-import ChooseNameScreen from './screens/ChooseNameScreen';
-import BirthdateScreen from './screens/BirthdateScreen';
-import PassionScreen from './screens/PassionScreen';
-import BiographyScreen from './screens/BiographyScreen';
-import ActivateLocalisationScreen from './screens/ActivateLocalisationScreen';
-import ChooseGenderScreen from './screens/ChooseGenderScreen';
+import HomeScreen from './tabscreens/HomeScreen';
+import MapScreen from './tabscreens/MapScreen';
+import ParametersScreen from './tabscreens/ParametersScreen';
+import MessagesScreen from './tabscreens/MessagesScreen';
+
+import Signup from './screens/signup.jsx';
+import Signin from './screens/signin.jsx';
+import FirstLoginScreen from './screens/FirstLoginScreen.jsx';
+import ChooseNameScreen from './screens/ChooseNameScreen.jsx';
+import BirthdateScreen from './screens/BirthdateScreen.jsx';
+import PassionScreen from './screens/PassionScreen.jsx';
+import BiographyScreen from './screens/BiographyScreen.jsx';
+import ActivateLocalisationScreen from './screens/ActivateLocalisationScreen.jsx';
+import ChooseGenderScreen from './screens/ChooseGenderScreen.jsx';
 import ChoosePhotoScreen from './screens/ChoosePhotoScreen.jsx';
 
 
