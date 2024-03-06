@@ -23,17 +23,28 @@ export default function BirthdateScreen({ navigation }) {
 
     const handleConfirm = (date) => {
         console.log("A date has been picked: ", date);
-        setBirthdate(date.toLocaleDateString());
+        console.log(date)
+        setBirthdate(date.getTime());
+
         hideDatePicker();
     };
 
     const handleNext = () => {
-        if (birthdate) {
-            dispatch(defineBirthdate(birthdate));
-            navigation.navigate('PassionScreen');
-        } else {
-            navigation.navigate('PassionScreen');
-        }
+        const dateDuJourEnMs = new Date().getTime();
+        console.log(dateDuJourEnMs - birthdate)
+        console.log()
+
+
+
+
+        /*
+                if (birthdate) {
+                    dispatch(defineBirthdate(birthdate));
+                    navigation.navigate('PassionScreen');
+                } else {
+                    navigation.navigate('PassionScreen');
+                }
+                */
     };
 
 
@@ -67,9 +78,9 @@ export default function BirthdateScreen({ navigation }) {
                     <Text style={styles.texteblanc}>Sélectionner la date de naissance</Text>
                 </Pressable>
 
-                {birthdate !== '' && (
-                    <Text>Date de naissance sélectionnée : {birthdate}</Text>
-                )}
+
+                <Text>Date de naissance sélectionnée : {birthdate}</Text>
+
 
                 <Pressable
                     style={[styles.button, { marginTop: 20 }]}
