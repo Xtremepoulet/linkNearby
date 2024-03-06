@@ -31,31 +31,34 @@ export default function ChooseGenderScreen({ navigation }) {
                 >
                     <FontAwesome name="arrow-left" size={24} style={styles.arrowIcon} />
                 </Pressable>
-                <Text style={styles.headerText}>foufoune ou zbeub zbeub</Text>
+                <Text style={styles.headerText}>Quel est ton sexe ?</Text>
             </View>
             <View style={styles.bottom}>
-                <Pressable
-                    style={[styles.genderButton, selectedGender === 'femme' ? styles.selectedButton : null]}
-                    title="choose femme"
-                    onPress={() => selectGender('femme')}
-                >
-                    <Text style={styles.texteblanc}>femme</Text>
-                </Pressable>
-                <Pressable
-                    style={[styles.genderButton, selectedGender === 'homme' ? styles.selectedButton : null]}
-                    title="choose male"
-                    onPress={() => selectGender('homme')}
-                >
-                    <Text style={styles.texteblanc}>homme</Text>
-                </Pressable>
-
-                <Pressable
-                    style={styles.button}
-                    title="Go to PassionsScreen"
-                    onPress={() => nextPage()}
-                >
-                    <Text style={styles.texteblanc}>Next</Text>
-                </Pressable>
+                <View style={styles.gender_container}> 
+                    <Pressable
+                        style={[styles.genderButton, selectedGender === 'femme' ? styles.selectedButton : null]}
+                        title="choose femme"
+                        onPress={() => selectGender('femme')}
+                    >
+                        <Text style={styles.texteblanc}>femme</Text>
+                    </Pressable>
+                    <Pressable
+                        style={[styles.genderButton, selectedGender === 'homme' ? styles.selectedButton : null]}
+                        title="choose male"
+                        onPress={() => selectGender('homme')}
+                    >
+                        <Text style={styles.texteblanc}>homme</Text>
+                    </Pressable>
+                </View>
+                <View style={styles.next_container}>
+                    <Pressable
+                        style={styles.button}
+                        title="Go to PassionsScreen"
+                        onPress={() => nextPage()}
+                    >
+                        <Text style={styles.texteblanc}>Next</Text>
+                    </Pressable>
+                </View>
             </View>
         </KeyboardAvoidingView>
     );
@@ -65,39 +68,39 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
-        justifyContent: 'flex-start',
+        justifyContent: 'space-between',
         paddingTop: 40,
-        backgroundColor: 'white'
+        backgroundColor: 'white',
     },
     header: {
+        display: 'flex',
         flexDirection: 'row',
+        justifyContent: 'center',
         alignItems: 'center',
-        paddingHorizontal: 20,
-        marginBottom: 20,
+        marginTop: 20,
     },
     arrowIcon: {
         marginRight: 10,
-        marginBottom: 2,
     },
     headerText: {
         fontSize: 24,
         fontWeight: 'bold',
-        marginBottom: 10,
     },
     bottom: {
-        flex: 1,
-        justifyContent: 'center',
+        flex: 0.6,
+        display: 'flex',
+        justifyContent: 'space-evenly',
         alignItems: 'center',
         width: '100%',
-        marginTop: windowHeight * 0.1,
     },
-    input: {
-        marginVertical: 12,
-        borderBottomWidth: 1,
-        width: '80%',
-        fontSize: 18,
-        paddingHorizontal: 10,
+
+    gender_container: {
+        width: '100%',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
     },
+
     button: {
         alignItems: 'center',
         justifyContent: 'center',
@@ -115,14 +118,20 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         paddingVertical: 12,
-        width: '80%',
+        width: '40%',
         borderRadius: 5,
         elevation: 3,
-        backgroundColor: 'purple',
+        backgroundColor: '#c7c3c3',
         marginTop: 20,
     },
     selectedButton: {
-        backgroundColor: 'black',
-
+        backgroundColor: '#f27d3d',
     },
+
+    next_container : {
+        width: '100%',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+    }
 });
