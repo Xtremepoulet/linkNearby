@@ -13,9 +13,15 @@ const hash = bcrypt.hashSync('password', 10);
 //middleWare
 const verifyToken = require('./middleware/auth');
 
+//express file upload 
+const fileUpload = require('express-fileupload');
+
 const app = express();
 app.use(cors());
+app.use(fileUpload());
 //routes jeremy
+
+
 
 const authRouter = require('./routes/auth.js');
 const userRouter = require('./routes/user.js');

@@ -7,6 +7,11 @@ const { checkBody } = require('../modules/checkBody');
 const User = require('../models/user.js');
 const Passion = require('../models/Passion.js');
 
+//cloudinary import 
+const cloudinary = require('cloudinary').v2;
+//file system 
+const fs = require('fs');
+
 router.get('/authorisation', authenticateToken, (req, res, next) => {
     //si un userId est renvoyé par le middleware, alors l'authorisation est correct 
     if (req.user.userId) {
@@ -19,7 +24,9 @@ router.get('/authorisation', authenticateToken, (req, res, next) => {
 router.post('/user_informations', authenticateToken, async (req, res, next) => {
     const { name, birthdate, passions, bio, latitude, longitude, gender } = req.body;
 
-    if (!checkBody(req.body, ['name', 'birthdate', 'passions', 'bio', 'latitude', 'longitude', 'gender'])) {
+    let url = '';
+
+    if (!checkBody(req.body, ['name', 'birthdate', 'passions', 'bio', 'latitude', 'longitude', 'gender', 'uri'])) {
         return res.status(400).json({ result: false, message: 'Missing informations' });
     }
 
@@ -28,6 +35,20 @@ router.post('/user_informations', authenticateToken, async (req, res, next) => {
         if (req.user.userId) {
             const user = await User.findOne({ _id: req.user.userId });
             if (user) {
+
+                //gestion de la photo à upload 
+                    const photoPath = `./tmp/${uniqid()}.jpg`;
+                    const resultMove = await req.files.photoFromFront.mv(photoPath);
+
+                    if(!resultMove) {
+                        const resultCloudinary = await cloudinary.uploader.upload(photoPath);
+                        fs.unlinkSync(photoPath);
+                        url = resultCloudinary.secure_url
+                    } else {
+                        return res.json({ result: false, error: resultCopy });
+                    }
+                //fin de la gestion de la photo à upload 
+
                 const result = await User.updateOne(
                     { _id: req.user.userId },
                     {
@@ -37,6 +58,7 @@ router.post('/user_informations', authenticateToken, async (req, res, next) => {
                             gender: gender,
                             bio: bio,
                             updatedAt: new Date(),
+                            uri: url,
                         },
                         $push: {
                             location: {
