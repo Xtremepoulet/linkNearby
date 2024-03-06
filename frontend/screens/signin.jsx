@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import { StyleSheet, Text, TextInput, View, TouchableOpacity, KeyboardAvoidingView, Platform, Image, SafeAreaView } from 'react-native';
+import { StyleSheet, Text, TextInput, View, TouchableOpacity, KeyboardAvoidingView, Platform, Image, Dimensions } from 'react-native';
 import Constants from 'expo-constants';
 import { UseDispatch, useDispatch } from "react-redux";
 import { addToken } from "../reducers/users";
@@ -7,7 +7,8 @@ const CONNECTION_BACKEND = Constants.expoConfig?.extra?.CONNECTION_BACKEND;
 import logoLinkNearby from '../assets/linkNearbyBackNone.webp';
 
 
-
+const { width, height } = Dimensions.get('window'); // Recupere la dimension de l'écran
+import { SafeAreaView } from 'react-native-safe-area-context'; // composant pour gérer les zones safe sur ios et android
 
 const Signin = ({ navigation }) => {
 
@@ -57,7 +58,6 @@ const Signin = ({ navigation }) => {
         }
     }
 
-    const Container = Platform.OS === 'ios' ? SafeAreaView : View;
 
 
     return (
@@ -65,9 +65,9 @@ const Signin = ({ navigation }) => {
         <KeyboardAvoidingView
             behavior={Platform.OS === "ios" ? "padding" : "height"}
             style={styles.container}
-            keyboardVerticalOffset={Platform.OS === "ios" ? 90 : 20} // Ajusté pour iOS
+            keyboardVerticalOffset={Platform.OS === "ios" ? height * 0.08 : height * 0.08} // Ajusté pour iOS
         >
-            <Container style={styles.container}>
+            <SafeAreaView style={styles.container} edges={['top']} styleAndroid={{ flex: 1 }}>
                 {/* top section */}
                 <View style={styles.header}>
                     <Image source={logoLinkNearby} style={styles.logo} />
@@ -87,7 +87,7 @@ const Signin = ({ navigation }) => {
                         <Text style={styles.text_button}>Connect</Text>
                     </TouchableOpacity>
                 </View>
-            </Container>
+            </SafeAreaView>
         </KeyboardAvoidingView>
 
     );
@@ -101,28 +101,24 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: 'white',
-        // justifyContent: 'space-between',
+
     },
     logo: {
         width: 100,
         height: 100,
         marginBottom: 20,
-        // backgroundColor: 'red',
     },
     h1: {
-        fontSize: 50,
+        fontSize: width * 0.14,
         fontWeight: 'bold',
         color: 'black',
-        // backgroundColor: 'blue',
-
     },
     input_container: {
-        width: '80%',
+        width: width * 0.80,
         height: 50,
         margin: 10,
         borderRadius: 20,
         backgroundColor: '#FFA53F',
-        // elevation: 10,
     },
     invalid_message: {
         color: '#b91414',
@@ -145,15 +141,14 @@ const styles = StyleSheet.create({
     header: {
         justifyContent: 'center',
         alignItems: 'center',
-        // marginTop: '50%',
         height: '70%',
         width: '100%',
-        // backgroundColor: 'green',
+
     },
     signup_button: {
         marginTop: 20,
         width: '40%',
-        height: 60,
+        height: height * 0.05,
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -163,7 +158,7 @@ const styles = StyleSheet.create({
 
     },
     text_button: {
-        fontSize: 20,
+        fontSize: height * 0.02,
         fontWeight: 'bold',
         color: 'white'
     }
