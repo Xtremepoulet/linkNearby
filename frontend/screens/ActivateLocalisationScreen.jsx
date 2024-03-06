@@ -13,18 +13,20 @@ const CONNECTION_BACKEND = Constants.expoConfig?.extra?.CONNECTION_BACKEND;
 export default function ActivateLocalisationScreen({ navigation }) {
 
     const user_infos = useSelector((state) => state.users.value);
+    const [isLocationActivated, setIsLocationActivated] = useState(false);
     const dispatch = useDispatch();
-
+    
     const [reload, setreload] = useState(false);
     //on active uniquement la localisation, on ne la met pas à jour
     useEffect(() => {
         (async () => {
           const { status } = await Location.requestForegroundPermissionsAsync();
-     
+            
           if (status === 'granted') {
             const location = await Location.getCurrentPositionAsync({});
             console.log(location);
             dispatch(turnOnLocation(true));
+            setIsLocationActivated(true);
           } 
         })();
       }, []);
@@ -54,7 +56,7 @@ export default function ActivateLocalisationScreen({ navigation }) {
         console.log(result)
         navigation.navigate('TabNavigator');
       }
-      
+
 
       const reload_page = () => {
         setreload(!reload);
@@ -73,8 +75,8 @@ export default function ActivateLocalisationScreen({ navigation }) {
                                         <Pressable
                                             style={styles.button}
                                             title="Go to TabNavigator"
-                                            onPressIn={() => reload_page()}
-                                            // onPress={() => send_informations_to_back()}
+                                            onPress={() => reload_page()}
+
                                         >
                                             <Text style={styles.texteblanc}>Activer la localisation</Text>
                                         </Pressable>
@@ -82,22 +84,31 @@ export default function ActivateLocalisationScreen({ navigation }) {
     
 
 
-    // const location_activate = 
+    const location_activate = <View style={styles.container_number2}>
+                                <View style={styles.header}>
+                                    <Pressable
+                                        onPress={() => navigation.navigate('ChoosePhotoScreen')}
+                                    >
+                                        <FontAwesome name="arrow-left" size={24} style={styles.arrowIcon} />
+                                    </Pressable>
+                                    <Text style={styles.headerText}>Finalise ton inscription</Text>
+                                </View>
+                                <View style={styles.bottom}>
+                                    <Pressable
+                                        style={styles.button}
+                                        title="Go to Home"
+                                        onPress={() => send_informations_to_back()}
+                                    >
+                                    <Text style={styles.texteblanc}>Finaliser l'inscription</Text>
+                                </Pressable>
+                                </View>
+                            </View>
 
     return (
         <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
             style={styles.container}
         >   
-            <View style={styles.container_number2}>
-                <View style={styles.header}>
-                    <Pressable
-                        onPress={() => navigation.navigate('ChoosePhotoScreen')}
-                    >
-                        <FontAwesome name="arrow-left" size={24} style={styles.arrowIcon} />
-                    </Pressable>
-                    <Text style={styles.headerText}>Finalise ton inscription</Text>
-                </View>
-            </View>
+            {isLocationActivated ? location_activate : location_not_activate}
         </KeyboardAvoidingView>
     );
 }
@@ -111,16 +122,6 @@ const styles = StyleSheet.create({
         gap: 20,
     },
 
-    button: {
-        alignItems: 'center',
-        justifyContent: 'center',
-        paddingVertical: 12,
-        width: '50%',
-        borderRadius: 5,
-        elevation: 3,
-        backgroundColor: '#F98F22',
-        padding: 5,
-    },
     texteblanc: {
         color: 'white'
     },
@@ -131,7 +132,7 @@ const styles = StyleSheet.create({
     },
 
     container_number2: {
-        flex: 1,
+        width: '100%',
         alignItems: 'center',
         justifyContent: 'space-between',
         paddingTop: 40,
@@ -154,4 +155,23 @@ const styles = StyleSheet.create({
         fontSize: 24,
         fontWeight: 'bold',
     }, 
+
+    bottom: {
+        width: '100%',
+        height: '100%',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+
+    button: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingVertical: 12,
+        width: '50%',
+        borderRadius: 5,
+        elevation: 3,
+        backgroundColor: '#F98F22',
+        padding: 5,
+    },
+
 })

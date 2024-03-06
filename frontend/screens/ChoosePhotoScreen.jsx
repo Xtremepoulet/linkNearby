@@ -97,8 +97,6 @@ export default function ChoosePhotoScreen({ navigation }) {
 
       
       const go_to_navigation_screen = async () => {
-
-        
         if(isPhoto_taken){
           
           const formData = new FormData();
@@ -114,7 +112,7 @@ export default function ChoosePhotoScreen({ navigation }) {
               body: formData,
           });
            
-          
+
           const result = await fetching_data.json();
           console.log(result)
           
@@ -147,7 +145,7 @@ export default function ChoosePhotoScreen({ navigation }) {
                           </View>
 
                           <View style={styles.camera_bottom_container}>
-                              <FontAwesome onPress={takePicture} name='circle-thin' size={80} color='#d6d3d2'/>
+                              <FontAwesome onPress={() => takePicture()} name='circle-thin' size={80} color='#d6d3d2'/>
                           </View>
                       </Camera>
                     </View>

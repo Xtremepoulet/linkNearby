@@ -28,7 +28,6 @@ router.post('/signin', async (req, res) => {
 
             // Génération du JWT
             const token = jwt.sign({ userId: user._id }, process.env.TOKEN_SECRET, { expiresIn: '24h' });
-            console.log(token)
             res.json({ result: true, token: token });
         } else {
             res.status(401).json({ result: false, message: 'Incorrect email or password' });
