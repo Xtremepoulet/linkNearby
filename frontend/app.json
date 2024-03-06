@@ -25,9 +25,9 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    },
+    },      
     "extra": {
-      "CONNECTION_BACKEND": "http://172.20.10.3:3000"
+      "CONNECTION_BACKEND": "http://10.9.0.37:3000"
     }
   }
 }
