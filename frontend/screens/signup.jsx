@@ -44,10 +44,10 @@ const Signup = ({ navigation }) => {
 
         if (user_response.result) {
             dispatch(addToken(user_response.token))
-            navigation.navigate('chooseNameScreen');
+            navigation.navigate('ChooseNameScreen')
         }
     }
-
+    
     const Container = Platform.OS === 'ios' ? SafeAreaView : View;
     return (
 

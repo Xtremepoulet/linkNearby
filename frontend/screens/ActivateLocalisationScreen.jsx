@@ -1,6 +1,26 @@
 import { Pressable, StyleSheet, Text, View, Image, TextInput, KeyboardAvoidingView, Platform } from 'react-native';
+import * as Location from 'expo-location';
+import { useEffect } from 'react';
+import { turnOnLocation } from '../reducers/users';
+import { useDispatch } from 'react-redux';
 
 export default function ActivateLocalisationScreen({ navigation }) {
+
+    const dispatch = useDispatch();
+    //on active uniquement la localisation, on ne la met pas à jour
+    useEffect(() => {
+        (async () => {
+          const { status } = await Location.requestForegroundPermissionsAsync();
+     
+          if (status === 'granted') {
+            const location = await Location.getCurrentPositionAsync({});
+            console.log(location);
+            dispatch(turnOnLocation(true));
+          } 
+        })();
+      }, []);
+      
+
     return (
         <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
             style={styles.container}

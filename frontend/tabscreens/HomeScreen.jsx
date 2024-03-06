@@ -16,7 +16,7 @@ export default function HomeScreen({ navigation }) {
             headers: { 'Content-Type': 'application/json', 'authorization': token },
         })
     }, [])
-
+    
     return (
         <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
             style={styles.container}
