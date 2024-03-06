@@ -4,6 +4,7 @@ import { UseSelector, useSelector } from 'react-redux';
 import Constants from 'expo-constants';
 import logoLinkNearby from '../assets/linkNearbyBackNone.webp';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import Card from '../components/Card';
 
 const { width, height } = Dimensions.get('window'); // Recupere la dimension de l'écran
 import { SafeAreaView } from 'react-native-safe-area-context'; // composant pour gérer les zones safe sur ios et android
@@ -23,7 +24,7 @@ export default function HomeScreen({ navigation }) {
         })
     }, [])
 
-    const picture = 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8cHJvZmlsfGVufDB8fDB8fHww'
+
 
     return (
         <KeyboardAvoidingView
@@ -35,7 +36,9 @@ export default function HomeScreen({ navigation }) {
 
                 <View style={styles.header}>
                     <View style={styles.containerFiltre}>
-                        <FontAwesome name="arrow-left" size={24} style={styles.arrowIcon} />
+                        <Pressable onPress={() => console.log('aie!')}>
+                            <FontAwesome name="bars" size={24} style={styles.arrowIcon} />
+                        </Pressable>
                     </View>
                     <View style={styles.logoMarque}>
                         <Image source={logoLinkNearby} style={styles.logo} />
@@ -43,109 +46,23 @@ export default function HomeScreen({ navigation }) {
                     </View>
                 </View>
                 <View style={styles.body}>
-                    <View style={styles.textBody}>
-                        <Text>Linkers</Text>
+                    <View style={styles.containertextBody}>
+                        <Text style={styles.textBody}>Linkers</Text>
                     </View>
 
                     <View style={styles.cardView}>
-                        <ScrollView contentContainerStyle={styles.containerScroll}>
-                            <View style={styles.card}>
-                                <Pressable onPress={() => console.log("oui")}>
-                                    <View style={styles.profilPicture}>
-                                        <Image uri={picture} style={styles.picture} />
-                                        <View style={styles.informationProfile}>
-                                            <Text style={styles.informationPrenom}>Jérémy, 32ans</Text>
-                                            <Text style={styles.informationLocalisation}>Localisé à 500m</Text>
-                                        </View>
-                                    </View>
-                                </Pressable>
-                            </View>
-
-                            <View style={styles.card}>
-                                <Pressable onPress={() => console.log("oui")}>
-                                    <View style={styles.profilPicture}>
-                                        <Image uri={picture} style={styles.picture} />
-                                        <View style={styles.informationProfile}>
-                                            <Text style={styles.informationPrenom}>Jérémy, 32ans</Text>
-                                            <Text style={styles.informationLocalisation}>Localisé à 500m</Text>
-                                        </View>
-                                    </View>
-                                </Pressable>
-                            </View>
-
-                            <View style={styles.card}>
-                                <Pressable onPress={() => console.log("oui")}>
-                                    <View style={styles.profilPicture}>
-                                        <Image uri={picture} style={styles.picture} />
-                                        <View style={styles.informationProfile}>
-                                            <Text style={styles.informationPrenom}>Jérémy, 32ans</Text>
-                                            <Text style={styles.informationLocalisation}>Localisé à 500m</Text>
-                                        </View>
-                                    </View>
-                                </Pressable>
-                            </View>
-
-                            <View style={styles.card}>
-                                <Pressable onPress={() => console.log("oui")}>
-                                    <View style={styles.profilPicture}>
-                                        <Image uri={picture} style={styles.picture} />
-                                        <View style={styles.informationProfile}>
-                                            <Text style={styles.informationPrenom}>Jérémy, 32ans</Text>
-                                            <Text style={styles.informationLocalisation}>Localisé à 500m</Text>
-                                        </View>
-                                    </View>
-                                </Pressable>
-                            </View>
-
-                            <View style={styles.card}>
-                                <Pressable onPress={() => console.log("oui")}>
-                                    <View style={styles.profilPicture}>
-                                        <Image uri={picture} style={styles.picture} />
-                                        <View style={styles.informationProfile}>
-                                            <Text style={styles.informationPrenom}>Jérémy, 32ans</Text>
-                                            <Text style={styles.informationLocalisation}>Localisé à 500m</Text>
-                                        </View>
-                                    </View>
-                                </Pressable>
-                            </View>
-
-                            <View style={styles.card}>
-                                <Pressable onPress={() => console.log("oui")}>
-                                    <View style={styles.profilPicture}>
-                                        <Image uri={picture} style={styles.picture} />
-                                        <View style={styles.informationProfile}>
-                                            <Text style={styles.informationPrenom}>Jérémy, 32ans</Text>
-                                            <Text style={styles.informationLocalisation}>Localisé à 500m</Text>
-                                        </View>
-                                    </View>
-                                </Pressable>
-                            </View>
-
-                            <View style={styles.card}>
-                                <Pressable onPress={() => console.log("oui")}>
-                                    <View style={styles.profilPicture}>
-                                        <Image uri={picture} style={styles.picture} />
-                                        <View style={styles.informationProfile}>
-                                            <Text style={styles.informationPrenom}>Jérémy, 32ans</Text>
-                                            <Text style={styles.informationLocalisation}>Localisé à 500m</Text>
-                                        </View>
-                                    </View>
-                                </Pressable>
-                            </View>
-
-                            <View style={styles.card}>
-                                <Pressable onPress={() => console.log("oui")}>
-                                    <View style={styles.profilPicture}>
-                                        <Image uri={picture} style={styles.picture} />
-                                        <View style={styles.informationProfile}>
-                                            <Text style={styles.informationPrenom}>Jérémy, 32ans</Text>
-                                            <Text style={styles.informationLocalisation}>Localisé à 500m</Text>
-                                        </View>
-                                    </View>
-                                </Pressable>
-                            </View>
+                        <ScrollView showsVerticalScrollIndicator={false}
+                            showsHorizontalScrollIndicator={false} contentContainerStyle={styles.containerScroll}>
 
 
+                            <Card />
+                            <Card />
+                            <Card />
+                            <Card />
+                            <Card />
+                            <Card />
+                            <Card />
+                            <Card />
 
 
                         </ScrollView>
@@ -165,15 +82,16 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: 'blue',
+        // backgroundColor: 'blue',
     },
     header: {
-        backgroundColor: 'green',
+        // backgroundColor: 'green',
         flexDirection: 'row',
         width: width,
         height: '8%',
         alignItems: 'center',
         justifyContent: 'center',
+        // paddingTop: 10,
     },
     logo: {
         width: 50,
@@ -188,59 +106,47 @@ const styles = StyleSheet.create({
 
     },
     containerFiltre: {
-        width: '10%',
-        backgroundColor: 'yellow',
-        height: '100%',
-    },
-    logoMarque: {
-        flexDirection: 'row',
-        width: '90%',
-        backgroundColor: 'red',
+        width: '20%',
+        // backgroundColor: 'yellow',
         height: '100%',
         alignItems: 'center',
         justifyContent: 'center',
     },
+    logoMarque: {
+        flexDirection: 'row',
+        width: '70%',
+        // backgroundColor: 'red',
+        height: '100%',
+        alignItems: 'center',
+        justifyContent: 'start',
+    },
     body: {
-        backgroundColor: 'red',
+        // backgroundColor: 'red',
         width: width,
         height: '92%',
         alignItems: 'center',
     },
-    textBody: {
-        backgroundColor: 'yellow',
+    containertextBody: {
+        // backgroundColor: 'yellow',
         width: width,
-        height: '8%',
+        height: '5%',
+        justifyContent: 'center',
+        paddingLeft: 15,
+    },
+    textBody: {
+        fontSize: 25,
+        fontWeight: 'bold',
     },
     cardView: {
-        backgroundColor: 'orange',
+        // backgroundColor: 'orange',
         width: width * 0.90,
-        height: '92%',
-    },
-    card: {
-        backgroundColor: 'white',
-        width: width * 0.40,
-        height: height * 0.25,
-        borderWidth: 3,
-        borderRadius: 10,
-        borderColor: 'black',
-        marginBottom: 20,
+        height: '97%',
     },
     containerScroll: {
         flexDirection: 'row',
         flexWrap: 'wrap',
         justifyContent: 'space-between',
     },
-    profilPicture: {
-        backgroundColor: 'blue',
-        width: '100%',
-        height: '100%',
-        flexDirection: 'row',
-    },
-    informationProfile: {
-        alignSelf: 'flex-end',
-    },
-    informationPrenom: {
-        color: 'white',
-    },
+
 
 })
