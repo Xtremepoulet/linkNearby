@@ -15,7 +15,6 @@ export default function FirstLoginScreen({ navigation }) {
         <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
             style={styles.container}
         >
-            <Container style={styles.container}>
                 <View style={styles.header}>
                     <Image source={logoLinkNearby} style={styles.logo} />
                     <Text style={styles.h1}>LINK NEARBY</Text>
@@ -36,7 +35,6 @@ export default function FirstLoginScreen({ navigation }) {
                         <Text style={styles.text}>Connexion</Text>
                     </Pressable>
                 </View>
-            </Container>
         </KeyboardAvoidingView>
     );
 }
@@ -45,14 +43,13 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: 'white',
-        justifyContent: 'space-between'
+        justifyContent: 'space-around'
     },
     header: {
         justifyContent: 'center',
         alignItems: 'center',
         marginTop: 200,
         width: '100%',
-
     },
     h1: {
         fontSize: 50,

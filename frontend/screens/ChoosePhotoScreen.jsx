@@ -17,14 +17,14 @@ export default function ChoosePhotoScreen({ navigation }) {
 
     const [hasPermission, setHasPermission] = useState(false);
 
-    const [rotation, setrotation] = useState(Camera.Constants.Type.back);
+    const [rotation, setrotation] = useState(Camera.Constants.Type.front);
     const [flash, setflash] = useState(Camera.Constants.FlashMode.off);
 
     const [isPhoto_taken, setIsPhoto_taken] = useState(false);
 
     const uri = useSelector((state) => state.users.value.uri)
     const user_token = useSelector((state) => state.users.value.token)
-    
+
     let cameraRef = useRef(null)
 
     //permission for camera 
@@ -140,25 +140,33 @@ export default function ChoosePhotoScreen({ navigation }) {
 
 
     const camera = <View style={styles.camera_container}>
-            <Camera style={styles.camera} flashMode={flash} type={rotation} ref={cameraRef}>
-                <View style={styles.camera_top_container}>
-                    <FontAwesome onPress={() => change_rotation()} name='rotate-right' size={25} color='#ffffff'/>
-                    <FontAwesome onPress={() => set_flash()} name='flash' size={25} color='#ffffff'/>
-                </View>
+                    <View style={styles.camera_container_top}>
+                      <Camera style={styles.camera} flashMode={flash} type={rotation} ref={cameraRef}>
+                          <View style={styles.camera_top_container}>
+                              <FontAwesome onPress={() => change_rotation()} name='rotate-right' size={25} color='#d6d3d2'/>
+                              <FontAwesome onPress={() => set_flash()} name='flash' size={25} color='#d6d3d2'/>
+                          </View>
 
-                <View style={styles.camera_bottom_container}>
-                    <FontAwesome onPress={takePicture} name='circle-thin' size={80} color='#ffffff'/>
+                          <View style={styles.camera_bottom_container}>
+                              <FontAwesome onPress={takePicture} name='circle-thin' size={80} color='#d6d3d2'/>
+                          </View>
+                      </Camera>
+                    </View>
+
+                    <View style={styles.camera_container_middle}>
+                      <Text> Ou</Text>
+                    </View>
+
+                    <View style={styles.camera_container_bottom}>
+                      <Pressable
+                              style={styles.button}
+                              title="Go to PassionsScreen"
+                              onPress={() => pickDocument()}
+                          >
+                              <Text style={styles.texteblanc}>Add from</Text>
+                      </Pressable>
+                    </View>
                 </View>
-            </Camera>
-            <Text> --- or ---</Text>
-            <Pressable
-                    style={styles.button}
-                    title="Go to PassionsScreen"
-                    onPress={() => pickDocument()}
-                >
-                    <Text style={styles.texteblanc}>Add from</Text>
-            </Pressable>
-        </View>
 
 
     return (
@@ -192,25 +200,28 @@ export default function ChoosePhotoScreen({ navigation }) {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        
+      flex: 1,
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      paddingTop: 40,
+      backgroundColor: 'white',
+      gap: 30,
     },
+
     header: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        marginBottom: 20,
-        marginTop: 30,
+      display: 'flex',
+      flexDirection: 'row',
+      justifyContent: 'center',
+      alignItems: 'center',
+      marginTop: 20,
     },
+
     arrowIcon: {
         marginRight: 10,
-        marginBottom: 2,
     },
     headerText: {
         fontSize: 24,
         fontWeight: 'bold',
-        marginBottom: 10,
     },
     bottom: {
         flex: 1,
@@ -219,13 +230,6 @@ const styles = StyleSheet.create({
         width: '100%',
     },
 
-    input: {
-        marginVertical: 12,
-        borderBottomWidth: 1,
-        width: '80%',
-        fontSize: 18,
-        paddingHorizontal: 10,
-    },
     button: {
         alignItems: 'center',
         justifyContent: 'center',
@@ -241,26 +245,27 @@ const styles = StyleSheet.create({
     },
 
     camera_container: {
-        width: '90%',
-        height: '60%',
+        width: '95%',
+        height: '70%',
         display: 'flex',
-        justifyContent: 'space-between',
+        justifyContent: 'space-around',
         alignItems: 'center',
-
     },
 
     camera: {
         width: '100%',
-        height: '100%',
+        height: '90%',
         display: 'flex',
         justifyContent: 'space-between',
-        padding: 5,
+        
     },
 
+    //pour le button dans la camera
     camera_bottom_container: {
         alignSelf: 'center',
     }, 
 
+    //pour le button dans la camera 
     camera_top_container: {
         width: '100%',
         display: 'flex',
@@ -268,6 +273,27 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         padding: 10,
     },
+
+    camera_container_top: {
+      width: '100%',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+
+    camera_container_middle: {
+      width: '100%',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+
+    camera_container_bottom: {
+      width: '100%',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+    }
 
     
 });
