@@ -4,6 +4,8 @@ import { useEffect } from 'react';
 import users, { turnOnLocation } from '../reducers/users';
 import { useDispatch, useSelector } from 'react-redux';
 import Constants from 'expo-constants';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import { useState } from 'react';
 
 const CONNECTION_BACKEND = Constants.expoConfig?.extra?.CONNECTION_BACKEND;
 
@@ -12,6 +14,8 @@ export default function ActivateLocalisationScreen({ navigation }) {
 
     const user_infos = useSelector((state) => state.users.value);
     const dispatch = useDispatch();
+
+    const [reload, setreload] = useState(false);
     //on active uniquement la localisation, on ne la met pas à jour
     useEffect(() => {
         (async () => {
@@ -52,20 +56,48 @@ export default function ActivateLocalisationScreen({ navigation }) {
       }
       
 
+      const reload_page = () => {
+        setreload(!reload);
+      }
+      
+    //   const location_not_activate = 
+      const location_not_activate = <View style={styles.container}>
+                                        <View>
+                                            <FontAwesome name='podcast' size={25} color='#F98F22'/>
+                                        </View>
+
+                                        <View style={styles.message_container}>
+                                            <Text>Pour profiter pleinement de l'application, la localisation a besoin d'être activé</Text>
+                                        </View>
+                                        
+                                        <Pressable
+                                            style={styles.button}
+                                            title="Go to TabNavigator"
+                                            onPressIn={() => reload_page()}
+                                            // onPress={() => send_informations_to_back()}
+                                        >
+                                            <Text style={styles.texteblanc}>Activer la localisation</Text>
+                                        </Pressable>
+                                    </View>
+    
+
+
+    // const location_activate = 
+
     return (
         <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
             style={styles.container}
-        >
-            <Text>Activate localistation screen</Text>
-
-            <Pressable
-                style={styles.button}
-                title="Go to TabNavigator"
-                onPress={() => send_informations_to_back()}
-            >
-                <Text>go to navigator</Text>
-            </Pressable>
-
+        >   
+            <View style={styles.container_number2}>
+                <View style={styles.header}>
+                    <Pressable
+                        onPress={() => navigation.navigate('ChoosePhotoScreen')}
+                    >
+                        <FontAwesome name="arrow-left" size={24} style={styles.arrowIcon} />
+                    </Pressable>
+                    <Text style={styles.headerText}>Finalise ton inscription</Text>
+                </View>
+            </View>
         </KeyboardAvoidingView>
     );
 }
@@ -75,33 +107,51 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: 'white'
+        backgroundColor: 'white',
+        gap: 20,
     },
-    img: {
-        width: '100%',
-        height: '50%'
 
-    },
-    text: {
-        textAlign: 'left',
-        fontSize: 40,
-        fontWeight: 'bold',
-    },
-    input: {
-        margin: 12,
-        borderBottomWidth: 1,
-        width: '80%'
-    },
     button: {
         alignItems: 'center',
         justifyContent: 'center',
         paddingVertical: 12,
-        width: '80%',
+        width: '50%',
         borderRadius: 5,
         elevation: 3,
-        backgroundColor: 'red',
+        backgroundColor: '#F98F22',
+        padding: 5,
     },
     texteblanc: {
         color: 'white'
-    }
+    },
+
+    message_container: {
+        width: '70%',
+
+    },
+
+    container_number2: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        paddingTop: 40,
+        backgroundColor: 'white',
+        gap: 20,
+    },
+
+    header: {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 20,
+      },
+
+      arrowIcon: {
+        marginRight: 10,
+    },
+    headerText: {
+        fontSize: 24,
+        fontWeight: 'bold',
+    }, 
 })

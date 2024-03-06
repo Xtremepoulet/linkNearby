@@ -97,6 +97,8 @@ export default function ChoosePhotoScreen({ navigation }) {
 
       
       const go_to_navigation_screen = async () => {
+
+        
         if(isPhoto_taken){
           
           const formData = new FormData();
@@ -111,13 +113,13 @@ export default function ChoosePhotoScreen({ navigation }) {
               headers: { 'authorization': user_token },
               body: formData,
           });
-
-            console.log('ok')
            
+          
           const result = await fetching_data.json();
           console.log(result)
           
           navigation.navigate('ActivateLocalisationScreen')
+         
         }
       }
 
@@ -130,12 +132,9 @@ export default function ChoosePhotoScreen({ navigation }) {
                     uri: uri,
                     }}
                 />      
-                <Pressable
-                    style={styles.button}
-                    onPress={() => setIsPhoto_taken(false)}
-                >
-                    <Text style={styles.texteblanc}>take a new one</Text>
-            </Pressable>
+            
+                  <FontAwesome onPress={() => setIsPhoto_taken(false)} name='rotate-right' size={25} color='#F98F22'/>
+            
             </View>
 
 
@@ -152,22 +151,17 @@ export default function ChoosePhotoScreen({ navigation }) {
                           </View>
                       </Camera>
                     </View>
-
-                    <View style={styles.camera_container_middle}>
-                      <Text> Ou</Text>
-                    </View>
-
                     <View style={styles.camera_container_bottom}>
                       <Pressable
                               style={styles.from_button}
                               title="Go to PassionsScreen"
                               onPress={() => pickDocument()}
                           >
-                              <Text style={styles.texteblanc}>Add from</Text>
+                              <Text style={styles.texteblanc}>Depuis la gallerie</Text>
                       </Pressable>
                     </View>
                 </View>
-
+    
 
     return (
         <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -244,10 +238,10 @@ const styles = StyleSheet.create({
       alignItems: 'center',
       justifyContent: 'center',
       paddingVertical: 12,
-      width: '25%',
+      width: '40%',
       borderRadius: 5,
       elevation: 3,
-      backgroundColor: '#F98F22',
+      backgroundColor: '#e8967d',
       marginTop: 20,
     },
 
