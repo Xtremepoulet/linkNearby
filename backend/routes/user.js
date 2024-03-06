@@ -63,9 +63,8 @@ router.post('/user_informations', authenticateToken, async (req, res, next) => {
 
 
 //authenticate with token, understand why its not working
-router.post('/upload_user_photo', authenticateToken, async (req, res, next) => {
+router.post('/upload_user_photo',authenticateToken,  async (req, res, next) => {    
     if (req.user.userId) {
-
         const user = await User.findOne({ _id: req.user.userId });
         if (user) {
             const photoPath = `./tmp/${uniqid()}.jpg`;
