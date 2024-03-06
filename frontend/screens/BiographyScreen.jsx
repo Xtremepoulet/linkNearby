@@ -28,7 +28,7 @@ export default function BiographyScreen({ navigation }) {
         <KeyboardAvoidingView
             behavior={Platform.OS === "ios" ? "padding" : "height"}
             style={styles.container}
-            keyboardVerticalOffset={Platform.OS === "ios" ? height * -0.02 : 0}
+            keyboardVerticalOffset={Platform.OS === "ios" ? height * -0.02 : height * -0.01}
         >
             <SafeAreaView style={styles.container} edges={['top']} styleAndroid={{ flex: 1 }}>
                 <View style={styles.header}>
