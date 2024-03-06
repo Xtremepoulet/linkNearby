@@ -1,11 +1,16 @@
 import { Pressable, StyleSheet, Text, View, Image, TextInput, KeyboardAvoidingView, Platform } from 'react-native';
 import * as Location from 'expo-location';
 import { useEffect } from 'react';
-import { turnOnLocation } from '../reducers/users';
-import { useDispatch } from 'react-redux';
+import users, { turnOnLocation } from '../reducers/users';
+import { useDispatch, useSelector } from 'react-redux';
+import Constants from 'expo-constants';
+
+const CONNECTION_BACKEND = Constants.expoConfig?.extra?.CONNECTION_BACKEND;
+
 
 export default function ActivateLocalisationScreen({ navigation }) {
 
+    const user_infos = useSelector((state) => state.users.value);
     const dispatch = useDispatch();
     //on active uniquement la localisation, on ne la met pas à jour
     useEffect(() => {
@@ -19,6 +24,32 @@ export default function ActivateLocalisationScreen({ navigation }) {
           } 
         })();
       }, []);
+
+      const send_informations_to_back = async () => {
+        // { email: null, token: null, birthdate: null, bio: null, gender: null, passions: [], name: null, uri: null, location: false },
+
+        const user_informations_to_send = {
+            name: user_infos.name,
+            birthdate: user_infos.birthdate,
+            passions: user_infos.passions,
+            bio: user_infos.bio,
+            latitude: 10,
+            longitude: 10,
+            gender: user_infos.gender,
+            uri: user_infos.uri,
+        }
+        
+        const fetching_data = await fetch(`${CONNECTION_BACKEND}/user/user_informations`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'authorization' : user_infos.token },
+            body: JSON.stringify(user_informations_to_send),
+        })
+        
+        console.log(user_infos.token)
+        const result = await fetching_data.json();
+        console.log(result)
+        navigation.navigate('TabNavigator');
+      }
       
 
     return (
@@ -30,7 +61,7 @@ export default function ActivateLocalisationScreen({ navigation }) {
             <Pressable
                 style={styles.button}
                 title="Go to TabNavigator"
-                onPress={() => navigation.navigate('TabNavigator')}
+                onPress={() => send_informations_to_back()}
             >
                 <Text>go to navigator</Text>
             </Pressable>

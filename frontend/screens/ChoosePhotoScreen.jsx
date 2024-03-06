@@ -6,6 +6,9 @@ import { defineName, defineUri } from '../reducers/users';
 import { useState, useEffect, useRef } from 'react';
 import * as DocumentPicker from 'expo-document-picker';
 import { Camera } from 'expo-camera';
+import Constants from 'expo-constants';
+
+const CONNECTION_BACKEND = Constants.expoConfig?.extra?.CONNECTION_BACKEND;
 
 
 
@@ -20,6 +23,7 @@ export default function ChoosePhotoScreen({ navigation }) {
     const [isPhoto_taken, setIsPhoto_taken] = useState(false);
 
     const uri = useSelector((state) => state.users.value.uri)
+    const user_token = useSelector((state) => state.users.value.token)
     
     let cameraRef = useRef(null)
 
@@ -92,9 +96,28 @@ export default function ChoosePhotoScreen({ navigation }) {
       };
 
       
-      const go_to_navigation_screen = () => {
+      const go_to_navigation_screen = async () => {
         if(isPhoto_taken){
-            navigation.navigate('ActivateLocalisationScreen')
+          
+          const formData = new FormData();
+          formData.append('photoFromFront', {
+              uri: uri,
+              name: 'photo.jpg',
+              type: 'image/jpeg',
+          });
+          
+          const fetching_data = await fetch(`${CONNECTION_BACKEND}/user/upload_user_photo`, {
+              method: 'POST',
+              headers: { 'authorization': user_token },
+              body: formData,
+          });
+
+            console.log('ok')
+           
+          const result = await fetching_data.json();
+          console.log(result)
+          
+          navigation.navigate('ActivateLocalisationScreen')
         }
       }
 
