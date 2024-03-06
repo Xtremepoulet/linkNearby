@@ -159,7 +159,7 @@ export default function ChoosePhotoScreen({ navigation }) {
 
                     <View style={styles.camera_container_bottom}>
                       <Pressable
-                              style={styles.button}
+                              style={styles.from_button}
                               title="Go to PassionsScreen"
                               onPress={() => pickDocument()}
                           >
@@ -180,7 +180,7 @@ export default function ChoosePhotoScreen({ navigation }) {
                 >
                     <FontAwesome name="arrow-left" size={24} style={styles.arrowIcon} />
                 </Pressable>
-                <Text style={styles.headerText}>Parles nous de toi</Text>
+                <Text style={styles.headerText}>Prend une belle photo</Text>
             </View>
 
             {isPhoto_taken ? image : camera}
@@ -205,7 +205,7 @@ const styles = StyleSheet.create({
       justifyContent: 'space-between',
       paddingTop: 40,
       backgroundColor: 'white',
-      gap: 30,
+      gap: 20,
     },
 
     header: {
@@ -222,7 +222,7 @@ const styles = StyleSheet.create({
     headerText: {
         fontSize: 24,
         fontWeight: 'bold',
-    },
+    },  
     bottom: {
         flex: 1,
         justifyContent: 'center',
@@ -238,8 +238,19 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         elevation: 3,
         backgroundColor: '#F98F22',
-        marginTop: 20,
     },
+
+    from_button: {
+      alignItems: 'center',
+      justifyContent: 'center',
+      paddingVertical: 12,
+      width: '25%',
+      borderRadius: 5,
+      elevation: 3,
+      backgroundColor: '#F98F22',
+      marginTop: 20,
+    },
+
     texteblanc: {
         color: 'white'
     },
@@ -250,6 +261,7 @@ const styles = StyleSheet.create({
         display: 'flex',
         justifyContent: 'space-around',
         alignItems: 'center',
+        borderRadius: 5,
     },
 
     camera: {
@@ -257,7 +269,6 @@ const styles = StyleSheet.create({
         height: '90%',
         display: 'flex',
         justifyContent: 'space-between',
-        
     },
 
     //pour le button dans la camera
