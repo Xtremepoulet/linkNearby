@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Pressable, StyleSheet, Text, View, Image, TextInput, KeyboardAvoidingView, Platform, Dimensions } from 'react-native';
 import { UseSelector, useSelector } from 'react-redux';
 import Constants from 'expo-constants';
@@ -15,6 +15,7 @@ const CONNECTION_BACKEND = Constants.expoConfig?.extra?.CONNECTION_BACKEND;
 
 export default function HomeScreen({ navigation }) {
     const token = useSelector((state) => state.users.value.token);
+    const [users, setUsers] = useState([])
 
     const user_infos = { name: 'hello' }
     useEffect(() => {
@@ -22,7 +23,25 @@ export default function HomeScreen({ navigation }) {
             method: 'GET',
             headers: { 'Content-Type': 'application/json', 'authorization': token },
         })
+        getUsers()
     }, [])
+
+    const getUsers = async () => {
+        const response = await fetch(`${CONNECTION_BACKEND}/user/users`, {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' },
+        })
+
+        const result = await response.json();
+        if (result.result) {
+            setUsers(result.users)
+        }
+    }
+
+    const usersList = users.map((user, index) => {
+
+        return <Card key={index} picture={user.uri} isConnected={user.isConnected} name={user.name} />
+    })
 
 
 
@@ -53,18 +72,7 @@ export default function HomeScreen({ navigation }) {
                     <View style={styles.cardView}>
                         <ScrollView showsVerticalScrollIndicator={false}
                             showsHorizontalScrollIndicator={false} contentContainerStyle={styles.containerScroll}>
-
-
-                            <Card />
-                            <Card />
-                            <Card />
-                            <Card />
-                            <Card />
-                            <Card />
-                            <Card />
-                            <Card />
-
-
+                            {usersList}
                         </ScrollView>
                     </View>
 

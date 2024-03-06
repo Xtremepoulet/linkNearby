@@ -15,7 +15,7 @@ const Signin = ({ navigation }) => {
     const dispatch = useDispatch();
 
     const [email, setEmail] = useState('cerisier.jeremy@gmail.com');
-    const [password, setPassword] = useState('123@Jeremy');
+    const [password, setPassword] = useState('123@Lagune');
     const [password_is_valid, setPassword_is_valid] = useState(true);
     const [email_is_valid, setEmail_is_valid] = useState(true);
 

@@ -5,16 +5,16 @@ const { width, height } = Dimensions.get('window');
 function Card(props) {
     const picture = 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8cHJvZmlsfGVufDB8fDB8fHww';
 
-    const isConnected = true
+
 
 
     return (
         <View style={styles.card}>
             <Pressable onPress={() => console.log("oui")}>
-                <Image source={{ uri: picture }} style={styles.picture} />
-                {isConnected && <View style={styles.statusIndicator}></View>}
+                <Image source={{ uri: props.picture }} style={styles.picture} />
+                {props.isConnected && <View style={styles.statusIndicator}></View>}
                 <View style={styles.informationProfile}>
-                    <Text style={styles.informationPrenom}>Jérémy, 32ans</Text>
+                    <Text style={styles.informationPrenom}>{props.name}</Text>
                     <Text style={styles.informationLocalisation}>Localisé à 500m</Text>
                 </View>
             </Pressable>
