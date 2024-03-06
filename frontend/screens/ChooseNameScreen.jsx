@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { Pressable, StyleSheet, Text, View, TextInput, KeyboardAvoidingView, Platform, Dimensions } from 'react-native';
+import { Pressable, StyleSheet, Text, View, TextInput, KeyboardAvoidingView, Platform, Dimensions, Image } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { useDispatch } from 'react-redux';
+import logoLinkNearby from '../assets/linkNearbyBackNone.webp';
 import { defineName } from '../reducers/users';
 
 const windowHeight = Dimensions.get('window').height;
@@ -38,15 +39,17 @@ export default function ChooseNameScreen({ navigation }) {
     return (
         <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
             style={styles.container}
-        >
-            <View style={styles.header}>
-                <Pressable
-                    onPress={() => navigation.navigate('signupScreen')}
-                >
-                    <FontAwesome name="arrow-left" size={24} style={styles.arrowIcon} />
-                </Pressable>
-                <Text style={styles.headerText}>Comment tu t'appelles ?</Text>
-            </View>
+        >   
+                <View style={styles.header}>
+                    <Pressable
+                        onPress={() => navigation.navigate('signupScreen')}
+                    >
+                        <FontAwesome name="arrow-left" size={24} style={styles.arrowIcon} />
+                    </Pressable>
+                    <Text style={styles.headerText}>Comment tu t'appelles ?</Text>
+                </View>
+            
+
             <View style={styles.bottom}>
                 <TextInput
                     placeholder='Name'
@@ -70,31 +73,30 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
-        justifyContent: 'flex-start',
+        justifyContent: 'space-between',
         paddingTop: 40,
-        backgroundColor: 'white'
+        backgroundColor: 'white',
     },
     header: {
+        display: 'flex',
         flexDirection: 'row',
+        justifyContent: 'center',
         alignItems: 'center',
-        paddingHorizontal: 20,
-        marginBottom: 20,
+        marginTop: 20,
     },
     arrowIcon: {
         marginRight: 10,
-        marginBottom: 2,
     },
     headerText: {
         fontSize: 24,
         fontWeight: 'bold',
-        marginBottom: 10,
     },
     bottom: {
-        flex: 1,
+        flex: 0.7,
         justifyContent: 'center',
         alignItems: 'center',
         width: '100%',
-        marginTop: windowHeight * 0.1,
+        
     },
     input: {
         marginVertical: 12,
@@ -115,7 +117,35 @@ const styles = StyleSheet.create({
     },
     texteblanc: {
         color: 'white'
-    }
+    },
+
+    top_container: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        gap: 25,
+    },
+
+    // logo_container: {
+    //     display: 'flex',
+    //     flexDirection: 'row',
+    //     justifyContent: 'center',
+    //     alignItems: 'center',
+    //     gap: 10,
+    // },
+
+    // logo: {
+    //     width: 50,
+    //     height: 50,
+    // },
+
+    // h1: {
+    //     fontSize: 20,
+    //     fontWeight: 'bold',
+    //     color: 'black',
+    //     alignSelf: 'center',
+    // },
+
 });
 
 /*

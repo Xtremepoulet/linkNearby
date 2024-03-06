@@ -12,6 +12,7 @@ export default function BirthdateScreen({ navigation }) {
     const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
     const [birthdate, setBirthdate] = useState('');
     const [birthdatea, setBirthdatea] = useState('');
+    const [isBirthdateSelected, setIsBirthdateSelected] = useState(false);
 
 
     const showDatePicker = () => {
@@ -28,6 +29,7 @@ export default function BirthdateScreen({ navigation }) {
         setBirthdate(date.getTime());
         setBirthdatea(date.toLocaleDateString());
         hideDatePicker();
+        setIsBirthdateSelected(true);
     };
 
     const handleNext = () => {
@@ -73,12 +75,8 @@ export default function BirthdateScreen({ navigation }) {
                     style={styles.button}
                     onPress={showDatePicker}
                 >
-                    <Text style={styles.texteblanc}>Sélectionner la date de naissance</Text>
+                    {isBirthdateSelected ? <Text style={styles.texteblanc}>{birthdatea}</Text> : <Text style={styles.texteblanc}>Sélectionner la date de naissance</Text>}
                 </Pressable>
-
-
-                <Text>Date de naissance sélectionnée : {birthdatea}</Text>
-
 
                 <Pressable
                     style={[styles.button, { marginTop: 20 }]}
@@ -89,45 +87,38 @@ export default function BirthdateScreen({ navigation }) {
             </View>
         </KeyboardAvoidingView>
     );
-}
+}   
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
-        justifyContent: 'flex-start',
+        justifyContent: 'space-between',
         paddingTop: 40,
-        backgroundColor: 'white'
+        backgroundColor: 'white',
     },
     header: {
+        display: 'flex',
         flexDirection: 'row',
+        justifyContent: 'center',
         alignItems: 'center',
-        paddingHorizontal: 20,
-        marginBottom: 20,
+        marginTop: 20,
     },
     arrowIcon: {
         marginRight: 10,
-        marginBottom: 2,
     },
     headerText: {
         fontSize: 24,
         fontWeight: 'bold',
-        marginBottom: 10,
     },
     bottom: {
-        flex: 1,
+        flex: 0.6,
         justifyContent: 'center',
         alignItems: 'center',
         width: '100%',
-        marginTop: windowHeight * 0.1,
+        gap: 50,
     },
-    input: {
-        marginVertical: 12,
-        borderBottomWidth: 1,
-        width: '80%',
-        fontSize: 18,
-        paddingHorizontal: 10,
-    },
+
     button: {
         alignItems: 'center',
         justifyContent: 'center',
