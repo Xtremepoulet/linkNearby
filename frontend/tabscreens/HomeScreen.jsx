@@ -4,7 +4,7 @@ import { UseSelector, useSelector } from 'react-redux';
 import Constants from 'expo-constants';
 import logoLinkNearby from '../assets/linkNearbyBackNone.webp';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import Card from '../components/Card';
+import Card from '../components/HomeCard';
 
 const { width, height } = Dimensions.get('window'); // Recupere la dimension de l'écran
 import { SafeAreaView } from 'react-native-safe-area-context'; // composant pour gérer les zones safe sur ios et android
@@ -39,9 +39,16 @@ export default function HomeScreen({ navigation }) {
     }
 
     const usersList = users.map((user, index) => {
+        const birthdate = new Date(user.birthdate);
+        const today = new Date();
+        const age = today.getFullYear() - birthdate.getFullYear();
+        const m = today.getMonth() - birthdate.getMonth();
+        if (m < 0 || (m === 0 && today.getDate() < birthdate.getDate())) {
+            age--;
+        }
 
-        return <Card key={index} picture={user.uri} isConnected={user.isConnected} name={user.name} />
-    })
+        return <Card key={index} picture={user.uri} isConnected={user.isConnected} name={user.name} age={age} />;
+    });
 
 
 

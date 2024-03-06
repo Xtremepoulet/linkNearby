@@ -14,7 +14,7 @@ function Card(props) {
                 <Image source={{ uri: props.picture }} style={styles.picture} />
                 {props.isConnected && <View style={styles.statusIndicator}></View>}
                 <View style={styles.informationProfile}>
-                    <Text style={styles.informationPrenom}>{props.name}</Text>
+                    <Text style={styles.informationPrenom}>{props.name}, {props.age}</Text>
                     <Text style={styles.informationLocalisation}>Localisé à 500m</Text>
                 </View>
             </Pressable>
