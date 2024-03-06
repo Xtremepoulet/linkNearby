@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Pressable, StyleSheet, Text, View, TextInput, KeyboardAvoidingView, Platform, Dimensions, ScrollView, SafeAreaView } from 'react-native';
+import { Pressable, StyleSheet, Text, View, TextInput, KeyboardAvoidingView, Platform, Dimensions, ScrollView } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -8,7 +8,9 @@ import { addPassions, removePassions } from '../reducers/users';
 import Constants from 'expo-constants';
 
 const CONNECTION_BACKEND = Constants.expoConfig?.extra?.CONNECTION_BACKEND;
-const windowHeight = Dimensions.get('window').height;
+
+const { width, height } = Dimensions.get('window'); // Recupere la dimension de l'écran
+import { SafeAreaView } from 'react-native-safe-area-context'; // composant pour gérer les zones safe sur ios et android
 
 
 export default function PassionScreen({ navigation }) {
@@ -110,8 +112,6 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
-        justifyContent: 'flex-start',
-        paddingTop: 40,
         backgroundColor: 'white'
     },
     header: {
@@ -128,7 +128,6 @@ const styles = StyleSheet.create({
         fontSize: 24,
         fontWeight: 'bold',
     },
-
     input: {
         marginVertical: 12,
         borderBottomWidth: 1,
@@ -142,8 +141,8 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         backgroundColor: '#F98F22',
         marginTop: 20,
-        height: 50,
-        width: 200,
+        width: width * 0.70,
+        height: height * 0.05,
 
     },
     texteblanc: {
@@ -167,7 +166,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         width: '100%',
         marginTop: 20,
-        height: windowHeight * 0.65,
+        height: height * 0.68,
     },
     containerScroll: {
         justifyContent: 'center',
@@ -183,6 +182,5 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         color: '#F98F22',
         marginTop: 20,
-        // marginBottom: 20,
     }
 });

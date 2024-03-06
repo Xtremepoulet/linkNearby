@@ -53,6 +53,7 @@ export default function ChoosePhotoScreen({ navigation }) {
         }
       }
 
+      
 
       const set_flash = () => {
         if(flash === Camera.Constants.FlashMode.off){
@@ -62,7 +63,7 @@ export default function ChoosePhotoScreen({ navigation }) {
         }
       }
     
-
+    
 
       //take document from gallery 
     const pickDocument = async () => {
@@ -89,6 +90,13 @@ export default function ChoosePhotoScreen({ navigation }) {
           console.error('Error picking document:', error);
         }
       };
+
+      
+      const go_to_navigation_screen = () => {
+        if(isPhoto_taken){
+            navigation.navigate('ActivateLocalisationScreen')
+        }
+      }
 
 
       //definititon des elements qui seront display par la suite selon si la photo est prise ou non 
@@ -150,7 +158,7 @@ export default function ChoosePhotoScreen({ navigation }) {
                 <Pressable
                     style={styles.button}
                     title="Go to PassionsScreen"
-                    onPress={() => navigation.navigate('ActivateLocalisationScreen')}
+                    onPress={() => go_to_navigation_screen()}
                 >
                     <Text style={styles.texteblanc}>Next</Text>
                 </Pressable>
