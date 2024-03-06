@@ -11,6 +11,8 @@ export default function BirthdateScreen({ navigation }) {
     const dispatch = useDispatch();
     const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
     const [birthdate, setBirthdate] = useState('');
+    const [birthdatea, setBirthdatea] = useState('');
+
 
     const showDatePicker = () => {
         setBirthdate('')
@@ -20,31 +22,27 @@ export default function BirthdateScreen({ navigation }) {
     const hideDatePicker = () => {
         setDatePickerVisibility(false);
     };
-
     const handleConfirm = (date) => {
         console.log("A date has been picked: ", date);
-        console.log(date)
-        setBirthdate(date.getTime());
 
+        setBirthdate(date.getTime());
+        setBirthdatea(date.toLocaleDateString());
         hideDatePicker();
     };
 
     const handleNext = () => {
+        let oui = 0
         const dateDuJourEnMs = new Date().getTime();
-        console.log(dateDuJourEnMs - birthdate)
-        console.log()
+        difference = dateDuJourEnMs - birthdate
+        oui = difference / (1000 * 60 * 60 * 24 * 365.25)
 
+        if (oui >= 18 && oui <= 120 && birthdate) {
+            dispatch(defineBirthdate(birthdate));
 
+            navigation.navigate('PassionScreen');
+        } else {
 
-
-        /*
-                if (birthdate) {
-                    dispatch(defineBirthdate(birthdate));
-                    navigation.navigate('PassionScreen');
-                } else {
-                    navigation.navigate('PassionScreen');
-                }
-                */
+        }
     };
 
 
@@ -79,7 +77,7 @@ export default function BirthdateScreen({ navigation }) {
                 </Pressable>
 
 
-                <Text>Date de naissance sélectionnée : {birthdate}</Text>
+                <Text>Date de naissance sélectionnée : {birthdatea}</Text>
 
 
                 <Pressable
