@@ -144,7 +144,6 @@ router.get('/users_position', async (req, res, next) => {
             .select('location name') // Sélection des champs à renvoyer
             .exec(); // Exécute la requête
 
-
         const formattedUsers = users.map(user => {
             return {
                 location: user.location,
