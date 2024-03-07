@@ -240,10 +240,11 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 10,
+        textAlign: 'center',
     },
     texteButtonMessage: {
         color: 'black',
-        fontSize: 16,
+        fontSize: 14,
     },
     fullScreenContainer: {
         flex: 1,
