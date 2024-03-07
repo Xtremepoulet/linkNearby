@@ -21,6 +21,9 @@ import ActivateLocalisationScreen from './screens/ActivateLocalisationScreen.jsx
 import ChooseGenderScreen from './screens/ChooseGenderScreen.jsx';
 import ChoosePhotoScreen from './screens/ChoosePhotoScreen.jsx';
 
+import ConversationScreen from './otherscreens/ConversationScreen.jsx';
+
+
 
 ChooseGenderScreen
 
@@ -84,6 +87,7 @@ export default function App() {
             <Stack.Screen name="ActivateLocalisationScreen" component={ActivateLocalisationScreen} />
             <Stack.Screen name="ChooseGenderScreen" component={ChooseGenderScreen} />
             <Stack.Screen name="ChoosePhotoScreen" component={ChoosePhotoScreen} />
+            <Stack.Screen name="ConversationScreen" component={ConversationScreen} />
 
 
 
