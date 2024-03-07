@@ -1,7 +1,7 @@
 import { Pressable, StyleSheet, Text, View, Image, TextInput, KeyboardAvoidingView, Platform } from 'react-native';
 import * as Location from 'expo-location';
 import { useEffect } from 'react';
-import users, { turnOnLocation } from '../reducers/users';
+import users, { addLatitude, addLongitude, turnOnLocation } from '../reducers/users';
 import { useDispatch, useSelector } from 'react-redux';
 import Constants from 'expo-constants';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -24,8 +24,14 @@ export default function ActivateLocalisationScreen({ navigation }) {
             
           if (status === 'granted') {
             const location = await Location.getCurrentPositionAsync({});
+            Location.watchPositionAsync({ distanceInterval: 10 },
+                (location) => {
+                  console.log(location);
+                });
             console.log(location);
             dispatch(turnOnLocation(true));
+            dispatch(addLatitude(location.coords.latitude));
+            dispatch(addLongitude(location.coords.longitude));
             setIsLocationActivated(true);
           } 
         })();
