@@ -63,7 +63,7 @@ router.post('/user_informations', authenticateToken, async (req, res, next) => {
 
 
 //authenticate with token, understand why its not working
-router.post('/upload_user_photo',authenticateToken,  async (req, res, next) => {    
+router.post('/upload_user_photo', authenticateToken, async (req, res, next) => {
     if (req.user.userId) {
         const user = await User.findOne({ _id: req.user.userId });
         if (user) {
@@ -122,7 +122,7 @@ router.get('/users', async (req, res) => {
                 location: user.location,
                 bio: user.bio,
                 uri: user.uri,
-                passions: user.userPassion.map(passion => ({ name: passion.name, emoji: passion.emoji })), // Adaptez selon le schéma de 'Passion'
+                passions: user.userPassion.map(passion => ({ id: passion._id, name: passion.name, emoji: passion.emoji })), // Adaptez selon le schéma de 'Passion'
                 gender: user.gender,
                 isConnected: user.isConnected
             };
@@ -139,11 +139,11 @@ router.get('/users', async (req, res) => {
 //get the users positions from database if they are logged
 router.get('/users_position', async (req, res, next) => {
     try {
-        const users = await User.find({ isConnected: true})
+        const users = await User.find({ isConnected: true })
             .select('location') // Sélection des champs à renvoyer
             .exec(); // Exécute la requête
 
-        
+
         const formattedUsers = users.map(user => {
             return {
                 location: user.location,
@@ -155,7 +155,7 @@ router.get('/users_position', async (req, res, next) => {
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
-})  
+})
 
 
 
@@ -168,9 +168,9 @@ router.get('/users_position', async (req, res, next) => {
 router.get('/user_connected', authenticateToken, async (req, res, next) => {
     if (req.user.userId) {
 
-        try{
+        try {
             const user = await User.findOne({ _id: req.user.userId });
-            if(user){
+            if (user) {
                 const result = await User.updateOne(
                     { _id: req.user.userId },
                     {
@@ -178,10 +178,10 @@ router.get('/user_connected', authenticateToken, async (req, res, next) => {
                             isConnected: true,
                         },
                     })
-    
-                    res.json({ result: true, message: 'user connected'})
+
+                res.json({ result: true, message: 'user connected' })
             }
-        }catch {
+        } catch {
             res.status(500).json({ message: error.message });
         }
 

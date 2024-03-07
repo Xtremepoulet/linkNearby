@@ -1,39 +1,66 @@
 import { View, Text, Pressable, Image, StyleSheet, Dimensions } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
+import { useNavigation } from '@react-navigation/native';
 
 const { width, height } = Dimensions.get('window');
 
 function Card(props) {
     const picture = 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8cHJvZmlsfGVufDB8fDB8fHww';
 
+    const navigation = useNavigation();
 
+    let passions = ''
+    if (props.passions) {
+        passions = props.passions.slice(0, 1).map((passion) => {
+            return (
+                <View key={passion.id} style={styles.passionBody}>
+                    <Text style={styles.passionText}>{passion.name} {passion.emoji}</Text>
+                </View>
+            );
+        })
+    }
+    const handleProfileClick = () => {
 
+        navigation.navigate('ProfilScreen', {
+            userEmail: props.email,
+            name: props.name,
+            birthdate: props.age,
+            location: props.location,
+            bio: props.bio,
+            gender: props.gender,
+            passions: props.passions,
+            picture: props.picture,
+            isConnected: props.isConnected
+        });
+    }
 
     return (
-        <View style={styles.card}>
-            <Pressable onPress={() => console.log("oui")}>
-                <View style={styles.pictureContainer}>
-                    <Image source={{ uri: props.picture }} style={styles.picture} />
+        <View>
+            <View style={styles.card}>
+                <Pressable onPress={handleProfileClick}>
+                    <View style={styles.pictureContainer}>
+                        <Image source={{ uri: props.picture }} style={styles.picture} />
 
-                    {/* Dégradé en bas pour les informations */}
-                    <LinearGradient
-                        start={{ x: 0, y: 1 }}
-                        end={{ x: 0, y: 0 }}
-                        colors={['rgba(0,0,0,0.8)', 'transparent']}
-                        style={styles.gradientBottom}
-                    />
+                        {/* Dégradé en bas pour les informations */}
+                        <LinearGradient
+                            start={{ x: 0, y: 1 }}
+                            end={{ x: 0, y: 0 }}
+                            colors={['rgba(0,0,0,0.8)', 'transparent']}
+                            style={styles.gradientBottom}
+                        />
 
-                    {props.isConnected && <View style={styles.statusIndicator}></View>}
-                </View>
+                        {props.isConnected && <View style={styles.statusIndicator}></View>}
+                    </View>
 
-                <View style={styles.informationProfile}>
-                    <Text style={styles.informationPrenom}>{props.name}, {props.age}</Text>
-                    <Text style={styles.informationLocalisation}>📍 à 1 km</Text>
-                </View>
-                {/* <View style={styles.passionBody}>
-                    <Text style={styles.passionText}>Tennis 💪</Text>
-                </View> */}
-            </Pressable>
+                    <View style={styles.informationProfile}>
+                        <Text style={styles.informationPrenom}>{props.name}, {props.age}</Text>
+                        <Text style={styles.informationLocalisation}>📍 à 1 km</Text>
+                    </View>
+                </Pressable>
+            </View>
+            <View style={styles.passionContainer}>
+                {passions}
+            </View>
         </View>
     );
 }
@@ -42,7 +69,7 @@ const styles = StyleSheet.create({
     card: {
         width: width * 0.40,
         height: height * 0.25,
-        marginBottom: 20,
+        // marginBottom: 20,
         borderRadius: 10,
         backgroundColor: 'white',
         // Propriétés de l'ombre pour iOS
@@ -98,13 +125,23 @@ const styles = StyleSheet.create({
         width: '100%',
         height: '20%',
     },
+
     passionText: {
         color: 'white',
-        fontSize: 14,
-        paddingHorizontal: 10,
+        fontSize: 10,
+        paddingHorizontal: 5,
         paddingVertical: 5,
 
     },
+    passionBody: {
+        backgroundColor: '#F98F22',
+        alignSelf: 'flex-start',
+        borderRadius: 20,
+    },
+    passionContainer: {
+        marginBottom: 20,
+        marginTop: 3,
+    }
 
 });
 export default Card;
