@@ -1,15 +1,13 @@
 import { View, Text, Pressable, Image, StyleSheet, Dimensions } from 'react-native';
-
+import { useNavigation } from '@react-navigation/native';
 const { width, height } = Dimensions.get('window');
 
 function MessageCard(props) {
-    const picture = 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8cHJvZmlsfGVufDB8fDB8fHww';
-
-    const isConnected = true
+    const navigation = useNavigation()
 
 
     return (
-        <View style={styles.card}>
+        <Pressable onPress={() => navigation.navigate('ConversationScreen')} style={styles.card}>
             <View style={styles.nope}>
                 <Image style={styles.image} source={require('../assets/profile.png')}></Image>
             </View>
@@ -18,7 +16,7 @@ function MessageCard(props) {
                 <Text style={styles.txtcolor} >last message... • il y a 2min</Text>
             </View>
 
-        </View>
+        </Pressable>
     );
 }
 
