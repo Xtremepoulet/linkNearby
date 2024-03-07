@@ -5,6 +5,7 @@ import Constants from 'expo-constants';
 import logoLinkNearby from '../assets/linkNearbyBackNone.webp';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Card from '../components/HomeCard';
+import CardNew from '../components/HomeCardNew';
 
 const { width, height } = Dimensions.get('window'); // Recupere la dimension de l'écran
 import { SafeAreaView } from 'react-native-safe-area-context'; // composant pour gérer les zones safe sur ios et android
@@ -102,7 +103,9 @@ export default function HomeScreen({ navigation }) {
                     <View style={styles.cardView}>
                         <ScrollView showsVerticalScrollIndicator={false}
                             showsHorizontalScrollIndicator={false} contentContainerStyle={styles.containerScroll}>
-                            {usersList}
+                            {/* {usersList} */}
+                            <CardNew />
+                            <Card />
                         </ScrollView>
                     </View>
 
@@ -120,7 +123,7 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
-        // backgroundColor: 'blue',
+        backgroundColor: 'white',
     },
     header: {
         // backgroundColor: 'green',
