@@ -136,5 +136,31 @@ router.get('/users', async (req, res) => {
 
 
 
+//get the users positions from database if they are logged
+router.get('/users_position', async (req, res, next) => {
+    
+})
+
+
+//gere la connexion utilisateur en BDD lorsque l'utilisateur arrive sur le home screen
+router.post('/user_connected', authenticateToken, async (req, res, next) => {
+    if (req.user.userId) {
+        const user = await User.findOne({ _id: req.user.userId });
+        if(user){
+            const result = await User.updateOne(
+                { _id: req.user.userId },
+                {
+                    $set: {
+                        isConnected: true,
+                    },
+                })
+                
+                res.json({ result: true, message: 'user connected'})
+        }
+    }
+})
+
+
+
 
 module.exports = router; 
