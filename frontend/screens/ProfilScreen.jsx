@@ -36,7 +36,7 @@ export default function ProfilScreen({ route, navigation }) {
 
                 <View style={styles.header}>
                     <View style={styles.containerFiltre}>
-                        <Pressable onPress={() => console.log('aie!')}>
+                        <Pressable onPress={() => navigation.goBack()}>
                             <FontAwesome name="arrow-left" size={24} style={styles.arrowIcon} />
                         </Pressable>
                     </View>
@@ -177,13 +177,13 @@ const styles = StyleSheet.create({
         width: '100%',
         height: 200,
         marginTop: 20,
-        borderWidth: 3,
+
         borderRadius: 10,
-        borderColor: '#F98F22',
+
         flexDirection: 'row',
         flexWrap: 'wrap',
-        alignItems: 'center',
-        justifyContent: 'center',
+        // alignItems: 'center',
+        // justifyContent: 'center',
         alignSelf: 'flex-start',
     },
     passionBody: {

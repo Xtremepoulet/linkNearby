@@ -10,7 +10,8 @@ const userSchema = mongoose.Schema({
   uri: String,
   userPassion: [{ type: mongoose.Schema.Types.ObjectId, ref: 'passions' }],
   gender: { type: String, enum: ['homme', 'femme'], },
-  isConnected: { type: Boolean, default: false },
+  isConnected: { type: Boolean, default: true },
+  lastHeartbeat: { type: Date, default: Date.now },
   chatChannels: [{ type: mongoose.Schema.Types.ObjectId, ref: 'chatChannels' }],
 }, { timestamps: true }); //ajoute automatiquement createdAt et updatedAt
 

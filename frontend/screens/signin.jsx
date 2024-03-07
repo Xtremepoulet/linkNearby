@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react"
 import { StyleSheet, Text, TextInput, View, TouchableOpacity, KeyboardAvoidingView, Platform, Image, Dimensions } from 'react-native';
 import Constants from 'expo-constants';
 import { UseDispatch, useDispatch } from "react-redux";
-import { addToken } from "../reducers/users";
+import { addToken, addEmail } from "../reducers/users";
 const CONNECTION_BACKEND = Constants.expoConfig?.extra?.CONNECTION_BACKEND;
 import logoLinkNearby from '../assets/linkNearbyBackNone.webp';
 
@@ -48,9 +48,14 @@ const Signin = ({ navigation }) => {
 
         if (result.result) {
             dispatch(addToken(result.token));
-            navigation.navigate('TabNavigator');
+            dispatch(addEmail(email));
+            // navigation.navigate('TabNavigator');
             setEmail_is_valid(true);
             setPassword_is_valid(true);
+            navigation.reset({
+                index: 0,
+                routes: [{ name: 'TabNavigator' }],
+            });
         } else {
             console.log('erreur de connexion')
             setEmail_is_valid(false);

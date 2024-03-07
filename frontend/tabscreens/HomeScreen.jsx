@@ -1,10 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Pressable, StyleSheet, Text, View, Image, TextInput, KeyboardAvoidingView, Platform, Dimensions } from 'react-native';
 import { UseSelector, useSelector } from 'react-redux';
 import Constants from 'expo-constants';
 import logoLinkNearby from '../assets/linkNearbyBackNone.webp';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Card from '../components/HomeCard';
+import { RefreshControl } from 'react-native';
 
 
 const { width, height } = Dimensions.get('window'); // Recupere la dimension de l'écran
@@ -16,13 +17,48 @@ const CONNECTION_BACKEND = Constants.expoConfig?.extra?.CONNECTION_BACKEND;
 
 export default function HomeScreen({ navigation }) {
 
+    const [refreshing, setRefreshing] = useState(false);
+
     const token = useSelector((state) => state.users.value.token);
     const [users, setUsers] = useState([])
 
     const user_token = useSelector((state) => state.users.value.token);
+    const user_email = useSelector((state) => state.users.value.email);
 
     useEffect(() => {
         connected_user();
+    }, []);
+
+    useEffect(() => {
+        const intervalId = setInterval(sendHeartbeat, 2 * 60 * 1000);
+
+        return () => clearInterval(intervalId);
+    }, [token]);
+
+
+    const sendHeartbeat = useCallback(async () => {
+        if (token) {
+            try {
+                await fetch(`${CONNECTION_BACKEND}/heartbeat`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': user_token
+                    },
+                    body: JSON.stringify({ email: user_email })
+                });
+            } catch (error) {
+                console.error('Erreur lors de l\'envoi du heartbeat:', error);
+            }
+        }
+    }, [token]);
+
+
+
+    const onRefresh = useCallback(async () => {
+        setRefreshing(true);
+        await getUsers();
+        setRefreshing(false);
     }, []);
 
 
@@ -34,10 +70,8 @@ export default function HomeScreen({ navigation }) {
         const result = await fetching_data.json();
     }
 
-
-
-    const user_infos = { name: 'hello' }
     useEffect(() => {
+
         fetch(`${CONNECTION_BACKEND}/user/authorisation`, {
             method: 'GET',
             headers: { 'Content-Type': 'application/json', 'authorization': token },
@@ -57,10 +91,10 @@ export default function HomeScreen({ navigation }) {
         }
     }
 
-    const usersList = users.map((user) => {
+    const usersList = users.filter((user) => user.email !== user_email).map((user) => {
         const birthdate = new Date(user.birthdate);
         const today = new Date();
-        let age = today.getFullYear() - birthdate.getFullYear(); // Utilisez `let` pour `age`
+        let age = today.getFullYear() - birthdate.getFullYear();
         const m = today.getMonth() - birthdate.getMonth();
         if (m < 0 || (m === 0 && today.getDate() < birthdate.getDate())) {
             age--;
@@ -107,8 +141,17 @@ export default function HomeScreen({ navigation }) {
                     </View>
 
                     <View style={styles.cardView}>
-                        <ScrollView showsVerticalScrollIndicator={false}
-                            showsHorizontalScrollIndicator={false} contentContainerStyle={styles.containerScroll}>
+                        <ScrollView
+                            showsVerticalScrollIndicator={false}
+                            showsHorizontalScrollIndicator={false}
+                            contentContainerStyle={styles.containerScroll}
+                            refreshControl={
+                                <RefreshControl
+                                    refreshing={refreshing}
+                                    onRefresh={onRefresh}
+                                />
+                            }
+                        >
                             {usersList}
 
                         </ScrollView>
@@ -119,7 +162,7 @@ export default function HomeScreen({ navigation }) {
 
 
             </SafeAreaView>
-        </KeyboardAvoidingView>
+        </KeyboardAvoidingView >
     );
 }
 
