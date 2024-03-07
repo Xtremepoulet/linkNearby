@@ -4,7 +4,7 @@ import { KeyboardAvoidingView, Image, StyleSheet, Text, View, Platform } from 'r
 import Constants from 'expo-constants';
 import MapView from 'react-native-maps';
 import { Marker } from 'react-native-maps';
-
+    
 import {Dimensions} from 'react-native';
 import { useSelector } from 'react-redux';
 
