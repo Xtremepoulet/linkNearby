@@ -55,7 +55,6 @@ const ProfileScreen = ({ navigation }) => {
     }
 
 
-
     const users_positions_to_display = users_positions.map((user, i) => {
         let distance = calcCrow(user.location[0].latitude, user.location[0].longitude, latitude, longitude).toFixed(2)
         //distance inferior of 5 km or 500meters ? 
