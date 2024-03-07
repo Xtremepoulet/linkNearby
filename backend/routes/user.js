@@ -141,6 +141,8 @@ router.get('/users_position', async (req, res, next) => {
     try {
         const users = await User.find({ isConnected: true })
             .select('location') // Sélection des champs à renvoyer
+        const users = await User.find({ isConnected: true })
+            .select('location name') // Sélection des champs à renvoyer
             .exec(); // Exécute la requête
 
 
@@ -148,6 +150,7 @@ router.get('/users_position', async (req, res, next) => {
             return {
                 location: user.location,
                 isConnected: user.isConnected,
+                name: user.name,
             };
         });
 
