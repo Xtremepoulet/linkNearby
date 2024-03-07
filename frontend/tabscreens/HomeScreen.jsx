@@ -14,8 +14,31 @@ const CONNECTION_BACKEND = Constants.expoConfig?.extra?.CONNECTION_BACKEND;
 
 
 export default function HomeScreen({ navigation }) {
+
     const token = useSelector((state) => state.users.value.token);
     const [users, setUsers] = useState([])
+
+    const user_token = useSelector((state) => state.users.value.token);
+
+    useEffect(() => {
+        connected_user();
+    }, []);
+        
+
+    const connected_user = async () => {
+        const fetching_data = await fetch(`${CONNECTION_BACKEND}/user/user_connected`, {
+            method: 'GET',
+            headers: { 'authorization': user_token },
+        });
+        const result = await fetching_data.json();
+
+        if(result.result){
+            dis
+        }
+        
+    }
+
+
 
     const user_infos = { name: 'hello' }
     useEffect(() => {
