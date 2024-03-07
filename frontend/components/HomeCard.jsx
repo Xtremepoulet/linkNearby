@@ -1,4 +1,5 @@
 import { View, Text, Pressable, Image, StyleSheet, Dimensions } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 
 const { width, height } = Dimensions.get('window');
 
@@ -11,12 +12,27 @@ function Card(props) {
     return (
         <View style={styles.card}>
             <Pressable onPress={() => console.log("oui")}>
-                <Image source={{ uri: picture }} style={styles.picture} />
-                {props.isConnected && <View style={styles.statusIndicator}></View>}
+                <View style={styles.pictureContainer}>
+                    <Image source={{ uri: props.picture }} style={styles.picture} />
+
+                    {/* Dégradé en bas pour les informations */}
+                    <LinearGradient
+                        start={{ x: 0, y: 1 }}
+                        end={{ x: 0, y: 0 }}
+                        colors={['rgba(0,0,0,0.8)', 'transparent']}
+                        style={styles.gradientBottom}
+                    />
+
+                    {props.isConnected && <View style={styles.statusIndicator}></View>}
+                </View>
+
                 <View style={styles.informationProfile}>
                     <Text style={styles.informationPrenom}>{props.name}, {props.age}</Text>
-                    <Text style={styles.informationLocalisation}>Localisé à 500m</Text>
+                    <Text style={styles.informationLocalisation}>📍 à 1 km</Text>
                 </View>
+                {/* <View style={styles.passionBody}>
+                    <Text style={styles.passionText}>Tennis 💪</Text>
+                </View> */}
             </Pressable>
         </View>
     );
@@ -52,10 +68,13 @@ const styles = StyleSheet.create({
         paddingVertical: 2,
     },
     informationPrenom: {
+        fontWeight: 'bold',
+        fontSize: 16,
         color: 'white',
     },
     informationLocalisation: {
         color: 'white',
+        fontSize: 14,
     },
     statusIndicator: {
         position: 'absolute',
@@ -66,5 +85,26 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         backgroundColor: '#91cb3e',
     },
+    pictureContainer: {
+        width: '100%',
+        height: '100%',
+        borderRadius: 10,
+        overflow: 'hidden',
+    },
+    gradientBottom: {
+        position: 'absolute',
+        left: 0,
+        bottom: 0,
+        width: '100%',
+        height: '20%',
+    },
+    passionText: {
+        color: 'white',
+        fontSize: 14,
+        paddingHorizontal: 10,
+        paddingVertical: 5,
+
+    },
+
 });
 export default Card;
