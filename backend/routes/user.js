@@ -6,6 +6,7 @@ const { checkBody } = require('../modules/checkBody');
 
 const User = require('../models/user.js');
 const Passion = require('../models/Passion.js');
+const bcrypt = require('bcrypt');
 
 //cloudinary import 
 const cloudinary = require('cloudinary').v2;
@@ -189,6 +190,60 @@ router.get('/user_connected', authenticateToken, async (req, res, next) => {
     }
 })
 
+
+
+//get the personnal user information for the parameter page 
+router.get('/user_personnal', authenticateToken, async (req, res, next) => {
+    if(req.user.userId){
+        try {
+            const user = await User.findOne({ _id: req.user.userId })
+                .select('name email') // Sélection des champs à renvoyer
+                .exec(); // Exécute la requête
+            
+                console.log(user.name)
+
+            if(user){
+                const user_infos = {
+                    name: user.name,
+                    email: user.email,
+                }
+                res.json({ result: true, user: user_infos });
+            }
+    
+        } catch (error) {
+            res.status(500).json({ message: error.message });
+        }
+    }
+})
+
+
+
+
+
+router.post('/delete_user', authenticateToken, async (req, res, next) => {
+
+    if(req.user.userId){
+        
+        if (!checkBody(req.body, ['password'])) {
+            return res.status(400).json({ result: false, message: 'Missing password' });
+        }
+
+        
+        try{
+            const user = await User.findOne({ _id: req.user.userId })
+            if (user && await bcrypt.compare(req.body.password, user.hash)) {
+
+                console.log(req.body)
+                const delete_user = await User.delete({ _id: req.user.userId })
+                res.json({ result: true, message: 'user deleted'})
+            }else {
+                return res.json({ result: false, error: 'user not found'})
+            }
+        }catch{
+            res.status(500).json({ message: error.message });
+        }
+    }
+})
 
 
 
