@@ -5,6 +5,7 @@ import Constants from 'expo-constants';
 import logoLinkNearby from '../assets/linkNearbyBackNone.webp';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Card from '../components/HomeCard';
+import CardNew from '../components/HomeCardNew';
 
 const { width, height } = Dimensions.get('window'); // Recupere la dimension de l'écran
 import { SafeAreaView } from 'react-native-safe-area-context'; // composant pour gérer les zones safe sur ios et android
@@ -14,8 +15,26 @@ const CONNECTION_BACKEND = Constants.expoConfig?.extra?.CONNECTION_BACKEND;
 
 
 export default function HomeScreen({ navigation }) {
+
     const token = useSelector((state) => state.users.value.token);
     const [users, setUsers] = useState([])
+
+    const user_token = useSelector((state) => state.users.value.token);
+
+    useEffect(() => {
+        connected_user();
+    }, []);
+        
+
+    const connected_user = async () => {
+        const fetching_data = await fetch(`${CONNECTION_BACKEND}/user/user_connected`, {
+            method: 'GET',
+            headers: { 'authorization': user_token },
+        });
+        const result = await fetching_data.json();        
+    }
+
+    
 
     const user_infos = { name: 'hello' }
     useEffect(() => {
@@ -79,7 +98,9 @@ export default function HomeScreen({ navigation }) {
                     <View style={styles.cardView}>
                         <ScrollView showsVerticalScrollIndicator={false}
                             showsHorizontalScrollIndicator={false} contentContainerStyle={styles.containerScroll}>
-                            {usersList}
+                            {/* {usersList} */}
+                            <CardNew />
+                            <Card />
                         </ScrollView>
                     </View>
 
@@ -97,7 +118,7 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
-        // backgroundColor: 'blue',
+        backgroundColor: 'white',
     },
     header: {
         // backgroundColor: 'green',

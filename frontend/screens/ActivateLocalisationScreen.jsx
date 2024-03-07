@@ -1,7 +1,7 @@
 import { Pressable, StyleSheet, Text, View, Image, TextInput, KeyboardAvoidingView, Platform } from 'react-native';
 import * as Location from 'expo-location';
 import { useEffect } from 'react';
-import users, { turnOnLocation } from '../reducers/users';
+import users, { addLatitude, addLongitude, turnOnLocation } from '../reducers/users';
 import { useDispatch, useSelector } from 'react-redux';
 import Constants from 'expo-constants';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -15,6 +15,9 @@ export default function ActivateLocalisationScreen({ navigation }) {
     const user_infos = useSelector((state) => state.users.value);
     const [isLocationActivated, setIsLocationActivated] = useState(false);
     const dispatch = useDispatch();
+
+    const [latitude, setLatitude] = useState(null);
+    const [longitude, setLongitude] = useState(null);
     
     const [reload, setreload] = useState(false);
     //on active uniquement la localisation, on ne la met pas à jour
@@ -25,8 +28,18 @@ export default function ActivateLocalisationScreen({ navigation }) {
           if (status === 'granted') {
             const location = await Location.getCurrentPositionAsync({});
             console.log(location);
-            dispatch(turnOnLocation(true));
-            setIsLocationActivated(true);
+            Location.watchPositionAsync({ distanceInterval: 10 },
+                (location) => {
+                  console.log('location' + location);
+
+                    dispatch(turnOnLocation(true));
+                    dispatch(addLatitude(location.coords.latitude))
+                    dispatch(addLongitude(location.coords.longitude))
+
+                    setIsLocationActivated(true);
+                    setLatitude(location.coords.latitude);
+                    setLongitude(location.coords.longitude);
+                });
           } 
         })();
       }, []);
@@ -39,8 +52,8 @@ export default function ActivateLocalisationScreen({ navigation }) {
             birthdate: user_infos.birthdate,
             passions: user_infos.passions,
             bio: user_infos.bio,
-            latitude: 10,
-            longitude: 10,
+            latitude: latitude, 
+            longitude: longitude,
             gender: user_infos.gender,
             uri: user_infos.uri,
         }
@@ -53,10 +66,10 @@ export default function ActivateLocalisationScreen({ navigation }) {
         
         console.log(user_infos.token)
         const result = await fetching_data.json();
-        console.log(result)
+        console.log(result);
         navigation.navigate('TabNavigator');
       }
-
+      
 
       const reload_page = () => {
         setreload(!reload);

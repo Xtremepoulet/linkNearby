@@ -11,7 +11,7 @@ function Card(props) {
     return (
         <View style={styles.card}>
             <Pressable onPress={() => console.log("oui")}>
-                <Image source={{ uri: props.picture }} style={styles.picture} />
+                <Image source={{ uri: picture }} style={styles.picture} />
                 {props.isConnected && <View style={styles.statusIndicator}></View>}
                 <View style={styles.informationProfile}>
                     <Text style={styles.informationPrenom}>{props.name}, {props.age}</Text>
