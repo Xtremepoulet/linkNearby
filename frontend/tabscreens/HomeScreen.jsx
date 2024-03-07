@@ -5,7 +5,7 @@ import Constants from 'expo-constants';
 import logoLinkNearby from '../assets/linkNearbyBackNone.webp';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Card from '../components/HomeCard';
-import CardNew from '../components/HomeCardNew';
+
 
 const { width, height } = Dimensions.get('window'); // Recupere la dimension de l'écran
 import { SafeAreaView } from 'react-native-safe-area-context'; // composant pour gérer les zones safe sur ios et android
@@ -24,17 +24,17 @@ export default function HomeScreen({ navigation }) {
     useEffect(() => {
         connected_user();
     }, []);
-        
+
 
     const connected_user = async () => {
         const fetching_data = await fetch(`${CONNECTION_BACKEND}/user/user_connected`, {
             method: 'GET',
             headers: { 'authorization': user_token },
         });
-        const result = await fetching_data.json();        
+        const result = await fetching_data.json();
     }
 
-    
+
 
     const user_infos = { name: 'hello' }
     useEffect(() => {
@@ -57,16 +57,27 @@ export default function HomeScreen({ navigation }) {
         }
     }
 
-    const usersList = users.map((user, index) => {
+    const usersList = users.map((user) => {
         const birthdate = new Date(user.birthdate);
         const today = new Date();
-        const age = today.getFullYear() - birthdate.getFullYear();
+        let age = today.getFullYear() - birthdate.getFullYear(); // Utilisez `let` pour `age`
         const m = today.getMonth() - birthdate.getMonth();
         if (m < 0 || (m === 0 && today.getDate() < birthdate.getDate())) {
             age--;
         }
 
-        return <Card key={index} picture={user.uri} isConnected={user.isConnected} name={user.name} age={age} />;
+        return (
+            <Card
+                key={user.email}
+                picture={user.uri}
+                isConnected={user.isConnected}
+                name={user.name}
+                age={age}
+                passions={user.passions}
+                email={user.email}
+                bio={user.bio}
+            />
+        );
     });
 
 

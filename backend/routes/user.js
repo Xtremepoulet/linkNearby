@@ -6,6 +6,7 @@ const { checkBody } = require('../modules/checkBody');
 
 const User = require('../models/user.js');
 const Passion = require('../models/Passion.js');
+const bcrypt = require('bcrypt');
 
 //cloudinary import 
 const cloudinary = require('cloudinary').v2;
@@ -63,7 +64,7 @@ router.post('/user_informations', authenticateToken, async (req, res, next) => {
 
 
 //authenticate with token, understand why its not working
-router.post('/upload_user_photo',authenticateToken,  async (req, res, next) => {    
+router.post('/upload_user_photo', authenticateToken, async (req, res, next) => {
     if (req.user.userId) {
         const user = await User.findOne({ _id: req.user.userId });
         if (user) {
@@ -122,7 +123,7 @@ router.get('/users', async (req, res) => {
                 location: user.location,
                 bio: user.bio,
                 uri: user.uri,
-                passions: user.userPassion.map(passion => ({ name: passion.name, emoji: passion.emoji })), // Adaptez selon le schéma de 'Passion'
+                passions: user.userPassion.map(passion => ({ id: passion._id, name: passion.name, emoji: passion.emoji })), // Adaptez selon le schéma de 'Passion'
                 gender: user.gender,
                 isConnected: user.isConnected
             };
@@ -139,15 +140,18 @@ router.get('/users', async (req, res) => {
 //get the users positions from database if they are logged
 router.get('/users_position', async (req, res, next) => {
     try {
-        const users = await User.find({ isConnected: true})
+        const users = await User.find({ isConnected: true })
             .select('location') // Sélection des champs à renvoyer
+        const users = await User.find({ isConnected: true })
+            .select('location name') // Sélection des champs à renvoyer
             .exec(); // Exécute la requête
 
-        
+
         const formattedUsers = users.map(user => {
             return {
                 location: user.location,
                 isConnected: user.isConnected,
+                name: user.name,
             };
         });
 
@@ -155,7 +159,7 @@ router.get('/users_position', async (req, res, next) => {
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
-})  
+})
 
 
 
@@ -168,9 +172,9 @@ router.get('/users_position', async (req, res, next) => {
 router.get('/user_connected', authenticateToken, async (req, res, next) => {
     if (req.user.userId) {
 
-        try{
+        try {
             const user = await User.findOne({ _id: req.user.userId });
-            if(user){
+            if (user) {
                 const result = await User.updateOne(
                     { _id: req.user.userId },
                     {
@@ -178,16 +182,70 @@ router.get('/user_connected', authenticateToken, async (req, res, next) => {
                             isConnected: true,
                         },
                     })
-    
-                    res.json({ result: true, message: 'user connected'})
+
+                res.json({ result: true, message: 'user connected' })
             }
-        }catch {
+        } catch {
             res.status(500).json({ message: error.message });
         }
 
     }
 })
 
+
+
+//get the personnal user information for the parameter page 
+router.get('/user_personnal', authenticateToken, async (req, res, next) => {
+    if(req.user.userId){
+        try {
+            const user = await User.findOne({ _id: req.user.userId })
+                .select('name email') // Sélection des champs à renvoyer
+                .exec(); // Exécute la requête
+            
+                console.log(user.name)
+
+            if(user){
+                const user_infos = {
+                    name: user.name,
+                    email: user.email,
+                }
+                res.json({ result: true, user: user_infos });
+            }
+    
+        } catch (error) {
+            res.status(500).json({ message: error.message });
+        }
+    }
+})
+
+
+
+
+
+router.post('/delete_user', authenticateToken, async (req, res, next) => {
+
+    if(req.user.userId){
+        
+        if (!checkBody(req.body, ['password'])) {
+            return res.status(400).json({ result: false, message: 'Missing password' });
+        }
+
+        
+        try{
+            const user = await User.findOne({ _id: req.user.userId })
+            if (user && await bcrypt.compare(req.body.password, user.hash)) {
+
+                console.log(req.body)
+                const delete_user = await User.delete({ _id: req.user.userId })
+                res.json({ result: true, message: 'user deleted'})
+            }else {
+                return res.json({ result: false, error: 'user not found'})
+            }
+        }catch{
+            res.status(500).json({ message: error.message });
+        }
+    }
+})
 
 
 
