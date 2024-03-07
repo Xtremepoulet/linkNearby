@@ -22,6 +22,7 @@ import ChooseGenderScreen from './screens/ChooseGenderScreen.jsx';
 import ChoosePhotoScreen from './screens/ChoosePhotoScreen.jsx';
 
 import ConversationScreen from './otherscreens/ConversationScreen.jsx';
+import ProfilScreen from './screens/ProfilScreen.jsx';
 
 
 
@@ -88,6 +89,7 @@ export default function App() {
             <Stack.Screen name="ChooseGenderScreen" component={ChooseGenderScreen} />
             <Stack.Screen name="ChoosePhotoScreen" component={ChoosePhotoScreen} />
             <Stack.Screen name="ConversationScreen" component={ConversationScreen} />
+            <Stack.Screen name="ProfilScreen" component={ProfilScreen} />
 
 
 
