@@ -31,15 +31,10 @@ export default function HomeScreen({ navigation }) {
             method: 'GET',
             headers: { 'authorization': user_token },
         });
-        const result = await fetching_data.json();
-
-        if(result.result){
-            dis
-        }
-        
+        const result = await fetching_data.json();        
     }
 
-
+    
 
     const user_infos = { name: 'hello' }
     useEffect(() => {
