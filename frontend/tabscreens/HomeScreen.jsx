@@ -98,9 +98,8 @@ export default function HomeScreen({ navigation }) {
                     <View style={styles.cardView}>
                         <ScrollView showsVerticalScrollIndicator={false}
                             showsHorizontalScrollIndicator={false} contentContainerStyle={styles.containerScroll}>
-                            {/* {usersList} */}
-                            <CardNew />
-                            <Card />
+                            {usersList}
+
                         </ScrollView>
                     </View>
 
