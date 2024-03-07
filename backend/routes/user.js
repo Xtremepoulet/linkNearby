@@ -138,8 +138,30 @@ router.get('/users', async (req, res) => {
 
 //get the users positions from database if they are logged
 router.get('/users_position', async (req, res, next) => {
-    
-})
+    try {
+        const users = await User.find({ isConnected: true})
+            .select('location') // Sélection des champs à renvoyer
+            .exec(); // Exécute la requête
+
+        
+        const formattedUsers = users.map(user => {
+            return {
+                location: user.location,
+                isConnected: user.isConnected,
+            };
+        });
+
+        res.json({ result: true, users: formattedUsers });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+})  
+
+
+
+
+
+
 
 
 //gere la connexion utilisateur en BDD lorsque l'utilisateur arrive sur le home screen
