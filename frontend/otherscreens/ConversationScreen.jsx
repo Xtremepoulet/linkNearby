@@ -1,11 +1,13 @@
-import { Pressable, StyleSheet, Text, View, Image, TextInput, KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
+import { Pressable, StyleSheet, Text, View, Image, TextInput, KeyboardAvoidingView, Platform, ScrollView, Dimensions } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
+const { width, height } = Dimensions.get('window'); // Recupere la dimension de l'écran
 
 
 export default function ConversationScreen({ navigation }) {
     return (
+
         <SafeAreaView style={styles.container} edges={['top']} styleAndroid={{ flex: 1 }}>
             <View style={styles.alignHeader} >
                 <Pressable style={styles.paddingArrow}
@@ -18,15 +20,28 @@ export default function ConversationScreen({ navigation }) {
                     <View style={styles.nope}>
                         <Image style={styles.image} source={require('../assets/profile.png')}></Image>
                     </View>
-                    <View style={styles.msg}>
-                        <Text>Jerem Ptit Zbeub</Text>
+                    <View style={styles.pseudo}>
+                        <Text>Jeremy-marie</Text>
                     </View>
+
                 </Pressable>
+                <Text style={styles.passion} >🍄pilotage de cerf-volant</Text>
+
             </View>
+            <KeyboardAvoidingView
+                behavior={Platform.OS === "ios" ? "padding" : "height"}
+                style={styles.oui}
+                keyboardVerticalOffset={Platform.OS === "ios" ? height * -0.02 : height * -0.01}
+            >
+                <ScrollView style={styles.messages} >
+                    <Text multiline={true} style={styles.msg}>bonjour je suis adrian et je suis un gros mangeur de taboulet</Text>
 
-
+                </ScrollView>
+                <TextInput style={styles.stretch} placeholder='caca' ></TextInput>
+            </KeyboardAvoidingView >
 
         </SafeAreaView>
+
     );
 }
 
@@ -66,7 +81,6 @@ const styles = StyleSheet.create({
     image: {
         height: 45,
         width: 45,
-        padding: 20
     },
     card: {
         flexDirection: 'row',
@@ -74,7 +88,7 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         height: 55
     },
-    msg: {
+    pseudo: {
         flexDirection: "column",
         justifyContent: 'space-evenly',
         padding: 10
@@ -91,13 +105,41 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignContent: 'center',
         alignItems: 'center',
+        justifyContent: 'space-around',
         borderBottomWidth: 2,
 
 
     },
     paddingArrow: {
-        padding: 20
-    }
+        padding: 15
+    },
+    passion: {
+        borderWidth: 1,
+        borderRadius: 5,
+        height: '25%',
+        fontSize: 10
+    },
+    messages: {
+        width: '90%',
+        height: 0,
+        backgroundColor: 'blue'
+    },
+    msg: {
+        borderWidth: 1,
+        borderRadius: 10,
+        backgroundColor: '#F98F22',
+        color: 'white',
+        padding: 5,
+        maxWidth: '75%',
+        alignSelf: 'flex-start',
+        overflow: 'hidden',
+    },
+    stretch: {
+        height: '6%',
+        width: 300,
+        borderWidth: 1,
+
+    },
 
 })
 

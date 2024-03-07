@@ -11,6 +11,7 @@ export default function MessagesScreen({ navigation }) {
 
             <Text style={styles.textTitle}>Discussions <FontAwesome name="comment" size={24} />
             </Text>
+
             <View style={styles.stretch}>
                 <TextInput style={styles.border} placeholder="Rechercher un utilisateur" ></TextInput>
             </View>
@@ -30,6 +31,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
+
     },
     oui: {
         flex: 1,
