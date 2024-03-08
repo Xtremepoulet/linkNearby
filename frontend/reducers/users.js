@@ -58,7 +58,8 @@ export const usersSlice = createSlice({
     },
     addEmail: (state, action) => {
       state.value.email = action.payload;
-    }
+    },
+
   },
 });
 
