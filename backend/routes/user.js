@@ -41,7 +41,7 @@ router.post('/user_informations', authenticateToken, async (req, res, next) => {
                     {
                         $set: {
                             name: name,
-                            birthdate: '1990-01-01',
+                            birthdate: birthdate,
                             gender: gender,
                             bio: bio,
                             updatedAt: new Date(),
@@ -193,26 +193,26 @@ router.get('/user_connected', authenticateToken, async (req, res, next) => {
 
 //get the personnal user information for the parameter page 
 router.get('/user_personnal', authenticateToken, async (req, res, next) => {
-    if(req.user.userId){
+    if (req.user.userId) {
         try {
             const user = await User.findOne({ _id: req.user.userId })
                 .select('name email password gender bio') // Sélection des champs à renvoyer
                 .exec(); // Exécute la requête
-            
-                console.log(user.name)
 
-            if(user){
+            console.log(user.name)
+
+            if (user) {
                 const user_infos = {
                     name: user.name,
                     email: user.email,
                     password: user.password,
-                    gender: user.gender, 
+                    gender: user.gender,
                     bio: user.bio,
 
                 }
                 res.json({ result: true, user: user_infos });
             }
-    
+
         } catch (error) {
             res.status(500).json({ message: error.message });
         }
@@ -225,24 +225,24 @@ router.get('/user_personnal', authenticateToken, async (req, res, next) => {
 
 router.post('/delete_user', authenticateToken, async (req, res, next) => {
 
-    if(req.user.userId){
-        
+    if (req.user.userId) {
+
         if (!checkBody(req.body, ['password'])) {
             return res.status(400).json({ result: false, message: 'Missing password' });
         }
 
-        
-        try{
+
+        try {
             const user = await User.findOne({ _id: req.user.userId })
             if (user && await bcrypt.compare(req.body.password, user.hash)) {
 
                 console.log(req.body)
                 const delete_user = await User.delete({ _id: req.user.userId })
-                res.json({ result: true, message: 'user deleted'})
-            }else {
-                return res.json({ result: false, error: 'user not found'})
+                res.json({ result: true, message: 'user deleted' })
+            } else {
+                return res.json({ result: false, error: 'user not found' })
             }
-        }catch{
+        } catch {
             res.status(500).json({ message: error.message });
         }
     }

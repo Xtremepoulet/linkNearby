@@ -64,6 +64,7 @@ export default function HomeScreen({ navigation }) {
     }, [token]);
 
 
+
     // Fonction pour rafraichir la liste des utilisateurs en tirant vers le bas
     const onRefresh = useCallback(async () => {
         setRefreshing(true);
@@ -88,7 +89,7 @@ export default function HomeScreen({ navigation }) {
         });
         const result = await response.json();
         if (result.result) {
-            const currentUserEmail = "email de l'utilisateur connecté";
+            const currentUserEmail = infoUser.email;
             const filteredUsers = result.users.filter(user => user.email !== currentUserEmail);
             setUsers(filteredUsers);
         }
@@ -117,7 +118,7 @@ export default function HomeScreen({ navigation }) {
         );
     });
 
-    
+
 
     return (
         <KeyboardAvoidingView
