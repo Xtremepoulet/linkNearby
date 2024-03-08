@@ -4,6 +4,7 @@ import logoLinkNearby from '../assets/linkNearbyBackNone.webp';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { deleteReducerValue, handleDeconnexion } from '../reducers/users';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { UseDispatch } from 'react-redux';
 
 const { width, height } = Dimensions.get('window'); // Recupere la dimension de l'écran
@@ -15,11 +16,29 @@ export default function ParametersScreen({ navigation }) {
     const user_token = useSelector((state) => state.users.value.token);
     const passions = useSelector((state) => state.users.value.passions);//sous forme de tableau 
 
+    //infos qui seront renvoyé au backend
+    const [gender, setGender] = useState(null);
+    const [bio, setBio] = useState('');
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    //il manque les passion qu'il faudra faire 
+    //le password n'est pas en clear, gérer ca 
+
+
     const [modalVisible, setModalVisible] = useState(false);
-    const [password, setPassword] = useState('hey');
-    const [isEmailEditable, setIsEmailEditable] = useState(false);
+    const [isEditable, setIsEditable] = useState(false);
+    const [isValidModification, setIsValidModification] = useState(true);
+
+    const [isBioEditable, setIsBioEditable] = useState(false);
+
 
     const [personal_informations, setPersonal_informations] = useState({});
+
+
+    const email_regex = /^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})$/;
+    // Minimum eight characters, at least one letter, one number and one special character:
+    const password_regex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
 
     useEffect(() => {
         get_personnal_infos();
@@ -34,10 +53,46 @@ export default function ParametersScreen({ navigation }) {
         const result = await fetching_data.json();
         if(result.result){
             setPersonal_informations(result.user)
+
+            setGender(result.user.gender);
+            setBio(result.user.bio);
+            setName(result.user.name);
+            setEmail(result.user.email);
+    
+            
         }
     }
 
-    console.log(personal_informations)
+
+    //enregistrement des modifications de l'utilisateurs
+    const save_changes = async () => {
+        if(email_regex.test(email) && bio.length < 500){
+
+            //le password et les passions devront etre aussi misent à jours 
+            const user_infos = {
+                name,
+                email,
+                bio,
+                gender,
+            }
+
+            const fetching_data = await fetch(`${CONNECTION_BACKEND}/user/update_user_infos`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'authorization': user_token },
+                body: JSON.stringify(user_infos)
+            })
+
+            const result = await fetching_data.json();
+            if(result.result){
+                setIsEditable(false);
+                setIsValidModification(true);
+            }
+        }else{
+            setIsValidModification(false);
+        }
+    }
+
+    
     //modal gestion 
     const handleClose = () => {
         setModalVisible(false);
@@ -52,6 +107,8 @@ export default function ParametersScreen({ navigation }) {
             body: JSON.stringify({password})
         })
         const result = await fetching_data.json();
+
+        console.log(result)
         if(result.result){
             dispatch(deleteReducerValue());
             navigation.navigate('signinScreen');
@@ -68,6 +125,21 @@ export default function ParametersScreen({ navigation }) {
 
 
 
+    const confirm_changes = <View style={styles.container_changes}>
+                                <TouchableOpacity style={styles.button} >
+                                    <Text onPress={() => save_changes()} style={styles.text_button}>Enregistrer les modifications</Text>
+                                </TouchableOpacity>
+                                {isValidModification ? '' : <Text style={styles.error_message}>Certains champs ne sont pas valide</Text>}
+                            </View>
+
+                            
+                            
+
+{/* <View> 
+<TouchableOpacity onPress={() => setIsEditable(!isEditable)} style={styles.edit_button}>
+    <FontAwesome name="user" size={24} color={'white'}/>
+</TouchableOpacity>
+</View> */}
 
     return (
         <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -79,17 +151,22 @@ export default function ParametersScreen({ navigation }) {
                     <Text style={styles.h1}>LINKNEARBY</Text>
                 </View>
                 <View style={styles.photo_container}>
-                    <Image style={styles.image} source={require('../assets/profile.png')}></Image>
-                    <Text style={styles.username}>Name</Text>
+                    <Image style={styles.image} source={{ uri: personal_informations.uri }}></Image>
+                    <Text style={styles.username}>{personal_informations.name}</Text>
                 </View>
             </View>
-
             <View style={styles.cardView}>
                     <ScrollView
                         showsVerticalScrollIndicator={false}
                         showsHorizontalScrollIndicator={false}
                         contentContainerStyle={styles.containerScroll}
                     >   
+
+                        <View> 
+                            <TouchableOpacity onPress={() => setIsEditable(!isEditable)} style={styles.edit_button}>
+                                <FontAwesome name="user" size={24} color={'white'}/>
+                            </TouchableOpacity>
+                        </View>
 
                         <View style={styles.container_champ}> 
                             <View style={styles.section_description}>
@@ -99,22 +176,30 @@ export default function ParametersScreen({ navigation }) {
                             <View style={styles.user_champ}>
                                 <View style={styles.champ}>
                                     <Text style={styles.text_description}>Name</Text>
-                                    <TextInput  style={styles.input_champ} value={personal_informations.name} editable={isEmailEditable}></TextInput>
+                                    <TextInput onChangeText={(value) => setName(value)} style={styles.input_champ} editable={isEditable}>{personal_informations.name}</TextInput>
                                 </View>
 
                                 <View style={styles.champ}>
                                     <Text style={styles.text_description}>Email</Text>
-                                    <TextInput style={styles.input_champ} value={personal_informations.email} editable={isEmailEditable}></TextInput>
+                                    <TextInput onChangeText={(value) => setEmail(value)} style={styles.input_champ} editable={isEditable}>{personal_informations.email}</TextInput>
                                 </View>
 
                                 <View style={styles.champ}>
                                     <Text style={styles.text_description}>Password</Text>
-                                    <TextInput style={styles.input_champ} value='evidement le password nest pas clear' editable={isEmailEditable}></TextInput>
+                                    <TextInput style={styles.input_champ} value='evidement le password nest pas clear' editable={isEditable}></TextInput>
                                 </View>
 
                                 <View style={styles.champ}>
                                     <Text style={styles.text_description}>Gender</Text>
-                                    <TextInput style={styles.input_champ} value={personal_informations.email} editable={isEmailEditable}></TextInput>
+                                    <View style={styles.gender_container}>
+                                        <TouchableOpacity onPress={() => setGender('homme')} style={gender === 'homme' ? styles.gender_selected_button : styles.gender_nonSelected_button} >
+                                            <Text style={styles.text_button}>Homme</Text>
+                                        </TouchableOpacity>
+
+                                        <TouchableOpacity onPress={() => setGender('femme')} style={gender === 'femme' ? styles.gender_selected_button : styles.gender_nonSelected_button} >
+                                            <Text style={styles.text_button}>Femme</Text>
+                                        </TouchableOpacity>
+                                    </View>
                                 </View>
                             </View>
                         </View>
@@ -129,14 +214,13 @@ export default function ParametersScreen({ navigation }) {
                             
                             <View style={styles.biographie_champ}>
                                 <View>
-                                    <TextInput>{personal_informations.bio}</TextInput>
+                                    <TextInput onChangeText={(value) => setBio(value)} editable={isEditable}>{personal_informations.bio}</TextInput>
                                 </View>
-
-                                <View style={styles.edit_button_container}>
-                                    <TouchableOpacity style={styles.edit_button} >
+                                {/* <View style={styles.edit_button_container}>
+                                    <TouchableOpacity onPress={() => setIsBioEditable(!isBioEditable)} style={styles.edit_button} >
                                         <Text>edit</Text>
                                     </TouchableOpacity>
-                                </View>
+                                </View> */}
                             </View>
                         </View>
 
@@ -152,41 +236,7 @@ export default function ParametersScreen({ navigation }) {
                             </View>
                         </View>
 
-
-                        <View style={styles.user_champ}>
-                            <TextInput style={styles.input_champ} value="I am read only" editable={isEmailEditable}></TextInput>
-                            <TouchableOpacity onPress={() => setIsEmailEditable(!isEmailEditable)} style={styles.button_champ} >
-                                <Text style={styles.text_button}>Edit</Text>
-                            </TouchableOpacity>
-                        </View>
-
-                        <View style={styles.user_champ}>
-                            <TextInput style={styles.input_champ} value="I am read only" editable={isEmailEditable}></TextInput>
-                            <TouchableOpacity onPress={() => setIsEmailEditable(!isEmailEditable)} style={styles.button_champ} >
-                                <Text style={styles.text_button}>Edit</Text>
-                            </TouchableOpacity>
-                        </View>
-
-                        <View style={styles.user_champ}>
-                            <TextInput style={styles.input_champ} value="I am read only" editable={isEmailEditable}></TextInput>
-                            <TouchableOpacity onPress={() => setIsEmailEditable(!isEmailEditable)} style={styles.button_champ} >
-                                <Text style={styles.text_button}>Edit</Text>
-                            </TouchableOpacity>
-                        </View>
-
-                        <View style={styles.user_champ}>
-                            <TextInput style={styles.input_champ} value="I am read only" editable={isEmailEditable}></TextInput>
-                            <TouchableOpacity onPress={() => setIsEmailEditable(!isEmailEditable)} style={styles.button_champ} >
-                                <Text style={styles.text_button}>Edit</Text>
-                            </TouchableOpacity>
-                        </View>
-
-                        <View style={styles.user_champ}>
-                            <TextInput style={styles.input_champ} value="I am read only" editable={isEmailEditable}></TextInput>
-                            <TouchableOpacity onPress={() => setIsEmailEditable(!isEmailEditable)} style={styles.button_champ} >
-                                <Text style={styles.text_button}>Edit</Text>
-                            </TouchableOpacity>
-                        </View>
+                        {isEditable ? confirm_changes : ''}
 
                         <TouchableOpacity onPress={() => user_deconnexion()} style={styles.button} >
                                     <Text style={styles.text_button}>Deconnexion</Text>
@@ -205,7 +255,7 @@ export default function ParametersScreen({ navigation }) {
         <Modal visible={modalVisible} animationType="fade" transparent>
             <View style={styles.centeredView}>
             <View style={styles.modalView}>
-                <TextInput placeholder="Mot de passe" style={styles.input} />
+                <TextInput onChangeText={(value) => setPassword(value)} placeholder="Mot de passe" style={styles.input} />
                 <TouchableOpacity style={styles.modal_button} activeOpacity={0.8}>
                     <Text onPress={() => delete_account()} style={styles.textButton}>Supprimer</Text>
                 </TouchableOpacity>
@@ -225,15 +275,23 @@ const styles = StyleSheet.create({
     container: {
         width: width,
         height: height,
+        backgroundColor: 'white',
     },
 
+    h1: {
+        fontSize: 22,
+    },
+                    
     top_container: {
         width: '100%',
         height: '30%',
-        backgroundColor: 'yellow',
         display: 'flex',
+        alignItems: 'center',
         paddingTop: 20,
         padding: 5,
+        backgroundColor: 'orange',
+        borderBottomColor: '#000',
+        borderBottomWidth: 1,
     },
 
     header: {
@@ -250,7 +308,6 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         width: '100%',
-        backgroundColor: 'blue',
         padding: 5,
     },
 
@@ -290,8 +347,8 @@ const styles = StyleSheet.create({
     },
 
     logo : {
-        width: 25,
-        height: 25,
+        width: 30,
+        height: 30,
         borderRadius: 5,
     },
      
@@ -304,7 +361,7 @@ const styles = StyleSheet.create({
         display: 'flex',
         alignItems: 'center',
         gap: 40,
-        backgroundColor: 'purple',
+        // backgroundColor: 'purple',
         padding: 30,
     },  
 
@@ -379,7 +436,7 @@ const styles = StyleSheet.create({
 
     section_title: {
         fontSize: 16,
-        color: 'white',
+        color: 'orange',
     },
 
     input_champ: {
@@ -397,6 +454,44 @@ const styles = StyleSheet.create({
         height: 40,
         borderRadius: 5,
         padding: 5,
+    },
+
+    gender_container: {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-evenly',
+    },
+
+    gender_selected_button: {
+        width: '30%',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: 'orange',
+        height: 30,
+        borderRadius: 5,
+        padding: 5,
+    },
+
+    gender_nonSelected_button: {
+        width: '30%',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: 'gray',
+        height: 30,
+        borderRadius: 5,
+        padding: 5,
+    },
+
+    container_changes: {
+        width: '100%',
+        alignItems: 'center',
+    },
+
+    error_message: {
+        color: 'red',
+        fontSize: 12,
     },
 
     //modal gestion at this point for the css
