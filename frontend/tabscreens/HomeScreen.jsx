@@ -34,16 +34,21 @@ export default function HomeScreen({ navigation }) {
             transports: ['websocket'],
         });
 
-        socket.on('connection', () => {
-            // Mettre à jour l'état de l'application ou de l'interface utilisateur ici
-            console.log(`User is now online`);
+        socket.on('connect', () => {
+            console.log('Connected to Socket.IO server');
+        });
+
+        socket.on('userStatusChanged', ({ userId, isConnected }) => {
+            console.log(`User ${userId} is now ${isConnected ? 'online' : 'offline'}`);
+            getUsers(); // Rafraîchir la liste des utilisateurs chaque fois qu'un changement d'état est détecté
         });
 
         return () => {
-            socket.off('disconnect');
+            socket.off('connect');
+            socket.off('userStatusChanged');
             socket.disconnect();
         };
-    }, [infoUser.token]);
+    }, [infoUser.token, getUsers]);
 
 
 
