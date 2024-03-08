@@ -11,9 +11,11 @@ export const usersSlice = createSlice({
     addToken: (state, action) => {
       state.value.token = action.payload;
     },
+
     deleteToken: (state, action) => {
       state.value.token = null;
     },
+
     defineName: (state, action) => {
       state.value.name = action.payload;
       console.log(state.value.name)
@@ -60,8 +62,12 @@ export const usersSlice = createSlice({
       state.value.email = action.payload;
     },
 
+    //delete le token de l'utilisateur si il se deconnecte
+    handleDeconnexion: (state, action) => {
+      state.value.token = null;
+    }
   },
 });
 
-export const { addEmail, addToken, deleteToken, defineName, defineGender, defineBirthdate, addPassions, removePassions, defineBiography, defineUri, turnOnLocation, addLatitude, addLongitude, deleteReducerValue } = usersSlice.actions;
+export const { addEmail, addToken, deleteToken, defineName, defineGender, defineBirthdate, addPassions, removePassions, defineBiography, defineUri, turnOnLocation, addLatitude, addLongitude, deleteReducerValue, handleDeconnexion } = usersSlice.actions;
 export default usersSlice.reducer;
