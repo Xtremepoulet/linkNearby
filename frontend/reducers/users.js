@@ -55,9 +55,12 @@ export const usersSlice = createSlice({
 
     deleteReducerValue: (state, action) => {
       state.value = { email: null, token: null, birthdate: null, bio: null, gender: null, passions: [], name: null, uri: null, location: false, longitude: null, latitude: null };
+    },
+    addEmail: (state, action) => {
+      state.value.email = action.payload;
     }
   },
 });
 
-export const { addToken, deleteToken, defineName, defineGender, defineBirthdate, addPassions, removePassions, defineBiography, defineUri, turnOnLocation, addLatitude, addLongitude, deleteReducerValue } = usersSlice.actions;
+export const { addEmail, addToken, deleteToken, defineName, defineGender, defineBirthdate, addPassions, removePassions, defineBiography, defineUri, turnOnLocation, addLatitude, addLongitude, deleteReducerValue } = usersSlice.actions;
 export default usersSlice.reducer;
