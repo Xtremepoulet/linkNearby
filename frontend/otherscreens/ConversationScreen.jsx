@@ -1,46 +1,44 @@
 import React from 'react';
-import { StyleSheet, Text, View, TextInput, KeyboardAvoidingView, Platform, Dimensions, ScrollView, Image } from 'react-native';
+import { StyleSheet, Text, View, TextInput, Dimensions, ScrollView, Image, KeyboardAvoidingView, Platform } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+
+
 const { width, height } = Dimensions.get('window');
 
 export default function ConversationScreen({ navigation }) {
+
+
+
+
     return (
-        <SafeAreaView>
+        <SafeAreaView style={styles.container}>
             <View style={styles.header}>
                 <FontAwesome name="arrow-left" size={24} style={styles.arrowIcon} onPress={() => navigation.goBack()} />
                 <Image style={styles.image} source={require('../assets/profile.png')} />
                 <Text style={styles.headerText}>Adrian</Text>
                 <Text>passion</Text>
             </View>
-            <KeyboardAwareScrollView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} >
 
-                <ScrollView contentContainerStyle={styles.containerEmoji}>
-
-                    <View style={styles.containerScroll}>
-                        <View style={styles.align} >
-                            <Image style={styles.imageMsg} source={require('../assets/profile.png')} />
-                            <Text multiline={true} style={styles.msg}>Salut! comment ça va?</Text>
-                        </View>
-                        <View style={styles.alignRight} >
-                            <Text multiline={true} style={styles.msg}>Super bien et toi?</Text>
-                        </View>
-                        <View style={styles.align} >
-                            <Image style={styles.imageMsg} source={require('../assets/profile.png')} />
-                            <Text multiline={true} style={styles.msg}>Dure journée mais ça peut aller ma grand-mère est morte empallée par le cactus en bas des escalier mais ça peut aller lolilol</Text>
-                        </View>
-
-
+            <ScrollView contentContainerStyle={styles.container_messages}>
+                <View style={styles.containerScroll}>
+                    <View style={styles.alignLeft} >
+                        <Image style={styles.imageMsg} source={require('../assets/profile.png')} />
+                        <Text multiline={true} style={styles.msg}>oui</Text>
                     </View>
-                </ScrollView>
 
-                <View style={styles.footer}>
-                    <FontAwesome name="camera" size={24} style={styles.arrowIcon} />
-                    <TextInput style={styles.button} placeholder='Votre message...' />
-                    <FontAwesome name="paper-plane" size={24} style={styles.arrowIcon} />
+                    <View style={styles.alignRight} >
+                        <Text multiline={true} style={styles.msg}>Super bien et toi?</Text>
+                    </View>
+                    {/* Add other messages here */}
                 </View>
-            </KeyboardAwareScrollView>
+            </ScrollView>
+
+            <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : null} style={styles.footer}>
+                <FontAwesome name="camera" size={24} style={styles.arrowIcon} />
+                <TextInput multiline={true} style={styles.button} placeholder='Votre message...' />
+                <FontAwesome name="paper-plane" size={24} style={styles.arrowIcon} />
+            </KeyboardAvoidingView>
         </SafeAreaView>
     );
 }
@@ -69,21 +67,14 @@ const styles = StyleSheet.create({
         width: width * 0.80,
         height: height * 0.05,
     },
-    containerEmoji: {
-        width: '100%',
-        height: height * 0.77,
+    container_messages: {
+        flexGrow: 1,
         justifyContent: 'flex-end'
     },
     containerScroll: {
         alignItems: 'center',
         flexDirection: 'row',
         flexWrap: 'wrap',
-    },
-    compteur: {
-        fontSize: 30,
-        fontWeight: 'bold',
-        color: '#F98F22',
-        marginTop: 20,
     },
     image: {
         height: 45,
@@ -108,7 +99,7 @@ const styles = StyleSheet.create({
         maxWidth: '75%',
         overflow: 'hidden',
     },
-    align: {
+    alignLeft: {
         flexDirection: 'row',
         alignItems: 'center',
         padding: 5,

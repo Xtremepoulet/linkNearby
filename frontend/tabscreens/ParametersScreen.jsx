@@ -126,8 +126,8 @@ export default function ParametersScreen({ navigation }) {
 
 
     const confirm_changes = <View style={styles.container_changes}>
-                                <TouchableOpacity style={styles.button} >
-                                    <Text onPress={() => save_changes()} style={styles.text_button}>Enregistrer les modifications</Text>
+                                <TouchableOpacity onPress={() => save_changes()} style={styles.button} >
+                                    <Text  style={styles.text_button}>Enregistrer les modifications</Text>
                                 </TouchableOpacity>
                                 {isValidModification ? '' : <Text style={styles.error_message}>Certains champs ne sont pas valide</Text>}
                             </View>
