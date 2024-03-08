@@ -28,6 +28,7 @@ export default function ParametersScreen({ navigation }) {
 
     const [modalVisible, setModalVisible] = useState(false);
     const [isEditable, setIsEditable] = useState(false);
+    const [isValidModification, setIsValidModification] = useState(true);
 
     const [isBioEditable, setIsBioEditable] = useState(false);
 
@@ -84,7 +85,10 @@ export default function ParametersScreen({ navigation }) {
             const result = await fetching_data.json();
             if(result.result){
                 setIsEditable(false);
+                setIsValidModification(true);
             }
+        }else{
+            setIsValidModification(false);
         }
     }
 
@@ -103,6 +107,8 @@ export default function ParametersScreen({ navigation }) {
             body: JSON.stringify({password})
         })
         const result = await fetching_data.json();
+
+        console.log(result)
         if(result.result){
             dispatch(deleteReducerValue());
             navigation.navigate('signinScreen');
@@ -119,11 +125,21 @@ export default function ParametersScreen({ navigation }) {
 
 
 
-    const confirm_changes = <TouchableOpacity style={styles.button} >
-                                <Text onPress={() => save_changes()} style={styles.text_button}>Enregistrer les modifications</Text>
-                            </TouchableOpacity>
+    const confirm_changes = <View style={styles.container_changes}>
+                                <TouchableOpacity style={styles.button} >
+                                    <Text onPress={() => save_changes()} style={styles.text_button}>Enregistrer les modifications</Text>
+                                </TouchableOpacity>
+                                {isValidModification ? '' : <Text style={styles.error_message}>Certains champs ne sont pas valide</Text>}
+                            </View>
 
+                            
+                            
 
+{/* <View> 
+<TouchableOpacity onPress={() => setIsEditable(!isEditable)} style={styles.edit_button}>
+    <FontAwesome name="user" size={24} color={'white'}/>
+</TouchableOpacity>
+</View> */}
 
     return (
         <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -139,7 +155,6 @@ export default function ParametersScreen({ navigation }) {
                     <Text style={styles.username}>{personal_informations.name}</Text>
                 </View>
             </View>
-            {console.log(bio)}
             <View style={styles.cardView}>
                     <ScrollView
                         showsVerticalScrollIndicator={false}
@@ -161,19 +176,19 @@ export default function ParametersScreen({ navigation }) {
                             <View style={styles.user_champ}>
                                 <View style={styles.champ}>
                                     <Text style={styles.text_description}>Name</Text>
-                                    <TextInput  onFocus={() => console.log('ok')} style={styles.input_champ} value={personal_informations.name} editable={isEditable}></TextInput>
+                                    <TextInput onChangeText={(value) => setName(value)} style={styles.input_champ} editable={isEditable}>{personal_informations.name}</TextInput>
                                 </View>
 
                                 <View style={styles.champ}>
                                     <Text style={styles.text_description}>Email</Text>
-                                    <TextInput style={styles.input_champ} value={personal_informations.email} editable={isEditable}></TextInput>
+                                    <TextInput onChangeText={(value) => setEmail(value)} style={styles.input_champ} editable={isEditable}>{personal_informations.email}</TextInput>
                                 </View>
 
                                 <View style={styles.champ}>
                                     <Text style={styles.text_description}>Password</Text>
                                     <TextInput style={styles.input_champ} value='evidement le password nest pas clear' editable={isEditable}></TextInput>
                                 </View>
-                                
+
                                 <View style={styles.champ}>
                                     <Text style={styles.text_description}>Gender</Text>
                                     <View style={styles.gender_container}>
@@ -240,7 +255,7 @@ export default function ParametersScreen({ navigation }) {
         <Modal visible={modalVisible} animationType="fade" transparent>
             <View style={styles.centeredView}>
             <View style={styles.modalView}>
-                <TextInput placeholder="Mot de passe" style={styles.input} />
+                <TextInput onChangeText={(value) => setPassword(value)} placeholder="Mot de passe" style={styles.input} />
                 <TouchableOpacity style={styles.modal_button} activeOpacity={0.8}>
                     <Text onPress={() => delete_account()} style={styles.textButton}>Supprimer</Text>
                 </TouchableOpacity>
@@ -467,6 +482,16 @@ const styles = StyleSheet.create({
         height: 30,
         borderRadius: 5,
         padding: 5,
+    },
+
+    container_changes: {
+        width: '100%',
+        alignItems: 'center',
+    },
+
+    error_message: {
+        color: 'red',
+        fontSize: 12,
     },
 
     //modal gestion at this point for the css
