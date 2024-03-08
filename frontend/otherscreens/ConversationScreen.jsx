@@ -30,26 +30,6 @@ export default function ConversationScreen({ navigation }) {
                             <Image style={styles.imageMsg} source={require('../assets/profile.png')} />
                             <Text multiline={true} style={styles.msg}>Dure journée mais ça peut aller ma grand-mère est morte empallée par le cactus en bas des escalier mais ça peut aller lolilol</Text>
                         </View>
-                        <View style={styles.align} >
-                            <Image style={styles.imageMsg} source={require('../assets/profile.png')} />
-                            <Text multiline={true} style={styles.msg}>Dure journée mais ça peut aller ma grand-mère est morte empallée par le cactus en bas des escalier mais ça peut aller lolilol</Text>
-                        </View>
-                        <View style={styles.align} >
-                            <Image style={styles.imageMsg} source={require('../assets/profile.png')} />
-                            <Text multiline={true} style={styles.msg}>Dure journée mais ça peut aller ma grand-mère est morte empallée par le cactus en bas des escalier mais ça peut aller lolilol</Text>
-                        </View>
-                        <View style={styles.align} >
-                            <Image style={styles.imageMsg} source={require('../assets/profile.png')} />
-                            <Text multiline={true} style={styles.msg}>Dure journée mais ça peut aller ma grand-mère est morte empallée par le cactus en bas des escalier mais ça peut aller lolilol</Text>
-                        </View>
-                        <View style={styles.align} >
-                            <Image style={styles.imageMsg} source={require('../assets/profile.png')} />
-                            <Text multiline={true} style={styles.msg}>Dure journée mais ça peut aller ma grand-mère est morte empallée par le cactus en bas des escalier mais ça peut aller lolilol</Text>
-                        </View>
-                        <View style={styles.align} >
-                            <Image style={styles.imageMsg} source={require('../assets/profile.png')} />
-                            <Text multiline={true} style={styles.msg}>Dure journée mais ça peut aller ma grand-mère est morte empallée par le cactus en bas des escalier mais ça peut aller lolilol</Text>
-                        </View>
 
 
                     </View>
