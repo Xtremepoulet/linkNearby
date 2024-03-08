@@ -12,7 +12,7 @@ function MessageCard(props) {
                 <Image style={styles.image} source={require('../assets/profile.png')}></Image>
             </View>
             <View style={styles.msg}>
-                <Text>Jerem Ptit Zbeub</Text>
+                <Text>Adrian</Text>
                 <Text style={styles.txtcolor} >last message... • il y a 2min</Text>
             </View>
 
