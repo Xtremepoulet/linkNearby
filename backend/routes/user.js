@@ -196,7 +196,7 @@ router.get('/user_personnal', authenticateToken, async (req, res, next) => {
     if (req.user.userId) {
         try {
             const user = await User.findOne({ _id: req.user.userId })
-                .select('name email password gender bio') // Sélection des champs à renvoyer
+                .select('name email password gender bio uri') // Sélection des champs à renvoyer
                 .exec(); // Exécute la requête
 
             console.log(user.name)
@@ -208,6 +208,7 @@ router.get('/user_personnal', authenticateToken, async (req, res, next) => {
                     password: user.password,
                     gender: user.gender,
                     bio: user.bio,
+                    uri: user.uri,
 
                 }
                 res.json({ result: true, user: user_infos });
@@ -248,6 +249,41 @@ router.post('/delete_user', authenticateToken, async (req, res, next) => {
     }
 })
 
+
+
+router.post('/update_user_infos', authenticateToken, async (req, res, next) => {
+    if(!checkBody(req.body, ['name', 'email', 'bio', 'gender'])){
+        return res.json({ result : false });
+    }
+
+    if (req.user.userId) {
+
+        const { name, email, bio, gender } = req.body;
+
+        try {
+            const user = await User.findOne({ _id: req.user.userId });
+            if (user) {
+                const result = await User.updateOne(
+                    { _id: req.user.userId },
+                    {
+                        $set: {
+                            name: name,
+                            email: email,
+                            bio: bio,
+                            gender: gender,
+                        },
+                    })
+
+                res.json({ result: true, message: 'user updated' })
+            }
+        } catch {
+            res.status(500).json({ message: error.message });
+        }
+
+    }
+
+
+})
 
 
 module.exports = router; 
