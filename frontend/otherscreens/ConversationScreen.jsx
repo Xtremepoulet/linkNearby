@@ -1,163 +1,147 @@
-import React, { useEffect } from 'react';
-import { Pressable, StyleSheet, Text, View, TextInput, KeyboardAvoidingView, Platform, Dimensions, ScrollView, Image } from 'react-native';
+import React from 'react';
+import { StyleSheet, Text, View, TextInput, KeyboardAvoidingView, Platform, Dimensions, ScrollView, Image } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import * as Haptics from 'expo-haptics';
-import { addPassions, removePassions } from '../reducers/users';
-import Constants from 'expo-constants';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+const { width, height } = Dimensions.get('window');
 
-const CONNECTION_BACKEND = Constants.expoConfig?.extra?.CONNECTION_BACKEND;
-
-const { width, height } = Dimensions.get('window'); // Recupere la dimension de l'écran
-import { SafeAreaView } from 'react-native-safe-area-context'; // composant pour gérer les zones safe sur ios et android
-
-
-export default function PassionScreen({ navigation }) {
-
+export default function ConversationScreen({ navigation }) {
     return (
-        <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-            style={styles.container}
-        >
-            <SafeAreaView style={styles.container}>
-                <View style={styles.header}>
-                    <Pressable
-                        onPress={() => navigation.goBack()}
-                    >
-                        <FontAwesome name="arrow-left" size={24} style={styles.arrowIcon} />
-                    </Pressable>
-                    <Image style={styles.image} source={require('../assets/profile.png')}></Image>
-                    <Text style={styles.headerText}>Adrian</Text>
-                    <Text>passion</Text>
-                </View>
+        <SafeAreaView>
+            <View style={styles.header}>
+                <FontAwesome name="arrow-left" size={24} style={styles.arrowIcon} onPress={() => navigation.goBack()} />
+                <Image style={styles.image} source={require('../assets/profile.png')} />
+                <Text style={styles.headerText}>Adrian</Text>
+                <Text>passion</Text>
+            </View>
+            <KeyboardAwareScrollView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} >
 
-                <View style={styles.containerEmoji}>
-                    <ScrollView contentContainerStyle={styles.containerScroll}>
-                        <Text multiline={true} style={styles.msg}>bonjour je suis adrian et je suis un gros mangeur de taboulet</Text>
+                <ScrollView contentContainerStyle={styles.containerEmoji}>
 
-                    </ScrollView>
-                </View>
+                    <View style={styles.containerScroll}>
+                        <View style={styles.align} >
+                            <Image style={styles.imageMsg} source={require('../assets/profile.png')} />
+                            <Text multiline={true} style={styles.msg}>Salut! comment ça va?</Text>
+                        </View>
+                        <View style={styles.alignRight} >
+                            <Text multiline={true} style={styles.msg}>Super bien et toi?</Text>
+                        </View>
+                        <View style={styles.align} >
+                            <Image style={styles.imageMsg} source={require('../assets/profile.png')} />
+                            <Text multiline={true} style={styles.msg}>Dure journée mais ça peut aller ma grand-mère est morte empallée par le cactus en bas des escalier mais ça peut aller lolilol</Text>
+                        </View>
+                        <View style={styles.align} >
+                            <Image style={styles.imageMsg} source={require('../assets/profile.png')} />
+                            <Text multiline={true} style={styles.msg}>Dure journée mais ça peut aller ma grand-mère est morte empallée par le cactus en bas des escalier mais ça peut aller lolilol</Text>
+                        </View>
+                        <View style={styles.align} >
+                            <Image style={styles.imageMsg} source={require('../assets/profile.png')} />
+                            <Text multiline={true} style={styles.msg}>Dure journée mais ça peut aller ma grand-mère est morte empallée par le cactus en bas des escalier mais ça peut aller lolilol</Text>
+                        </View>
+                        <View style={styles.align} >
+                            <Image style={styles.imageMsg} source={require('../assets/profile.png')} />
+                            <Text multiline={true} style={styles.msg}>Dure journée mais ça peut aller ma grand-mère est morte empallée par le cactus en bas des escalier mais ça peut aller lolilol</Text>
+                        </View>
+                        <View style={styles.align} >
+                            <Image style={styles.imageMsg} source={require('../assets/profile.png')} />
+                            <Text multiline={true} style={styles.msg}>Dure journée mais ça peut aller ma grand-mère est morte empallée par le cactus en bas des escalier mais ça peut aller lolilol</Text>
+                        </View>
+                        <View style={styles.align} >
+                            <Image style={styles.imageMsg} source={require('../assets/profile.png')} />
+                            <Text multiline={true} style={styles.msg}>Dure journée mais ça peut aller ma grand-mère est morte empallée par le cactus en bas des escalier mais ça peut aller lolilol</Text>
+                        </View>
+
+
+                    </View>
+                </ScrollView>
+
                 <View style={styles.footer}>
-                    <TextInput
-                        style={styles.button}
-                        placeholder='oui'
-                    >
-                    </TextInput>
-                    <Text>la</Text>
+                    <FontAwesome name="camera" size={24} style={styles.arrowIcon} />
+                    <TextInput style={styles.button} placeholder='Votre message...' />
+                    <FontAwesome name="paper-plane" size={24} style={styles.arrowIcon} />
                 </View>
-            </SafeAreaView>
-        </KeyboardAvoidingView>
-
+            </KeyboardAwareScrollView>
+        </SafeAreaView>
     );
 }
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        alignItems: 'center',
-        backgroundColor: 'yellow'
     },
     header: {
         flexDirection: 'row',
         alignItems: 'center',
-        paddingHorizontal: 20,
-        marginBottom: 20,
-        backgroundColor: 'purple'
-
+        padding: 10,
+        borderBottomWidth: 1
     },
     arrowIcon: {
-        marginRight: 10,
-        marginBottom: 2,
+        paddingRight: 10,
     },
     headerText: {
         fontSize: 24,
         fontWeight: 'bold',
     },
-    input: {
-        marginVertical: 12,
-        borderBottomWidth: 1,
-        width: '80%',
-        fontSize: 18,
-        paddingHorizontal: 10,
-
-    },
     button: {
-        alignItems: 'center',
-        justifyContent: 'center',
         borderRadius: 5,
         backgroundColor: 'white',
         borderWidth: 1,
-        marginTop: 20,
-        width: width * 0.70,
+        width: width * 0.80,
         height: height * 0.05,
-
-    },
-    texteblanc: {
-        color: 'white'
-    },
-    passionBody: {
-        padding: 5,
-        margin: 2,
-        backgroundColor: '#ECEEEE',
-        borderRadius: 20,
-        alignItems: 'center',
-        justifyContent: 'center',
-        alignSelf: 'flex-start',
-        paddingHorizontal: 10,
-
-    },
-    passionTexte: {
-        color: 'black',
-        fontSize: 13,
     },
     containerEmoji: {
-        justifyContent: 'center',
-        alignContent: 'center',
         width: '100%',
-        marginTop: 20,
-        height: height * 0.68,
-        backgroundColor: 'pink'
+        height: height * 0.77,
+        justifyContent: 'flex-end'
     },
     containerScroll: {
-        justifyContent: 'center',
         alignItems: 'center',
         flexDirection: 'row',
         flexWrap: 'wrap',
-        backgroundColor: 'blue',
-        justifyContent: 'flex-start',
-
-
-    },
-    passionSelected: {
-        backgroundColor: '#F98F22',
-
     },
     compteur: {
         fontSize: 30,
         fontWeight: 'bold',
         color: '#F98F22',
         marginTop: 20,
-
     },
     image: {
         height: 45,
         width: 45,
     },
+    imageMsg: {
+        height: 35,
+        width: 35,
+    },
     footer: {
         flexDirection: 'row',
         alignItems: 'center',
-        backgroundColor: 'green',
-        height: '3%',
-
+        paddingLeft: 5
     },
     msg: {
         borderWidth: 1,
+        borderColor: '#F98F22',
         borderRadius: 10,
         backgroundColor: '#F98F22',
         color: 'white',
         padding: 5,
         maxWidth: '75%',
         overflow: 'hidden',
-
+    },
+    align: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        padding: 5,
+        width: '100%',
+        backgroundColor: 'white',
+        justifyContent: 'flex-start'
+    },
+    alignRight: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        padding: 5,
+        width: '100%',
+        backgroundColor: 'white',
+        justifyContent: 'flex-end'
     },
 });
