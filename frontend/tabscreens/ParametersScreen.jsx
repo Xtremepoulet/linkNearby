@@ -15,6 +15,9 @@ export default function ParametersScreen({ navigation }) {
     const user_token = useSelector((state) => state.users.value.token);
     const passions = useSelector((state) => state.users.value.passions);//sous forme de tableau 
 
+    const [gender, setGender] = useState(null);
+
+
     const [modalVisible, setModalVisible] = useState(false);
     const [password, setPassword] = useState('hey');
     const [isEmailEditable, setIsEmailEditable] = useState(false);
@@ -34,6 +37,7 @@ export default function ParametersScreen({ navigation }) {
         const result = await fetching_data.json();
         if(result.result){
             setPersonal_informations(result.user)
+            setGender(result.user.gender);
         }
     }
 
@@ -111,10 +115,18 @@ export default function ParametersScreen({ navigation }) {
                                     <Text style={styles.text_description}>Password</Text>
                                     <TextInput style={styles.input_champ} value='evidement le password nest pas clear' editable={isEmailEditable}></TextInput>
                                 </View>
-
+                                
                                 <View style={styles.champ}>
                                     <Text style={styles.text_description}>Gender</Text>
-                                    <TextInput style={styles.input_champ} value={personal_informations.email} editable={isEmailEditable}></TextInput>
+                                    <View style={styles.gender_container}>
+                                        <TouchableOpacity onPress={() => setGender('homme')} style={gender === 'homme' ? styles.gender_selected_button : styles.gender_nonSelected_button} >
+                                            <Text style={styles.text_button}>Homme</Text>
+                                        </TouchableOpacity>
+
+                                        <TouchableOpacity onPress={() => setGender('femme')} style={gender === 'femme' ? styles.gender_selected_button : styles.gender_nonSelected_button} >
+                                            <Text style={styles.text_button}>Femme</Text>
+                                        </TouchableOpacity>
+                                    </View>
                                 </View>
                             </View>
                         </View>
@@ -395,6 +407,34 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         backgroundColor: 'orange',
         height: 40,
+        borderRadius: 5,
+        padding: 5,
+    },
+
+    gender_container: {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-evenly',
+    },
+
+    gender_selected_button: {
+        width: '30%',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: 'orange',
+        height: 30,
+        borderRadius: 5,
+        padding: 5,
+    },
+
+    gender_nonSelected_button: {
+        width: '30%',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: 'gray',
+        height: 30,
         borderRadius: 5,
         padding: 5,
     },
