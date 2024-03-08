@@ -1,12 +1,17 @@
 require('dotenv').config();
 const express = require('express');
+const http = require('http');
+const socketIo = require('socket.io');
+const jwt = require('jsonwebtoken');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const cors = require('cors');
 const fileUpload = require('express-fileupload');
 
-const User = require('./models/user'); // Assurez-vous que le chemin est correct
+
+// Fonctions
+const updateUserStatus = require('./modules/updateUserStatus');
 
 // Routes
 const indexRouter = require('./routes/index');
@@ -14,10 +19,11 @@ const authRouter = require('./routes/auth');
 const userRouter = require('./routes/user');
 const heartbeatRouter = require('./routes/heartbeat');
 
-// Middleware
-const verifyToken = require('./middleware/auth');
-
 const app = express();
+
+// Création du serveur
+const server = http.createServer(app);
+const io = socketIo(server); // Attachez Socket.IO au serveur HTTP
 
 // Middlewares
 app.use(cors());
@@ -34,22 +40,33 @@ app.use('/auth', authRouter);
 app.use('/user', userRouter);
 app.use('/heartbeat', heartbeatRouter);
 
-// Fonction de vérification pour mettre à jour le statut isConnected
-const updateUsersStatus = async () => {
-    const THREE_MINUTES = 3 * 60 * 1000; // 3 minutes en millisecondes
-    const threshold = new Date(new Date().getTime() - THREE_MINUTES);
 
-    try {
-        await User.updateMany(
-            { lastHeartbeat: { $lt: threshold } },
-            { $set: { isConnected: false } }
-        );
-    } catch (error) {
-        console.error('Erreur lors de la mise à jour des utilisateurs déconnectés:', error);
-    }
-};
+// Configuration de Socket.IO
+io.use((socket, next) => {
+    const token = socket.handshake.query.token; // Récupérez le token JWT du handshake
+    jwt.verify(token, process.env.TOKEN_SECRET, (err, decoded) => { // Utilisez la clé secrète environnementale
+        if (err) return next(new Error('Authentication error'));
+        socket.userId = decoded.userId; // Stockez l'ID de l'utilisateur dans l'objet socket pour une utilisation ultérieure
+        next();
+    });
+});
 
-// Démarrer la tâche de vérification à intervalles réguliers
-setInterval(updateUsersStatus, 60 * 1000); // Exécute cette fonction toutes les 60 secondes
+io.on('connection', (socket) => {
+    console.log(`User connected: ${socket.userId}`);
 
-module.exports = app;
+    // Mettre à jour l'état de connexion de l'utilisateur dans la base de données
+    updateUserStatus(socket.userId, true);
+
+    socket.on('disconnect', () => {
+        console.log(`User disconnected: ${socket.userId}`);
+
+        // Mettre à jour l'état de connexion de l'utilisateur dans la base de données
+        updateUserStatus(socket.userId, false);
+    });
+
+});
+
+
+
+//Export de app et server Io
+module.exports = { app, server };

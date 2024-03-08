@@ -225,20 +225,16 @@ router.get('/user_personnal', authenticateToken, async (req, res, next) => {
 
 
 router.post('/delete_user', authenticateToken, async (req, res, next) => {
-
     if (req.user.userId) {
-
         if (!checkBody(req.body, ['password'])) {
             return res.status(400).json({ result: false, message: 'Missing password' });
         }
-
-
         try {
             const user = await User.findOne({ _id: req.user.userId })
             if (user && await bcrypt.compare(req.body.password, user.hash)) {
 
                 console.log(req.body)
-                const delete_user = await User.delete({ _id: req.user.userId })
+                const delete_user = await User.deleteOne({ _id: req.user.userId })
                 res.json({ result: true, message: 'user deleted' })
             } else {
                 return res.json({ result: false, error: 'user not found' })
