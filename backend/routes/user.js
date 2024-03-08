@@ -196,7 +196,7 @@ router.get('/user_personnal', authenticateToken, async (req, res, next) => {
     if (req.user.userId) {
         try {
             const user = await User.findOne({ _id: req.user.userId })
-                .select('name email password gender bio') // Sélection des champs à renvoyer
+                .select('name email password gender bio uri') // Sélection des champs à renvoyer
                 .exec(); // Exécute la requête
 
             console.log(user.name)
@@ -208,6 +208,7 @@ router.get('/user_personnal', authenticateToken, async (req, res, next) => {
                     password: user.password,
                     gender: user.gender,
                     bio: user.bio,
+                    uri: user.uri,
 
                 }
                 res.json({ result: true, user: user_infos });

@@ -15,12 +15,16 @@ export default function ParametersScreen({ navigation }) {
     const user_token = useSelector((state) => state.users.value.token);
     const passions = useSelector((state) => state.users.value.passions);//sous forme de tableau 
 
+    //infos qui seront renvoyé au backend
     const [gender, setGender] = useState(null);
+    const [bio, setBio] = useState('');
 
 
     const [modalVisible, setModalVisible] = useState(false);
     const [password, setPassword] = useState('hey');
     const [isEmailEditable, setIsEmailEditable] = useState(false);
+    const [isBioEditable, setIsBioEditable] = useState(false);
+
 
     const [personal_informations, setPersonal_informations] = useState({});
 
@@ -37,11 +41,13 @@ export default function ParametersScreen({ navigation }) {
         const result = await fetching_data.json();
         if(result.result){
             setPersonal_informations(result.user)
+
             setGender(result.user.gender);
+            setBio(result.user.bio);
         }
     }
 
-    console.log(personal_informations)
+    
     //modal gestion 
     const handleClose = () => {
         setModalVisible(false);
@@ -83,11 +89,11 @@ export default function ParametersScreen({ navigation }) {
                     <Text style={styles.h1}>LINKNEARBY</Text>
                 </View>
                 <View style={styles.photo_container}>
-                    <Image style={styles.image} source={require('../assets/profile.png')}></Image>
-                    <Text style={styles.username}>Name</Text>
+                    <Image style={styles.image} source={{ uri: personal_informations.uri }}></Image>
+                    <Text style={styles.username}>{personal_informations.name}</Text>
                 </View>
             </View>
-
+            {console.log(bio)}
             <View style={styles.cardView}>
                     <ScrollView
                         showsVerticalScrollIndicator={false}
@@ -103,7 +109,7 @@ export default function ParametersScreen({ navigation }) {
                             <View style={styles.user_champ}>
                                 <View style={styles.champ}>
                                     <Text style={styles.text_description}>Name</Text>
-                                    <TextInput  style={styles.input_champ} value={personal_informations.name} editable={isEmailEditable}></TextInput>
+                                    <TextInput style={styles.input_champ} value={personal_informations.name} editable={isEmailEditable}></TextInput>
                                 </View>
 
                                 <View style={styles.champ}>
@@ -141,11 +147,11 @@ export default function ParametersScreen({ navigation }) {
                             
                             <View style={styles.biographie_champ}>
                                 <View>
-                                    <TextInput>{personal_informations.bio}</TextInput>
+                                    <TextInput onChangeText={(value) => setBio(value)} editable={isBioEditable}>{personal_informations.bio}</TextInput>
                                 </View>
 
                                 <View style={styles.edit_button_container}>
-                                    <TouchableOpacity style={styles.edit_button} >
+                                    <TouchableOpacity onPress={() => setIsBioEditable(!isBioEditable)} style={styles.edit_button} >
                                         <Text>edit</Text>
                                     </TouchableOpacity>
                                 </View>
@@ -162,42 +168,6 @@ export default function ParametersScreen({ navigation }) {
                             <View style={styles.passions_champ}>
             
                             </View>
-                        </View>
-
-
-                        <View style={styles.user_champ}>
-                            <TextInput style={styles.input_champ} value="I am read only" editable={isEmailEditable}></TextInput>
-                            <TouchableOpacity onPress={() => setIsEmailEditable(!isEmailEditable)} style={styles.button_champ} >
-                                <Text style={styles.text_button}>Edit</Text>
-                            </TouchableOpacity>
-                        </View>
-
-                        <View style={styles.user_champ}>
-                            <TextInput style={styles.input_champ} value="I am read only" editable={isEmailEditable}></TextInput>
-                            <TouchableOpacity onPress={() => setIsEmailEditable(!isEmailEditable)} style={styles.button_champ} >
-                                <Text style={styles.text_button}>Edit</Text>
-                            </TouchableOpacity>
-                        </View>
-
-                        <View style={styles.user_champ}>
-                            <TextInput style={styles.input_champ} value="I am read only" editable={isEmailEditable}></TextInput>
-                            <TouchableOpacity onPress={() => setIsEmailEditable(!isEmailEditable)} style={styles.button_champ} >
-                                <Text style={styles.text_button}>Edit</Text>
-                            </TouchableOpacity>
-                        </View>
-
-                        <View style={styles.user_champ}>
-                            <TextInput style={styles.input_champ} value="I am read only" editable={isEmailEditable}></TextInput>
-                            <TouchableOpacity onPress={() => setIsEmailEditable(!isEmailEditable)} style={styles.button_champ} >
-                                <Text style={styles.text_button}>Edit</Text>
-                            </TouchableOpacity>
-                        </View>
-
-                        <View style={styles.user_champ}>
-                            <TextInput style={styles.input_champ} value="I am read only" editable={isEmailEditable}></TextInput>
-                            <TouchableOpacity onPress={() => setIsEmailEditable(!isEmailEditable)} style={styles.button_champ} >
-                                <Text style={styles.text_button}>Edit</Text>
-                            </TouchableOpacity>
                         </View>
 
                         <TouchableOpacity onPress={() => user_deconnexion()} style={styles.button} >
@@ -237,15 +207,23 @@ const styles = StyleSheet.create({
     container: {
         width: width,
         height: height,
+        backgroundColor: 'white',
     },
 
+    h1: {
+        fontSize: 22,
+    },
+                    
     top_container: {
         width: '100%',
         height: '30%',
-        backgroundColor: 'yellow',
         display: 'flex',
+        alignItems: 'center',
         paddingTop: 20,
         padding: 5,
+        backgroundColor: 'orange',
+        borderBottomColor: '#000',
+        borderBottomWidth: 1,
     },
 
     header: {
@@ -262,7 +240,6 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         width: '100%',
-        backgroundColor: 'blue',
         padding: 5,
     },
 
@@ -302,8 +279,8 @@ const styles = StyleSheet.create({
     },
 
     logo : {
-        width: 25,
-        height: 25,
+        width: 30,
+        height: 30,
         borderRadius: 5,
     },
      
@@ -316,7 +293,7 @@ const styles = StyleSheet.create({
         display: 'flex',
         alignItems: 'center',
         gap: 40,
-        backgroundColor: 'purple',
+        // backgroundColor: 'purple',
         padding: 30,
     },  
 
@@ -391,7 +368,7 @@ const styles = StyleSheet.create({
 
     section_title: {
         fontSize: 16,
-        color: 'white',
+        color: 'orange',
     },
 
     input_champ: {
