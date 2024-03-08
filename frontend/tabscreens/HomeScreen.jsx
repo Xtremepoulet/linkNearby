@@ -10,6 +10,9 @@ import { RefreshControl } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context'; // composant pour gérer les zones safe sur ios et android
 import { ScrollView } from 'react-native';
 
+import { socket } from '../sockets.js';
+import { io } from 'socket.io-client';
+
 const CONNECTION_BACKEND = Constants.expoConfig?.extra?.CONNECTION_BACKEND;
 
 const { width, height } = Dimensions.get('window'); // Recupere la dimension de l'écran
@@ -19,49 +22,29 @@ const { width, height } = Dimensions.get('window'); // Recupere la dimension de 
 export default function HomeScreen({ navigation }) {
 
     const [refreshing, setRefreshing] = useState(false);
-    const token = useSelector((state) => state.users.value.token);
+
     const [users, setUsers] = useState([])
 
     const infoUser = useSelector((state) => state.users.value);
+    // const token = useSelector((state) => state.users.value.token);
 
-
-    //Recuperation des utilisateurs connectés
-    // useEffect(() => {
-    //     connected_user();
-    // }, []);
-
-    // const connected_user = async () => {
-    //     const fetching_data = await fetch(`${CONNECTION_BACKEND}/user/user_connected`, {
-    //         method: 'GET',
-    //         headers: { 'authorization': user_token },
-    //     });
-    //     const result = await fetching_data.json();
-    // }
-
-
-    // Battement de coeur, envoie de requete au serveur pour dire que l'utilisateur est toujours connecté
     useEffect(() => {
-        const intervalId = setInterval(sendHeartbeat, 2 * 60 * 1000);
+        const socket = io(CONNECTION_BACKEND, {
+            query: { token: infoUser.token },
+            transports: ['websocket'],
+        });
 
-        return () => clearInterval(intervalId);
-    }, [token]);
+        socket.on('connection', () => {
+            // Mettre à jour l'état de l'application ou de l'interface utilisateur ici
+            console.log(`User is now online`);
+        });
 
-    const sendHeartbeat = useCallback(async () => {
-        if (token) {
-            try {
-                await fetch(`${CONNECTION_BACKEND}/heartbeat`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': infoUser.token
-                    },
-                    body: JSON.stringify({ email: infoUser.email })
-                });
-            } catch (error) {
-                console.error('Erreur lors de l\'envoi du heartbeat:', error);
-            }
-        }
-    }, [token]);
+        return () => {
+            socket.off('disconnect');
+            socket.disconnect();
+        };
+    }, [infoUser.token]);
+
 
 
 
@@ -76,7 +59,7 @@ export default function HomeScreen({ navigation }) {
     useEffect(() => {
         fetch(`${CONNECTION_BACKEND}/user/authorisation`, {
             method: 'GET',
-            headers: { 'Content-Type': 'application/json', 'authorization': token },
+            headers: { 'Content-Type': 'application/json', 'authorization': infoUser.token },
         })
         getUsers()
     }, [])
