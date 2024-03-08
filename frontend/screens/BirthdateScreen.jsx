@@ -26,6 +26,8 @@ export default function BirthdateScreen({ navigation }) {
     const handleConfirm = (date) => {
         console.log("A date has been picked: ", date);
 
+        console.log("A date has been picked: ", date.toISOString());
+
         setBirthdate(date.getTime());
         setBirthdatea(date.toLocaleDateString());
         hideDatePicker();
@@ -48,6 +50,9 @@ export default function BirthdateScreen({ navigation }) {
     };
 
 
+    const defaultDate = new Date();
+    defaultDate.setFullYear(defaultDate.getFullYear() - 18);
+
     return (
         <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
             style={styles.container}
@@ -57,7 +62,7 @@ export default function BirthdateScreen({ navigation }) {
                 mode="date"
                 onConfirm={handleConfirm}
                 onCancel={hideDatePicker}
-                date={birthdate !== '' ? new Date(birthdate) : new Date()}
+                date={birthdate !== '' ? new Date(birthdate) : defaultDate}
             />
 
             <View style={styles.header}>
@@ -87,7 +92,7 @@ export default function BirthdateScreen({ navigation }) {
             </View>
         </KeyboardAvoidingView>
     );
-}   
+}
 
 const styles = StyleSheet.create({
     container: {

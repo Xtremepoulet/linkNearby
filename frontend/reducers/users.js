@@ -3,7 +3,7 @@ import { createSlice } from '@reduxjs/toolkit';
 const initialState = {
   value: { email: null, token: null, birthdate: null, bio: null, gender: null, passions: [], name: null, uri: null, location: false, longitude: null, latitude: null },
 };
-  
+
 export const usersSlice = createSlice({
   name: 'users',
   initialState,
@@ -60,7 +60,7 @@ export const usersSlice = createSlice({
     },
     addEmail: (state, action) => {
       state.value.email = action.payload;
-    }, 
+    },
 
     //delete le token de l'utilisateur si il se deconnecte
     handleDeconnexion: (state, action) => {

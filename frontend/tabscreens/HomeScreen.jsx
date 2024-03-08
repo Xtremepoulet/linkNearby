@@ -1,40 +1,50 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Pressable, StyleSheet, Text, View, Image, TextInput, KeyboardAvoidingView, Platform, Dimensions } from 'react-native';
-import { UseSelector, useSelector } from 'react-redux';
+import { UseSelector, useDispatch, useSelector } from 'react-redux';
 import Constants from 'expo-constants';
 import logoLinkNearby from '../assets/linkNearbyBackNone.webp';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Card from '../components/HomeCard';
 import { RefreshControl } from 'react-native';
 
-
-const { width, height } = Dimensions.get('window'); // Recupere la dimension de l'écran
 import { SafeAreaView } from 'react-native-safe-area-context'; // composant pour gérer les zones safe sur ios et android
 import { ScrollView } from 'react-native';
 
 const CONNECTION_BACKEND = Constants.expoConfig?.extra?.CONNECTION_BACKEND;
 
+const { width, height } = Dimensions.get('window'); // Recupere la dimension de l'écran
+
+
 
 export default function HomeScreen({ navigation }) {
 
     const [refreshing, setRefreshing] = useState(false);
-
     const token = useSelector((state) => state.users.value.token);
     const [users, setUsers] = useState([])
 
-    const user_token = useSelector((state) => state.users.value.token);
-    const user_email = useSelector((state) => state.users.value.email);
+    const infoUser = useSelector((state) => state.users.value);
 
-    useEffect(() => {
-        connected_user();
-    }, []);
 
+    //Recuperation des utilisateurs connectés
+    // useEffect(() => {
+    //     connected_user();
+    // }, []);
+
+    // const connected_user = async () => {
+    //     const fetching_data = await fetch(`${CONNECTION_BACKEND}/user/user_connected`, {
+    //         method: 'GET',
+    //         headers: { 'authorization': user_token },
+    //     });
+    //     const result = await fetching_data.json();
+    // }
+
+
+    // Battement de coeur, envoie de requete au serveur pour dire que l'utilisateur est toujours connecté
     useEffect(() => {
         const intervalId = setInterval(sendHeartbeat, 2 * 60 * 1000);
 
         return () => clearInterval(intervalId);
     }, [token]);
-
 
     const sendHeartbeat = useCallback(async () => {
         if (token) {
@@ -43,9 +53,9 @@ export default function HomeScreen({ navigation }) {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        'Authorization': user_token
+                        'Authorization': infoUser.token
                     },
-                    body: JSON.stringify({ email: user_email })
+                    body: JSON.stringify({ email: infoUser.email })
                 });
             } catch (error) {
                 console.error('Erreur lors de l\'envoi du heartbeat:', error);
@@ -54,7 +64,7 @@ export default function HomeScreen({ navigation }) {
     }, [token]);
 
 
-
+    // Fonction pour rafraichir la liste des utilisateurs en tirant vers le bas
     const onRefresh = useCallback(async () => {
         setRefreshing(true);
         await getUsers();
@@ -62,16 +72,7 @@ export default function HomeScreen({ navigation }) {
     }, []);
 
 
-    const connected_user = async () => {
-        const fetching_data = await fetch(`${CONNECTION_BACKEND}/user/user_connected`, {
-            method: 'GET',
-            headers: { 'authorization': user_token },
-        });
-        const result = await fetching_data.json();
-    }
-
     useEffect(() => {
-
         fetch(`${CONNECTION_BACKEND}/user/authorisation`, {
             method: 'GET',
             headers: { 'Content-Type': 'application/json', 'authorization': token },
@@ -79,19 +80,21 @@ export default function HomeScreen({ navigation }) {
         getUsers()
     }, [])
 
+    // Recuperation les utilisateurs
     const getUsers = async () => {
         const response = await fetch(`${CONNECTION_BACKEND}/user/users`, {
             method: 'GET',
             headers: { 'Content-Type': 'application/json' },
-        })
-
+        });
         const result = await response.json();
         if (result.result) {
-            setUsers(result.users)
+            const currentUserEmail = "email de l'utilisateur connecté";
+            const filteredUsers = result.users.filter(user => user.email !== currentUserEmail);
+            setUsers(filteredUsers);
         }
-    }
+    };
 
-    const usersList = users.filter((user) => user.email !== user_email).map((user) => {
+    const usersList = users.map((user) => {
         const birthdate = new Date(user.birthdate);
         const today = new Date();
         let age = today.getFullYear() - birthdate.getFullYear();
