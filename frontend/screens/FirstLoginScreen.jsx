@@ -1,6 +1,7 @@
 import { Pressable, StyleSheet, Text, View, Image, TextInput, KeyboardAvoidingView, Platform, SafeAreaView } from 'react-native';
 import logoLinkNearby from '../assets/linkNearbyBackNone.webp';
 import { useDispatch, useSelector } from 'react-redux';
+import { deleteReducerValue } from '../reducers/users';
 
 
 export default function FirstLoginScreen({ navigation }) {
@@ -15,26 +16,26 @@ export default function FirstLoginScreen({ navigation }) {
         <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
             style={styles.container}
         >
-                <View style={styles.header}>
-                    <Image source={logoLinkNearby} style={styles.logo} />
-                    <Text style={styles.h1}>LINK NEARBY</Text>
-                </View>
-                <View style={styles.body}>
-                    <Pressable
-                        style={styles.button}
-                        title="Go to SecondLoginScreen"
-                        onPress={() => navigation.navigate('signupScreen')}
-                    >
-                        <Text style={styles.text}>Créer un compte</Text>
-                    </Pressable>
-                    <Pressable
-                        style={styles.button}
-                        title="Go to signin screen"
-                        onPress={() => navigation.navigate('signinScreen')}
-                    >
-                        <Text style={styles.text}>Connexion</Text>
-                    </Pressable>
-                </View>
+            <View style={styles.header}>
+                <Image source={logoLinkNearby} style={styles.logo} />
+                <Text style={styles.h1}>LINK NEARBY</Text>
+            </View>
+            <View style={styles.body}>
+                <Pressable
+                    style={styles.button}
+                    title="Go to SecondLoginScreen"
+                    onPress={() => { navigation.navigate('signupScreen'), dispatch(deleteReducerValue()) }}
+                >
+                    <Text style={styles.text}>Créer un compte</Text>
+                </Pressable>
+                <Pressable
+                    style={styles.button}
+                    title="Go to signin screen"
+                    onPress={() => navigation.navigate('signinScreen')}
+                >
+                    <Text style={styles.text}>Connexion</Text>
+                </Pressable>
+            </View>
         </KeyboardAvoidingView>
     );
 }

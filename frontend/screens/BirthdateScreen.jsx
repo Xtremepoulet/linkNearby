@@ -10,43 +10,47 @@ const windowHeight = Dimensions.get('window').height;
 export default function BirthdateScreen({ navigation }) {
     const dispatch = useDispatch();
     const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
-    const [birthdate, setBirthdate] = useState('');
+    const [birthdate, setBirthdate] = useState();
     const [birthdatea, setBirthdatea] = useState('');
     const [isBirthdateSelected, setIsBirthdateSelected] = useState(false);
 
 
     const showDatePicker = () => {
-        setBirthdate('')
         setDatePickerVisibility(true);
+        setBirthdate(defaultDate)
     };
 
     const hideDatePicker = () => {
         setDatePickerVisibility(false);
     };
-    const handleConfirm = (date) => {
-        console.log("A date has been picked: ", date);
 
-        setBirthdate(date.getTime());
-        setBirthdatea(date.toLocaleDateString());
-        hideDatePicker();
+    const handleConfirm = (date) => {
+        hideDatePicker()
+        setBirthdate(date.toISOString());
         setIsBirthdateSelected(true);
     };
 
     const handleNext = () => {
-        let oui = 0
-        const dateDuJourEnMs = new Date().getTime();
-        difference = dateDuJourEnMs - birthdate
-        oui = difference / (1000 * 60 * 60 * 24 * 365.25)
+        if (birthdate) {
+            const birthdateDate = new Date(birthdate);
+            const currentDate = new Date();
+            let age = currentDate.getFullYear() - birthdateDate.getFullYear();
+            const m = currentDate.getMonth() - birthdateDate.getMonth();
+            if (m < 0 || (m === 0 && currentDate.getDate() < birthdateDate.getDate())) {
+                age--;
+            }
 
-        if (oui >= 18 && oui <= 120 && birthdate) {
-            dispatch(defineBirthdate(birthdate));
-
-            navigation.navigate('PassionScreen');
-        } else {
-
+            if (age >= 18 && age <= 120) {
+                dispatch(defineBirthdate(birthdate));
+                navigation.navigate('PassionScreen');
+            } else {
+                alert('Vous devez avoir au moins 18 ans pour utiliser l\'application');
+            }
         }
     };
 
+    const defaultDate = new Date();
+    defaultDate.setFullYear(defaultDate.getFullYear() - 18);
 
     return (
         <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -57,7 +61,7 @@ export default function BirthdateScreen({ navigation }) {
                 mode="date"
                 onConfirm={handleConfirm}
                 onCancel={hideDatePicker}
-                date={birthdate !== '' ? new Date(birthdate) : new Date()}
+                date={birthdate !== '' ? new Date(birthdate) : defaultDate}
             />
 
             <View style={styles.header}>
@@ -75,11 +79,19 @@ export default function BirthdateScreen({ navigation }) {
                     style={styles.button}
                     onPress={showDatePicker}
                 >
-                    {isBirthdateSelected ? <Text style={styles.texteblanc}>{birthdatea}</Text> : <Text style={styles.texteblanc}>Sélectionner la date de naissance</Text>}
+                    {isBirthdateSelected ? (
+                        <Text style={styles.texteblanc}>
+                            {new Date(birthdate).toLocaleDateString('fr-FR', {
+                                day: 'numeric', month: 'long', year: 'numeric'
+                            })}
+                        </Text>
+                    ) : (
+                        <Text style={styles.texteblanc}>Sélectionner la date de naissance</Text>
+                    )}
                 </Pressable>
 
                 <Pressable
-                    style={[styles.button, { marginTop: 20 }]}
+                    style={[styles.button, { marginTop: 30 }]}
                     onPress={handleNext}
                 >
                     <Text style={styles.texteblanc}>Suivant</Text>
@@ -87,7 +99,7 @@ export default function BirthdateScreen({ navigation }) {
             </View>
         </KeyboardAvoidingView>
     );
-}   
+}
 
 const styles = StyleSheet.create({
     container: {

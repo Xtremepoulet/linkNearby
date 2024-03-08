@@ -68,7 +68,7 @@ export default function ProfilScreen({ route, navigation }) {
                             </View>
                             <View style={styles.containerProfilView}>
                                 <View style={styles.profilView}>
-                                    <Text style={styles.informationPrenom}>{name} ,{birthdate} ans</Text>
+                                    <Text style={styles.informationPrenom}>{name}, {birthdate} ans</Text>
                                     <Text>a 500 m</Text>
                                 </View>
                                 <Pressable
