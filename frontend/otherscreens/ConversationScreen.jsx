@@ -6,17 +6,16 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 const { width, height } = Dimensions.get('window');
 
-export default function ConversationScreen({ navigation }) {
+export default function ConversationScreen({ navigation, route }) {
 
-
-
+    const { userId, name, uri } = route.params; //route.param nous permet de passer des props lors du chargement de la navigation
 
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.header}>
                 <FontAwesome name="arrow-left" size={24} style={styles.arrowIcon} onPress={() => navigation.goBack()} />
-                <Image style={styles.image} source={require('../assets/profile.png')} />
-                <Text style={styles.headerText}>Adrian</Text>
+                <Image style={styles.image} source={{ uri : uri }} />
+                <Text style={styles.headerText}>{name}</Text>
                 <Text>passion</Text>
             </View>
 

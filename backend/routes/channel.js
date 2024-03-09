@@ -62,5 +62,41 @@ router.post('/create_channel', authenticateToken,  async (req, res, next) => {
     //besoin d'authentifier le token pour récupérer l'ID de l'utilisateur qui envoie le message 
 })
 
-    
+
+
+
+
+//this route allows us to get all the informations of the users 
+router.get('/load_user_channel', authenticateToken, async (req, res, next) => {
+    if(req.user.userId){
+        try{
+            const user = await User.findOne({ _id: req.user.userId });
+            
+            const channels = await Channels.find({ users: user._id });
+
+            const users_id = channels.reduce((acc, channel) => {
+                acc.push(...channel.users);//on peut dans l'accumulator tout les utilisateurs trouvé 
+                return acc;
+            }, []);
+
+          
+            //on retire chaque ID 
+            const uniqueUserIds = [...new Set(users_id)];
+      
+
+            // Fetch user details for all unique user IDs
+            const users = await User.find({ _id: { $in: uniqueUserIds } });
+
+
+            // Send the user details to the frontend
+            res.json({ result: true, users });
+
+        }catch (error){
+            return res.status(500).json({ result: false, message: 'Internal server error' });
+        }
+    }
+})
+
+
+
 module.exports = router;

@@ -2,10 +2,55 @@ import { Pressable, StyleSheet, Text, View, Image, TextInput, KeyboardAvoidingVi
 import { SafeAreaView } from 'react-native-safe-area-context';
 import MessageCard from '../components/MessageCard';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import { useEffect, useState } from 'react';
+import Constants from 'expo-constants';
+import { useSelector } from 'react-redux';
+import { RefreshControl } from 'react-native';
 
+
+const CONNECTION_BACKEND = Constants.expoConfig?.extra?.CONNECTION_BACKEND;
 
 
 export default function MessagesScreen({ navigation }) {
+
+    const user_token = useSelector((state) => state.users.value.token)
+
+    const [users, setUsers] = useState([]);
+    const [refreshing, setRefreshing] = useState(false);
+
+    useEffect(() => {
+        load_channels();
+    }, [])
+
+
+    const load_channels = async () => {
+        const fetching_data = await fetch(`${CONNECTION_BACKEND}/channel/load_user_channel`, {
+            method: 'GET',
+            headers: { 'authorization': user_token },
+        }) 
+
+        const result = await fetching_data.json();
+
+        setUsers(result.users)
+    }
+
+
+    //gestion du refresh
+    const onRefresh = async () => {
+        setRefreshing(true);
+        await load_channels();
+        setRefreshing(false);
+    }
+
+
+
+
+    const message_card = users.map((user, i) => {
+        console.log(user.name)
+        return <MessageCard name={user.name} uri={user.uri}></MessageCard>
+    })
+
+
     return (
         <SafeAreaView style={styles.container} edges={['top']} styleAndroid={{ flex: 1 }}>
 
@@ -15,13 +60,17 @@ export default function MessagesScreen({ navigation }) {
             <View style={styles.stretch}>
                 <TextInput style={styles.border} placeholder="Rechercher un utilisateur" ></TextInput>
             </View>
-            <ScrollView style={styles.oui}>
-                <Text style={styles.textBody}>Messages</Text>
-                <MessageCard></MessageCard>
-                <MessageCard></MessageCard>
-                <MessageCard></MessageCard>
-                <MessageCard></MessageCard>
-                <MessageCard></MessageCard>
+            <ScrollView 
+                style={styles.oui}
+                refreshControl={
+                    <RefreshControl
+                        refreshing={refreshing}
+                        onRefresh={onRefresh}
+                    />
+                }>
+                    <Text style={styles.textBody}>Messages</Text>
+                    {/* display tout les utilisateurs  */}
+                    {message_card}
             </ScrollView>
         </SafeAreaView>
     );

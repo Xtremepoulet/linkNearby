@@ -7,12 +7,12 @@ function MessageCard(props) {
 
     //va faloir load ca avec des props 
     return (
-        <Pressable onPress={() => navigation.navigate('ConversationScreen')} style={styles.card}>
+        <Pressable onPress={() => navigation.navigate('ConversationScreen', { userId: props.userId, name: props.name, uri: props.uri })} style={styles.card}>
             <View style={styles.nope}>
-                <Image style={styles.image} source={require('../assets/profile.png')}></Image>
+                <Image style={styles.image} source={{ uri: props.uri }}></Image>
             </View>
             <View style={styles.msg}>
-                <Text>Adrian</Text>
+                <Text>{props.name}</Text>
                 <Text style={styles.txtcolor} >last message... • il y a 2min</Text>
             </View>
 
@@ -24,6 +24,7 @@ const styles = StyleSheet.create({
     image: {
         height: 60,
         width: 60,
+        borderRadius: 50,
         padding: 20
     },
     card: {
@@ -38,7 +39,6 @@ const styles = StyleSheet.create({
         justifyContent: 'space-evenly',
         padding: 10
     },
-
 
     nope: {
         padding: 6

@@ -32,7 +32,7 @@ export default function ParametersScreen({ navigation }) {
 
     const [isBioEditable, setIsBioEditable] = useState(false);
 
-
+    
     const [personal_informations, setPersonal_informations] = useState({});
 
 
