@@ -277,9 +277,8 @@ router.post('/update_user_infos', authenticateToken, async (req, res, next) => {
         }
 
     }
-
-
 })
 
+    
 
 module.exports = router; 

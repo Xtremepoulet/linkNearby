@@ -5,10 +5,29 @@ import logoLinkNearby from '../assets/linkNearbyBackNone.webp';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Card from '../components/HomeCard';
 import { useState } from 'react';
+import Constants from 'expo-constants';
+
+import { socket } from '../sockets.js';
+import { io } from 'socket.io-client';
+import { useSelector } from 'react-redux';
+
 
 const { width, height } = Dimensions.get('window'); // Recupere la dimension de l'écran
+const CONNECTION_BACKEND = Constants.expoConfig?.extra?.CONNECTION_BACKEND;
+
 
 export default function ProfilScreen({ route, navigation }) {
+
+    const user_token = useSelector((state) => state.users.value.token);
+
+    //initialisation du socket
+    const socket = io(CONNECTION_BACKEND, {
+        query: { token: user_token },
+        transports: ['websocket'],
+    });
+
+                        
+
     const [modalVisible, setModalVisible] = useState(false);
     const { userEmail, name, birthdate, location, bio, gender, passions, picture, isConnected } = route.params;
 
@@ -21,8 +40,13 @@ export default function ProfilScreen({ route, navigation }) {
         );
     })
 
+
     const handleMessage = () => {
         alert("Cest pas encore développé connard !!!!!!!!");
+
+        console.log(name, userEmail)
+        socket.emit('send message', {name, userEmail})
+
     }
 
     return (
