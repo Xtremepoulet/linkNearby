@@ -3,6 +3,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScrollView } from 'react-native';
 import logoLinkNearby from '../assets/linkNearbyBackNone.webp';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import { useNavigation } from '@react-navigation/native';
 import Card from '../components/HomeCard';
 import { useState } from 'react';
 import Constants from 'expo-constants';
@@ -41,12 +42,24 @@ export default function ProfilScreen({ route, navigation }) {
     })
 
 
-    const handleMessage = () => {
-        alert("Cest pas encore développé connard !!!!!!!!");
+    const handleMessage = async () => {
+        const data_to_send = {
+            distant_user_name: name,
+            distant_user_email: userEmail,
+        }
 
-        console.log(name, userEmail)
-        socket.emit('send message', {name, userEmail})
+        const fetching_data = await fetch(`${CONNECTION_BACKEND}/channel/create_channel`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'authorization': user_token },
+            body: JSON.stringify(data_to_send),
+        });
 
+        const result = await fetching_data.json();
+        if(result.result){
+            socket.emit('send message', {name, userEmail});
+            navigation.navigate('ConversationScreen');
+        }
+        
     }
 
     return (

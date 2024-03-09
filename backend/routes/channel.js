@@ -14,6 +14,7 @@ const jwt = require('jsonwebtoken');
 
 //Database
 const User = require('../models/user');
+const Channels = require('../models/channel');
 const { authenticateToken } = require('../middleware/auth');
 
 
@@ -23,18 +24,43 @@ const { authenticateToken } = require('../middleware/auth');
 
 
 //route de création de channel entre deux utilisateurs
-router.post('/create_channel', async (req, res, next) => {
+router.post('/create_channel', authenticateToken,  async (req, res, next) => {
 
-    //on récupérer l'id de celui qui créer la discussion et l'Id de l'utilisateur distant avec qui on veut la créer 
-    const {userId, distant_userId} = req.body;
+    if (req.user.userId) {
+                //on récupérer l'id de celui qui créer la discussion et l'Id de l'utilisateur distant avec qui on veut la créer 
+        const {distant_user_name, distant_user_email} = req.body;
 
-    if(!checkBody(req.body, ['userId', 'distant_userId'])){
-        return res.json({ result: false });
+        if(!checkBody(req.body, ['distant_user_name' ,'distant_user_email'])){
+            return res.json({ result: false, message: 'Missing or invalid champs' });
+        }
+
+        const user = await User.findOne({ _id: req.user.userId });
+
+
+        //on recherche si l'utilisateur distant existe bel et bien 
+        const distant_user = await User.findOne({name: distant_user_name}, {email: distant_user_email});
+
+        if(!distant_user){
+            return res.json({ result : false, message: 'distant user not found' });
+        }
+
+ 
+        const channel = await Channels.findOne({ users: {$all: [user.id, distant_user.id]} })
+        if(!channel){
+            const new_channel = new Channels({
+                users: [user.id, distant_user.id],
+            })
+
+            await new_channel.save();
+
+            res.json({ result: true, message: 'channel created'})
+        }else {
+            res.json({ result: false, message: 'channel already exists'})
+        }
+
     }
-
-    //on créer l'id du channel en concatenant les deux ID 
-    const channelId = `${userId}${distant_userId}`; 
+    //besoin d'authentifier le token pour récupérer l'ID de l'utilisateur qui envoie le message 
 })
 
-
+    
 module.exports = router;

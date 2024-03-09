@@ -5,7 +5,7 @@ const { width, height } = Dimensions.get('window');
 function MessageCard(props) {
     const navigation = useNavigation()
 
-
+    //va faloir load ca avec des props 
     return (
         <Pressable onPress={() => navigation.navigate('ConversationScreen')} style={styles.card}>
             <View style={styles.nope}>

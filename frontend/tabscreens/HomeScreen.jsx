@@ -21,12 +21,16 @@ const { width, height } = Dimensions.get('window'); // Recupere la dimension de 
 
 export default function HomeScreen({ navigation }) {
 
+    const token = useSelector((state) => state.users.value.token)
+
     const [refreshing, setRefreshing] = useState(false);
 
     const [users, setUsers] = useState([])
 
     const infoUser = useSelector((state) => state.users.value);
     // const token = useSelector((state) => state.users.value.token);
+
+    console.log(token)
 
     useEffect(() => {
         const socket = io(CONNECTION_BACKEND, {
