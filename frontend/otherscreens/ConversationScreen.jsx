@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { StyleSheet, Text, View, TextInput, Dimensions, ScrollView, Image, KeyboardAvoidingView, Platform } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -20,7 +20,7 @@ export default function ConversationScreen({ navigation, route }) {
 
 
     const [message, setMessage] = useState('');
-
+    const [channelMessage, setChannelMessage] = useState([]);
 
  
     const socket = io(CONNECTION_BACKEND, {
@@ -29,11 +29,65 @@ export default function ConversationScreen({ navigation, route }) {
     });
 
 
-    console.log('user id ' + userId)
+    // a voir si on en a l'utilité 
+    socket.on('message received', () => {
+        load_messages();
+    })
+
+
+
+    useEffect(() => {
+      
+        load_messages();
+        
+    }, []);
+
+    const load_messages = async () => {
+
+        const user_informations_to_send = {
+            distant_user_id: userId,
+        }
+
+        const fetching_data = await fetch(`${CONNECTION_BACKEND}/channel/messages`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'authorization': user_token},
+            body: JSON.stringify(user_informations_to_send)
+        })
+
+        const result = await fetching_data.json();
+        if(result.result){
+            setChannelMessage(result.messages)
+        }
+    }
+
+
 
     const send_message = () => {
-
+        socket.emit('send private message', ({distant_user_id : userId, message: message}));
+        setMessage('');
     }
+
+
+
+    const messages_to_display = channelMessage.map((user, i) => {
+      
+        console.log(user._id)
+        console.log(userId)
+
+        // return <View key={i} style={styles.alignRight} >
+        // <Text multiline={true} style={styles.msg}>{user.message}</Text>
+        // </View>
+        if(user._id === userId){
+            return <View key={i} style={styles.alignRight} >
+            <Text multiline={true} style={styles.msg}>{user.message}</Text>
+            </View>
+        }else {
+            return <View style={styles.alignLeft} >
+            <Image style={styles.image} source={{ uri : uri }} />
+            <Text multiline={true} style={styles.msg}>{user.message}</Text>
+            </View>
+        }            
+    })
 
 
     return (
@@ -48,22 +102,20 @@ export default function ConversationScreen({ navigation, route }) {
 
             <ScrollView contentContainerStyle={styles.container_messages}>
                 <View style={styles.containerScroll}>
-                    <View style={styles.alignLeft} >
-                        <Image style={styles.imageMsg} source={require('../assets/profile.png')} />
-                        <Text multiline={true} style={styles.msg}>oui</Text>
-                    </View>
 
-                    <View style={styles.alignRight} >
+
+                    {messages_to_display}
+                    {/* <View style={styles.alignRight} >
                         <Text multiline={true} style={styles.msg}>Super bien et toi?</Text>
-                    </View>
+                    </View> */}
                     {/* Add other messages here */}
                 </View>
             </ScrollView>
 
             <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : null} style={styles.footer}>
                 <FontAwesome name="camera" size={24} style={styles.arrowIcon} />
-                <TextInput onChangeText={(value) => setMessage(value)} multiline={true} style={styles.button} placeholder='Votre message...' />
-                <FontAwesome name="paper-plane" size={24} style={styles.arrowIcon} />
+                <TextInput value={message} onChangeText={(value) => setMessage(value)} multiline={true} style={styles.button} placeholder='Votre message...' />
+                <FontAwesome onPress={() => send_message()} name="paper-plane" size={24} style={styles.arrowIcon} />
             </KeyboardAvoidingView>
         </SafeAreaView>
     );

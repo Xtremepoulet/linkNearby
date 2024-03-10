@@ -76,9 +76,33 @@ io.on('connection', (socket) => {
     });
 
 
-    //reception du message
-    socket.on('send message', (args) => {
-        console.log(args.userEmail)
+
+
+    //reception du message + stockage en BDD. C'est le user socket.userId qui envoie systématiquement le message
+    socket.on('send private message', async (payload) => {
+        console.log(payload.message);
+
+        //ATTENTION MESSAGE NE PROVIENT PAS DE L'UTILISATEUR DISTANT MAIS DE NOUS MEME !!!! 
+
+        const channel = await Channels.findOne({ users: { $all: [socket.userId, payload.distant_user_id]}})
+    
+        if(channel){
+            const new_message = new Message({
+                user_id: socket.userId, 
+                message: payload.message, //message is from us not the distant user but i make it inside the payload dont know why 
+            })
+
+            await new_message.save();
+            channel.messages.push(new_message._id);
+            await channel.save();
+
+
+            //utile ou non ? 
+            // const room = channel._id;
+            // socket.join(room);
+    
+            socket.emit('message received');
+        }
     })
 
 });

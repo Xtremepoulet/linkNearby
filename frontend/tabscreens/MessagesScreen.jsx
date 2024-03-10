@@ -44,7 +44,7 @@ export default function MessagesScreen({ navigation }) {
 
 
     const message_card = users.map((user, i) => {
-        return <MessageCard name={user.name} uri={user.uri} userId={user._id}></MessageCard>
+        return <MessageCard key={i} name={user.name} uri={user.uri} userId={user._id}></MessageCard>
     })
 
 

@@ -108,13 +108,13 @@ router.post('/messages', authenticateToken, async(req, res, next) => {
         try{
             const { distant_user_id } = req.body;
             
-            const channel = await Channels.findOne({ users: { $all: [req.user.userId, distant_user_id]}})
-                // .populate('messages', 'name emoji')
+            console.log(req.user.userId)
+
+            const channel = await Channels.findOne({ users: { $all: [req.user.userId, distant_user_id]}}).populate('messages', 'message user_id CreatedAt')
+
+            res.json({ result: true, messages: channel.messages })
             
-            res.json({ result: true, channel });
-
-            // à terminer quand l'envoie de message sera OK 
-
+            
 
         }catch(error){
             return res.status(500).json({ result: false, message: 'Internal server error' });

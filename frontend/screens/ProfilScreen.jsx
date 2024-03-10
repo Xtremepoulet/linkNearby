@@ -6,7 +6,7 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { useNavigation } from '@react-navigation/native';
 import Card from '../components/HomeCard';
 import { useState } from 'react';
-import Constants from 'expo-constants';
+import Constants from 'expo-constants'; 
 
 import { socket } from '../sockets.js';
 import { io } from 'socket.io-client';
@@ -27,10 +27,10 @@ export default function ProfilScreen({ route, navigation }) {
         transports: ['websocket'],
     });
 
-                        
+
 
     const [modalVisible, setModalVisible] = useState(false);
-    const { userEmail, name, birthdate, location, bio, gender, passions, picture, isConnected } = route.params;
+    const { userEmail, name, birthdate, location, bio, gender, passions, picture, isConnected, userId } = route.params;
 
 
     const passionsUser = passions.map((passion) => {
@@ -55,12 +55,13 @@ export default function ProfilScreen({ route, navigation }) {
         });
 
         const result = await fetching_data.json();
+
         if(result.result){
             socket.emit('send message', {name, userEmail});
-            navigation.navigate('ConversationScreen');
-        }
-        
+            navigation.navigate('ConversationScreen', { userId: userId, name: name});//il faudra aussi mettre l'uri
+        }     
     }
+
 
     return (
         <KeyboardAvoidingView

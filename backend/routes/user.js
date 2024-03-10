@@ -110,7 +110,7 @@ router.get('/users', async (req, res) => {
     try {
 
         const users = await User.find()
-            .select('email name birthdate location bio uri gender isConnected') // Sélection des champs à renvoyer
+            .select('email name birthdate location bio uri gender isConnected _id') // Sélection des champs à renvoyer
             .populate('userPassion', 'name emoji') // Remplacez 'nomDeLaPropriétéDePassion' par les champs que vous souhaitez récupérer de 'userPassion'
             .exec(); // Exécute la requête
 
@@ -125,7 +125,8 @@ router.get('/users', async (req, res) => {
                 uri: user.uri,
                 passions: user.userPassion.map(passion => ({ id: passion._id, name: passion.name, emoji: passion.emoji })), // Adaptez selon le schéma de 'Passion'
                 gender: user.gender,
-                isConnected: user.isConnected
+                isConnected: user.isConnected,
+                userId: user._id,
             };
         });
 

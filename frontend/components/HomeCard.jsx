@@ -30,7 +30,8 @@ function Card(props) {
             gender: props.gender,
             passions: props.passions,
             picture: props.picture,
-            isConnected: props.isConnected
+            isConnected: props.isConnected,
+            userId: props.userId,
         });
     }
 
