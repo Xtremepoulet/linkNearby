@@ -99,4 +99,29 @@ router.get('/load_user_channel', authenticateToken, async (req, res, next) => {
 
 
 
+ 
+
+//load the message for the users connected to the same channel 
+router.post('/messages', authenticateToken, async(req, res, next) => {
+
+    if(req.user.userId){
+        try{
+            const { distant_user_id } = req.body;
+            
+            const channel = await Channels.findOne({ users: { $all: [req.user.userId, distant_user_id]}})
+                // .populate('messages', 'name emoji')
+            
+            res.json({ result: true, channel });
+
+            // à terminer quand l'envoie de message sera OK 
+
+
+        }catch(error){
+            return res.status(500).json({ result: false, message: 'Internal server error' });
+        }
+    }
+})
+
+
+
 module.exports = router;

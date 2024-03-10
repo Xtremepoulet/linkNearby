@@ -2,13 +2,39 @@ import React from 'react';
 import { StyleSheet, Text, View, TextInput, Dimensions, ScrollView, Image, KeyboardAvoidingView, Platform } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { SafeAreaView } from 'react-native-safe-area-context';
-
+import { useSelector } from 'react-redux';
+import { useState } from 'react';
+import Constants from 'expo-constants';
+//socket import 
+import { socket } from '../sockets.js';
+import { io } from 'socket.io-client';
 
 const { width, height } = Dimensions.get('window');
+const CONNECTION_BACKEND = Constants.expoConfig?.extra?.CONNECTION_BACKEND;
 
 export default function ConversationScreen({ navigation, route }) {
 
     const { userId, name, uri } = route.params; //route.param nous permet de passer des props lors du chargement de la navigation
+
+    const user_token = useSelector((state) => state.users.value.token);
+
+
+    const [message, setMessage] = useState('');
+
+
+ 
+    const socket = io(CONNECTION_BACKEND, {
+        query: { token: user_token },
+        transports: ['websocket'],
+    });
+
+
+    console.log('user id ' + userId)
+
+    const send_message = () => {
+
+    }
+
 
     return (
         <SafeAreaView style={styles.container}>
@@ -16,7 +42,8 @@ export default function ConversationScreen({ navigation, route }) {
                 <FontAwesome name="arrow-left" size={24} style={styles.arrowIcon} onPress={() => navigation.goBack()} />
                 <Image style={styles.image} source={{ uri : uri }} />
                 <Text style={styles.headerText}>{name}</Text>
-                <Text>passion</Text>
+                <Text>{userId}</Text>
+
             </View>
 
             <ScrollView contentContainerStyle={styles.container_messages}>
@@ -35,7 +62,7 @@ export default function ConversationScreen({ navigation, route }) {
 
             <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : null} style={styles.footer}>
                 <FontAwesome name="camera" size={24} style={styles.arrowIcon} />
-                <TextInput multiline={true} style={styles.button} placeholder='Votre message...' />
+                <TextInput onChangeText={(value) => setMessage(value)} multiline={true} style={styles.button} placeholder='Votre message...' />
                 <FontAwesome name="paper-plane" size={24} style={styles.arrowIcon} />
             </KeyboardAvoidingView>
         </SafeAreaView>

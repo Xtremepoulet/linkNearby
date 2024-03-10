@@ -10,6 +10,11 @@ const cors = require('cors');
 const fileUpload = require('express-fileupload');
 
 
+//import des bases de données 
+const Channels = require('./models/channel');
+const Message = require('./models/messages');
+
+
 // Fonctions
 const updateUserStatus = require('./modules/updateUserStatus');
 

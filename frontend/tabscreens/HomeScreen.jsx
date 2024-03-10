@@ -30,8 +30,6 @@ export default function HomeScreen({ navigation }) {
     const infoUser = useSelector((state) => state.users.value);
     // const token = useSelector((state) => state.users.value.token);
 
-    console.log(token)
-
     useEffect(() => {
         const socket = io(CONNECTION_BACKEND, {
             query: { token: infoUser.token },
