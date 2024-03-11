@@ -90,8 +90,6 @@ io.on('connection', (socket) => {
             await new_message.save();
             channel.messages.push(new_message._id);
             await channel.save();
-
-
             //utile ou non ? 
             // const room = channel._id;    
             // socket.join(room);

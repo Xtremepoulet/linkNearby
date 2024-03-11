@@ -23,7 +23,7 @@ export default function ConversationScreen({ navigation, route }) {
     const [message, setMessage] = useState('');
     const [channelMessage, setChannelMessage] = useState([]);
     const [messageReceived, setMessageReceived] = useState(false);
-    
+
     
     const socket = io(CONNECTION_BACKEND, {
         query: { token: user_token },
@@ -46,7 +46,6 @@ export default function ConversationScreen({ navigation, route }) {
                 // setChannelMessage([...channelMessage, message]); 
                 load_messages();
                 setMessageReceived(true); // Set messageReceived flag to true   
-
             });
         }
         return () => {
@@ -85,14 +84,15 @@ export default function ConversationScreen({ navigation, route }) {
         // return <View key={i} style={styles.alignRight} >
         // <Text multiline={true} style={styles.msg}>{user.message}</Text>
         // </View>
-        if(user._id === userId){
+        console.log(user)
+        if(user.user_id !== userId){
             return <View key={i} style={styles.alignRight} >
             <Text multiline={true} style={styles.msg}>{user.message}</Text>
             </View>
         }else {
             return <View key={i} style={styles.alignLeft} >
             <Image style={styles.image} source={{ uri : uri }} />
-            <Text multiline={true} style={styles.msg}>{user.message}</Text>
+            <Text multiline={true} style={styles.distant_msg}>{user.message}</Text>
             </View>
         }            
     })
@@ -122,7 +122,7 @@ export default function ConversationScreen({ navigation, route }) {
 
             <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : null} style={styles.footer}>
                 <FontAwesome name="camera" size={24} style={styles.arrowIcon} />
-                <TextInput value={message} onChangeText={(value) => setMessage(value)} multiline={true} style={styles.button} placeholder='Votre message...' />
+                <TextInput value={message} onChangeText={(value) => setMessage(value)} multiline={true} style={styles.input} placeholder='Votre message...' />
                 <FontAwesome onPress={() => send_message()} name="paper-plane" size={24} style={styles.arrowIcon} />
             </KeyboardAvoidingView>
         </SafeAreaView>
@@ -137,7 +137,8 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         padding: 10,
-        borderBottomWidth: 1
+        borderBottomWidth: 1,
+        backgroundColor: '#d48844',
     },
     arrowIcon: {
         paddingRight: 10,
@@ -146,12 +147,12 @@ const styles = StyleSheet.create({
         fontSize: 24,
         fontWeight: 'bold',
     },
-    button: {
+    input: {
         borderRadius: 5,
         backgroundColor: 'white',
         borderWidth: 1,
-        width: width * 0.80,
-        height: height * 0.05,
+        width: '80%',
+        padding: 3,
     },
     container_messages: {
         flexGrow: 1,
@@ -165,6 +166,7 @@ const styles = StyleSheet.create({
     image: {
         height: 45,
         width: 45,
+        borderRadius: 50,
     },
     imageMsg: {
         height: 35,
@@ -177,9 +179,19 @@ const styles = StyleSheet.create({
     },
     msg: {
         borderWidth: 1,
-        borderColor: '#F98F22',
+        borderColor: '#e88e3c',
         borderRadius: 10,
-        backgroundColor: '#F98F22',
+        backgroundColor: '#e88e3c',
+        color: 'white',
+        padding: 5,
+        maxWidth: '75%',
+        overflow: 'hidden',
+    },
+    distant_msg: {
+        borderWidth: 1,
+        borderColor: '#a1b0c2',
+        borderRadius: 10,
+        backgroundColor: '#a1b0c2',
         color: 'white',
         padding: 5,
         maxWidth: '75%',
@@ -189,6 +201,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         padding: 5,
+        gap: 5,
         width: '100%',
         backgroundColor: 'white',
         justifyContent: 'flex-start'
@@ -197,6 +210,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         padding: 5,
+        gap: 5,
         width: '100%',
         backgroundColor: 'white',
         justifyContent: 'flex-end'
