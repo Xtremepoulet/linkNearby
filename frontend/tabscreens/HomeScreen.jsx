@@ -31,26 +31,27 @@ export default function HomeScreen({ navigation }) {
     // const token = useSelector((state) => state.users.value.token);
 
     useEffect(() => {
-        const socket = io(CONNECTION_BACKEND, {
-            query: { token: infoUser.token },
-            transports: ['websocket'],
-        });
+        getUsers();
+        // const socket = io(CONNECTION_BACKEND, {
+        //     query: { token: infoUser.token },
+        //     transports: ['websocket'],
+        // });
 
-        socket.on('connect', () => {
-            console.log('Connected to Socket.IO server');
-        });
+        // socket.on('connect', () => {
+        //     console.log('Connected to Socket.IO server');
+        // });
 
-        socket.on('userStatusChanged', ({ userId, isConnected }) => {
-            console.log(`User ${userId} is now ${isConnected ? 'online' : 'offline'}`);
-            getUsers(); // Rafraîchir la liste des utilisateurs chaque fois qu'un changement d'état est détecté
-        });
+        // socket.on('userStatusChanged', ({ userId, isConnected }) => {
+        //     console.log(`User ${userId} is now ${isConnected ? 'online' : 'offline'}`);
+        //    // Rafraîchir la liste des utilisateurs chaque fois qu'un changement d'état est détecté
+        // });
 
-        return () => {
-            socket.off('connect');
-            socket.off('userStatusChanged');
-            socket.disconnect();
-        };
-    }, [infoUser.token, getUsers]);
+        // return () => {
+        //     socket.off('connect');
+        //     socket.off('userStatusChanged');
+        //     socket.disconnect();
+        // };
+    }, []);
 
 
     // Fonction pour rafraichir la liste des utilisateurs en tirant vers le bas

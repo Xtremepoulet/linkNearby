@@ -19,10 +19,12 @@ export default function ConversationScreen({ navigation, route }) {
     const user_token = useSelector((state) => state.users.value.token);
 
 
+
     const [message, setMessage] = useState('');
     const [channelMessage, setChannelMessage] = useState([]);
-
- 
+    const [messageReceived, setMessageReceived] = useState(false);
+    
+    
     const socket = io(CONNECTION_BACKEND, {
         query: { token: user_token },
         transports: ['websocket'],
@@ -30,17 +32,28 @@ export default function ConversationScreen({ navigation, route }) {
 
 
     // a voir si on en a l'utilité 
-    socket.on('message received', () => {
-        load_messages();
-    })
-
+    // socket.on('message received', (message) => {
+    //     setChannelMessage([...channelMessage,message])
+    // })
 
 
     useEffect(() => {
-      
-        load_messages();
-        
+        load_messages();//pas ouf mais fonctionne
+
+        // Add listener for 'message received' event only once when component loads
+        if (!messageReceived) {
+            socket.on('message received', (message) => {
+                // setChannelMessage([...channelMessage, message]); 
+                load_messages();
+                setMessageReceived(true); // Set messageReceived flag to true   
+
+            });
+        }
+        return () => {
+            socket.disconnect();
+        };
     }, []);
+
 
     const load_messages = async () => {
 
@@ -61,7 +74,6 @@ export default function ConversationScreen({ navigation, route }) {
     }
 
 
-
     const send_message = () => {
         socket.emit('send private message', ({distant_user_id : userId, message: message}));
         setMessage('');
@@ -70,10 +82,6 @@ export default function ConversationScreen({ navigation, route }) {
 
 
     const messages_to_display = channelMessage.map((user, i) => {
-      
-        console.log(user._id)
-        console.log(userId)
-
         // return <View key={i} style={styles.alignRight} >
         // <Text multiline={true} style={styles.msg}>{user.message}</Text>
         // </View>
@@ -82,7 +90,7 @@ export default function ConversationScreen({ navigation, route }) {
             <Text multiline={true} style={styles.msg}>{user.message}</Text>
             </View>
         }else {
-            return <View style={styles.alignLeft} >
+            return <View key={i} style={styles.alignLeft} >
             <Image style={styles.image} source={{ uri : uri }} />
             <Text multiline={true} style={styles.msg}>{user.message}</Text>
             </View>
