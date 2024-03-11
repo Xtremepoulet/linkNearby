@@ -40,25 +40,21 @@ export default function HomeScreen({ navigation }) {
             transports: ['websocket'],
         });
 
-        // Écouter l'événement de connexion pour confirmer que le socket est connecté
-        socket.on('connect', () => {
-            console.log('Connecté au serveur Socket.IO');
-        });
+        // socket.on('connect', () => {
+        //     console.log('Connected to Socket.IO server');
+        // });
 
-        // Assumer que chaque connexion est un nouvel utilisateur connecté
-        // Mettez à jour votre application en conséquence ici
-
-        socket.on('disconnect', () => {
-            console.log('Déconnecté du serveur Socket.IO');
-            // Mettre à jour l'état de l'application pour refléter la déconnexion de l'utilisateur
+        socket.on('userStatusChanged', ({ userId, isConnected }) => {
+            console.log(`User ${userId} is now ${isConnected ? 'online' : 'offline'}`);
+            // Rafraîchir la liste des utilisateurs chaque fois qu'un changement d'état est détecté
         });
 
         return () => {
             socket.off('connect');
-            socket.off('disconnect');
+            socket.off('userStatusChanged');
             socket.disconnect();
         };
-    }, [infoUser.token]);
+    }, []);
 
 
     // Fonction pour rafraichir la liste des utilisateurs en tirant vers le bas
