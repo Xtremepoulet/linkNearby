@@ -2,12 +2,50 @@ import { Pressable, StyleSheet, Text, View, Image, TextInput, KeyboardAvoidingVi
 import logoLinkNearby from '../assets/linkNearbyBackNone.webp';
 import { useDispatch, useSelector } from 'react-redux';
 import { deleteReducerValue } from '../reducers/users';
+import { useEffect } from 'react';
+import Constants from 'expo-constants';
+const CONNECTION_BACKEND = Constants.expoConfig?.extra?.CONNECTION_BACKEND;
 
 
 export default function FirstLoginScreen({ navigation }) {
 
     const Container = Platform.OS === 'ios' ? SafeAreaView : View;
     const dispatch = useDispatch();
+
+    const infoUser = useSelector((state) => state.users.value);
+
+
+    useEffect(() => {
+        verifyToken()
+    })
+
+    const verifyToken = async () => {
+        if (!infoUser.token) {
+            return;
+        }
+
+        try {
+            const response = await fetch(`${CONNECTION_BACKEND}/auth/verifyToken`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `${infoUser.token}`
+                }
+            });
+            const result = await response.json();
+
+            if (result.result) {
+                console.log('Token est toujours valide');
+                navigation.reset({
+                    index: 0,
+                    routes: [{ name: 'TabNavigator' }],
+                });
+            }
+        } catch (error) {
+            console.error('Erreur lors de la vérification du token:', error);
+        }
+    };
+
 
 
 

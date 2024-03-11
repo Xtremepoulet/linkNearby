@@ -27,11 +27,8 @@ export default function ActivateLocalisationScreen({ navigation }) {
 
             if (status === 'granted') {
                 const location = await Location.getCurrentPositionAsync({});
-                console.log(location);
                 Location.watchPositionAsync({ distanceInterval: 10 },
                     (location) => {
-                        console.log('location' + location);
-
                         dispatch(turnOnLocation(true));
                         dispatch(addLatitude(location.coords.latitude))
                         dispatch(addLongitude(location.coords.longitude))

@@ -6,6 +6,9 @@ import logoLinkNearby from '../assets/linkNearbyBackNone.webp';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Card from '../components/HomeCard';
 import { RefreshControl } from 'react-native';
+import * as Location from 'expo-location';
+import { getDistance } from 'geolib';
+
 
 import { SafeAreaView } from 'react-native-safe-area-context'; // composant pour gérer les zones safe sur ios et android
 import { ScrollView } from 'react-native';
@@ -17,18 +20,19 @@ const CONNECTION_BACKEND = Constants.expoConfig?.extra?.CONNECTION_BACKEND;
 
 const { width, height } = Dimensions.get('window'); // Recupere la dimension de l'écran
 
+import { addLatitude, addLongitude, turnOnLocation } from "../reducers/users";
+
 
 
 export default function HomeScreen({ navigation }) {
 
-    const token = useSelector((state) => state.users.value.token)
-
     const [refreshing, setRefreshing] = useState(false);
-
     const [users, setUsers] = useState([])
 
     const infoUser = useSelector((state) => state.users.value);
     // const token = useSelector((state) => state.users.value.token);
+
+    const dispatch = useDispatch();
 
     useEffect(() => {
         const socket = io(CONNECTION_BACKEND, {
@@ -67,6 +71,7 @@ export default function HomeScreen({ navigation }) {
             headers: { 'Content-Type': 'application/json', 'authorization': infoUser.token },
         })
         getUsers()
+        getLocation()
     }, [])
 
     // Recuperation les utilisateurs
@@ -85,6 +90,15 @@ export default function HomeScreen({ navigation }) {
     };
 
     const usersList = users.map((user) => {
+        let distance = user.location[0] ? getDistance(
+            { latitude: infoUser.latitude, longitude: infoUser.longitude },
+            { latitude: user.location[0].latitude, longitude: user.location[0].longitude }
+        ) : null;
+
+        // Convertir en kilomètres avec au moins 500 mètres comme minimum
+        distance = distance < 500 ? 500 : distance;
+        const distanceDisplay = distance >= 1000 ? `${(distance / 1000).toFixed(1)} km` : `${distance} m`;
+
         const birthdate = new Date(user.birthdate);
         const today = new Date();
         let age = today.getFullYear() - birthdate.getFullYear();
@@ -103,12 +117,29 @@ export default function HomeScreen({ navigation }) {
                 passions={user.passions}
                 email={user.email}
                 bio={user.bio}
-                userId={user.userId}
+                distance={distanceDisplay}
             />
         );
     });
 
-                                
+
+
+
+    const getLocation = async () => {
+        const { status } = await Location.requestForegroundPermissionsAsync();
+
+        if (status === 'granted') {
+            // const location = await Location.getCurrentPositionAsync({});
+            Location.watchPositionAsync({ distanceInterval: 10 },
+                (location) => {
+                    dispatch(turnOnLocation(true));
+                    dispatch(addLatitude(location.coords.latitude))
+                    dispatch(addLongitude(location.coords.longitude))
+                });
+        }
+    }
+
+
 
     return (
         <KeyboardAvoidingView

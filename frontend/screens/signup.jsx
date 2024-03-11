@@ -47,7 +47,7 @@ const Signup = ({ navigation }) => {
             navigation.navigate('ChooseNameScreen')
         }
     }
-    
+
     const Container = Platform.OS === 'ios' ? SafeAreaView : View;
     return (
 
@@ -67,11 +67,17 @@ const Signup = ({ navigation }) => {
                 {/* bottom section */}
                 <View style={styles.body}>
                     <View style={styles.input_container}>
-                        <TextInput value={email} onChangeText={(value) => setEmail(value.toLocaleLowerCase())} style={styles.text_input} placeholder="Email..."></TextInput>
+                        <TextInput value={email} onChangeText={(value) => setEmail(value.toLocaleLowerCase())} style={styles.text_input} placeholder="Email..."
+                            keyboardType="email-address"
+                            autoCapitalize="none"
+                            autoCorrect={false}></TextInput>
                         {!email_is_valid && <Text style={styles.invalid_message}>Email non valide</Text>}
                     </View>
                     <View style={styles.input_container}>
-                        <TextInput value={password} onChangeText={(value) => setPassword(value)} style={styles.text_input} placeholder="password..."></TextInput>
+                        <TextInput value={password} onChangeText={(value) => setPassword(value)} style={styles.text_input} placeholder="Mot de passe..."
+                            secureTextEntry={true}
+                            autoCapitalize="none"
+                            autoCorrect={false}></TextInput>
                         {!password_is_valid && <Text style={styles.invalid_message}>Mot de passe incorrect</Text>}
                     </View>
                     <TouchableOpacity style={styles.signup_button} onPress={() => user_signup()}>
