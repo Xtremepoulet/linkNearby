@@ -42,7 +42,7 @@ export default function ConversationScreen({ navigation, route }) {
         scrollViewRef.current.scrollToEnd({ animated: true });
       };
 
-
+      
 
     useEffect(() => {
 
@@ -98,7 +98,6 @@ export default function ConversationScreen({ navigation, route }) {
     };
 
     const messages_to_display = channelMessage.map((user, i) => {
-        console.log(user.CreatedAt)
         if(user.user_id !== userId){
             return <View key={i} style={styles.alignRight} >
                 <Text multiline={true} style={styles.msg}>{user.message}</Text>
