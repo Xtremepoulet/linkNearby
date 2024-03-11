@@ -17,7 +17,7 @@ export default function FirstLoginScreen({ navigation }) {
 
     useEffect(() => {
         verifyToken()
-    })
+    }, [])
 
     const verifyToken = async () => {
         if (!infoUser.token) {
