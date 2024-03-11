@@ -29,20 +29,20 @@ export default function ConversationScreen({ navigation, route }) {
 
     const [refreshing, setRefreshing] = useState(false);
 
-    
+
     const socket = io(CONNECTION_BACKEND, {
         query: { token: user_token },
         transports: ['websocket'],
     });
 
 
-    
-      const handleContentSizeChange = () => {
+
+    const handleContentSizeChange = () => {
         // Scroll to the bottom whenever the content size changes
         scrollViewRef.current.scrollToEnd({ animated: true });
-      };
+    };
 
-      
+
 
     useEffect(() => {
 
@@ -51,19 +51,9 @@ export default function ConversationScreen({ navigation, route }) {
 
         load_messages();//pas ouf mais fonctionne
 
-        // Add listener for 'message received' event only once when component loads
-        if (!messageReceived) {
-            socket.on('message received', (message) => {
-                // setChannelMessage([...channelMessage, message]); 
-                load_messages();
-                setMessageReceived(true); // Set messageReceived flag to true   
-            });
-        }
-        return () => {
-            socket.disconnect();
-        };
-    }, []);
+        load_messages();
 
+    }, []);
 
     const load_messages = async () => {
 
@@ -73,19 +63,20 @@ export default function ConversationScreen({ navigation, route }) {
 
         const fetching_data = await fetch(`${CONNECTION_BACKEND}/channel/messages`, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json', 'authorization': user_token},
+            headers: { 'Content-Type': 'application/json', 'authorization': user_token },
             body: JSON.stringify(user_informations_to_send)
         })
 
         const result = await fetching_data.json();
-        if(result.result){
+        if (result.result) {
             setChannelMessage(result.messages)
         }
     }
 
 
+
     const send_message = () => {
-        socket.emit('send private message', ({distant_user_id : userId, message: message}));
+        socket.emit('send private message', ({ distant_user_id: userId, message: message }));
         setMessage('');
     }
 
@@ -98,20 +89,20 @@ export default function ConversationScreen({ navigation, route }) {
     };
 
     const messages_to_display = channelMessage.map((user, i) => {
-        if(user.user_id !== userId){
+        if (user.user_id !== userId) {
             return <View key={i} style={styles.alignRight} >
                 <Text multiline={true} style={styles.msg}>{user.message}</Text>
                 <Text style={styles.date}>{moment(user.CreatedAt).calendar()}</Text>
             </View>
-        }else {
+        } else {
             return <View key={i} style={styles.alignLeft} >
-            <Image style={styles.image} source={{ uri : uri }} />
+                <Image style={styles.image} source={{ uri: uri }} />
                 <View>
                     <Text multiline={true} style={styles.distant_msg}>{user.message}</Text>
                     <Text style={styles.date}>{moment(user.CreatedAt).calendar()}</Text>
                 </View>
             </View>
-        }            
+        }
     })
 
 
@@ -119,11 +110,11 @@ export default function ConversationScreen({ navigation, route }) {
         <SafeAreaView style={styles.container}>
             <View style={styles.header}>
                 <FontAwesome name="arrow-left" size={24} style={styles.arrowIcon} onPress={() => navigation.goBack()} />
-                <Image style={styles.image} source={{ uri : uri }} />
+                <Image style={styles.image} source={{ uri: uri }} />
                 <Text style={styles.headerText}>{name}</Text>
             </View>
 
-            <ScrollView 
+            <ScrollView
                 ref={scrollViewRef}//ref to scrollViewRef with useRef
                 onContentSizeChange={handleContentSizeChange}//when the content size change, we call our function
                 contentContainerStyle={styles.container_messages}
@@ -133,7 +124,7 @@ export default function ConversationScreen({ navigation, route }) {
                         onRefresh={onRefresh}
                     />
                 }
-                >
+            >
                 <View style={styles.containerScroll}>
                     {messages_to_display}
                 </View>
@@ -141,7 +132,7 @@ export default function ConversationScreen({ navigation, route }) {
 
             <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : null} style={styles.footer}>
                 <FontAwesome name="camera" size={24} style={styles.arrowIcon} />
-                <TextInput value={message} onChangeText={(value) => setMessage(value)} multiline={true} style={styles.input} placeholder='Votre message...' />
+                <TextInput value={message} onChangeText={(value) => setMessage(value)} multiline={true} style={styles.button} placeholder='Votre message...' />
                 <FontAwesome onPress={() => send_message()} name="paper-plane" size={24} style={styles.arrowIcon} />
             </KeyboardAvoidingView>
         </SafeAreaView>
@@ -166,12 +157,12 @@ const styles = StyleSheet.create({
         fontSize: 24,
         fontWeight: 'bold',
     },
-    input: {
+    button: {
         borderRadius: 5,
         backgroundColor: 'white',
         borderWidth: 1,
-        width: '80%',
-        padding: 3,
+        width: width * 0.80,
+        height: height * 0.05,
     },
     container_messages: {
         flexGrow: 1,
@@ -185,13 +176,12 @@ const styles = StyleSheet.create({
     image: {
         height: 45,
         width: 45,
-        borderRadius: 50,
     },
     imageMsg: {
         height: 35,
         width: 35,
         shadowColor: '#000',
-        shadowOffset: {width: -30, height: 4},
+        shadowOffset: { width: -30, height: 4 },
         shadowOpacity: 0.2,
         shadowRadius: 3,
     },
@@ -228,7 +218,6 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         padding: 5,
-        gap: 5,
         width: '100%',
         justifyContent: 'flex-start',
         backgroundColor: 'white',
@@ -237,7 +226,6 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         alignItems: 'flex-end',
         padding: 5,
-        gap: 5,
         width: '100%',
         justifyContent: 'flex-end',
         backgroundColor: 'white',
