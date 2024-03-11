@@ -65,22 +65,22 @@ io.on('connection', (socket) => {
 
     // Mettre à jour l'état de connexion de l'utilisateur dans la base de données
     // updateUserStatus(socket.userId, true);
-    // socket.broadcast.emit('userStatusChanged', { userId: socket.userId, isConnected: true });
+    socket.broadcast.emit('userStatusChanged', { userId: socket.userId, isConnected: true });
 
-    // socket.on('disconnect', () => {
-    //     console.log(`User disconnected: ${socket.userId}`);
+    socket.on('disconnect', () => {
+        console.log(`User disconnected: ${socket.userId}`);
 
-    //     // Mettre à jour l'état de connexion de l'utilisateur dans la base de données
-    //     updateUserStatus(socket.userId, false);
-    //     socket.broadcast.emit('userStatusChanged', { userId: socket.userId, isConnected: false });
-    // });
+        // Mettre à jour l'état de connexion de l'utilisateur dans la base de données
+        updateUserStatus(socket.userId, false);
+        socket.broadcast.emit('userStatusChanged', { userId: socket.userId, isConnected: false });
+    });
 
     //reception du message + stockage en BDD. C'est le user socket.userId qui envoie systématiquement le message
     socket.on('send private message', async (payload) => {
         console.log(payload.message);
 
         const channel = await Channels.findOne({ users: { $all: [socket.userId, payload.distant_user_id]}})
-    
+        
         if(channel){
             const new_message = new Message({
                 user_id: socket.userId, 
