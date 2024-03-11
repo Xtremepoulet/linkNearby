@@ -91,7 +91,7 @@ export default function ConversationScreen({ navigation, route }) {
 
 
     const send_message = () => {
-        if (!message) {
+        if (!message || message.trim() === '') {
             return;
         }
         const messageData = {
@@ -122,24 +122,31 @@ export default function ConversationScreen({ navigation, route }) {
     };
 
     const messages_to_display = channelMessage.map((messageData, index) => {
-        // Vérifiez si le message n'est pas de l'utilisateur actuel (c'est-à-dire, c'est un message distant)
         const isUserMessage = messageData.user_id === userId;
         const messageStyle = isUserMessage ? styles.msg : styles.distant_msg;
         const containerStyle = isUserMessage ? styles.alignLeft : styles.alignRight;
-
         const key = messageData.id || `msg-${index}`;
 
+        // Configuration personnalisée pour la méthode .calendar()
+        const calendarFormat = {
+            lastDay: '[Hier à] HH:mm',  // Format pour hier
+            sameDay: '[Aujourd\'hui à] HH:mm',  // Format pour aujourd'hui
+            nextDay: '[Demain à] HH:mm',  // Format pour demain
+            lastWeek: '[le] dddd [à] HH:mm',  // Format pour la semaine dernière
+            nextWeek: 'dddd [à] HH:mm',  // Format pour la semaine prochaine
+            sameElse: 'DD/MM/YYYY [à] HH:mm'  // Format pour toutes les autres dates
+        };
         return (
             <View key={key} style={containerStyle}>
-                {/* N'affichez l'image que pour les messages de l'utilisateur distant */}
                 {isUserMessage && <Image style={styles.image} source={{ uri }} />}
                 <View style={styles.messageDate}>
                     <Text style={messageStyle}>{messageData.message}</Text>
-                    <Text style={styles.date}>{moment(messageData.createdAt).calendar()}</Text>
+                    <Text style={styles.date}>{moment(messageData.CreatedAt).calendar(null, calendarFormat)}</Text>
                 </View>
-            </View >
+            </View>
         );
     });
+
 
 
 
@@ -181,6 +188,7 @@ export default function ConversationScreen({ navigation, route }) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        // backgroundColor: 'white',
     },
     header: {
         flexDirection: 'row',
@@ -239,9 +247,10 @@ const styles = StyleSheet.create({
         borderColor: '#FBA81E',
         borderRadius: 10,
         backgroundColor: '#FBA81E',
+
         color: 'white',
         padding: 5,
-        maxWidth: '75%',  // Limite la largeur maximale à 75% de la largeur du conteneur
+        maxWidth: '80%',  // Limite la largeur maximale à 75% de la largeur du conteneur
         overflow: 'hidden',
         alignSelf: 'flex-start',  // Alignez au début (pour les messages de l'utilisateur actuel)
         margin: 5,  // Ajoute un peu d'espace autour de chaque message
@@ -253,7 +262,8 @@ const styles = StyleSheet.create({
         backgroundColor: '#6865F290',
         color: 'white',
         padding: 5,
-        maxWidth: '75%',  // Limite la largeur maximale à 75% de la largeur du conteneur
+        maxWidth: '70%',
+        width: '100%',  // Limite la largeur maximale à 75% de la largeur du conteneur
         overflow: 'hidden',
         alignSelf: 'flex-end',  // Alignez au début (pour les messages distants)
         margin: 5,  // Ajoute un peu d'espace autour de chaque message
@@ -265,7 +275,6 @@ const styles = StyleSheet.create({
         gap: 5,
         width: '100%',
         justifyContent: 'flex-start',
-        backgroundColor: 'white',
     },
     alignRight: {
         flexDirection: 'column',
@@ -274,7 +283,7 @@ const styles = StyleSheet.create({
         gap: 5,
         width: '100%',
         justifyContent: 'flex-end',
-        backgroundColor: 'white',
+        // backgroundColor: 'white',
     },
     date: {
         fontSize: 11,
