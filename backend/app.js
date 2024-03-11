@@ -62,14 +62,12 @@ io.use((socket, next) => {
 });
 
 io.on('connection', (socket) => {
-
+    
     // Mettre à jour l'état de connexion de l'utilisateur dans la base de données
     // updateUserStatus(socket.userId, true);
     socket.broadcast.emit('userStatusChanged', { userId: socket.userId, isConnected: true });
 
     socket.on('disconnect', () => {
-        console.log(`User disconnected: ${socket.userId}`);
-
         // Mettre à jour l'état de connexion de l'utilisateur dans la base de données
         updateUserStatus(socket.userId, false);
         socket.broadcast.emit('userStatusChanged', { userId: socket.userId, isConnected: false });
