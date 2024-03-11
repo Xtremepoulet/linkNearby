@@ -82,7 +82,7 @@ io.on('connection', (socket) => {
     socket.on('send private message', async (payload) => {
         console.log(payload.message);
 
-        //ATTENTION MESSAGE NE PROVIENT PAS DE L'UTILISATEUR DISTANT MAIS DE NOUS MEME !!!! 
+  
 
         const channel = await Channels.findOne({ users: { $all: [socket.userId, payload.distant_user_id]}})
     
@@ -98,10 +98,10 @@ io.on('connection', (socket) => {
 
 
             //utile ou non ? 
-            // const room = channel._id;
+            // const room = channel._id;    
             // socket.join(room);
     
-            socket.emit('message received');
+            socket.broadcast.emit('message received');
         }
     })
 
