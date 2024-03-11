@@ -44,6 +44,7 @@ const Signup = ({ navigation }) => {
 
         if (user_response.result) {
             dispatch(addToken(user_response.token))
+            dispatch(addEmail(email))
             navigation.navigate('ChooseNameScreen')
         }
     }
