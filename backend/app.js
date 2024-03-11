@@ -62,41 +62,47 @@ io.use((socket, next) => {
 });
 
 io.on('connection', (socket) => {
-    
-    // Mettre à jour l'état de connexion de l'utilisateur dans la base de données
-    // updateUserStatus(socket.userId, true);
-    socket.broadcast.emit('userStatusChanged', { userId: socket.userId, isConnected: true });
+    console.log(`User connected: ${socket.userId}`);
 
-    socket.on('disconnect', () => {
-        // Mettre à jour l'état de connexion de l'utilisateur dans la base de données
-        updateUserStatus(socket.userId, false);
-        socket.broadcast.emit('userStatusChanged', { userId: socket.userId, isConnected: false });
+    socket.on('heartbeat', () => {
+        updateUserStatus(socket.userId, true); // Mettre à jour l'état de connexion de l'utilisateur comme connecté
     });
 
-    //reception du message + stockage en BDD. C'est le user socket.userId qui envoie systématiquement le message
+    socket.on('disconnect', () => {
+        console.log(`User disconnected: ${socket.userId}`);
+        updateUserStatus(socket.userId, false); // Mettre à jour l'état de connexion de l'utilisateur comme déconnecté
+    });
+});
+
+io.on('connection', (socket) => {
+    // Écouter les messages privés et les stocker en BDD
     socket.on('send private message', async (payload) => {
         console.log(payload.message);
 
-        const channel = await Channels.findOne({ users: { $all: [socket.userId, payload.distant_user_id]}})
-        
-        if(channel){
-            const new_message = new Message({
-                user_id: socket.userId, 
-                message: payload.message, //message is from us not the distant user but i make it inside the payload dont know why 
-            })
+        // Trouver le canal de chat basé sur les utilisateurs impliqués
+        const channel = await Channels.findOne({
+            users: { $all: [socket.userId, payload.distant_user_id] }
+        });
 
+        if (channel) {
+            // Créer et sauvegarder le nouveau message
+            const new_message = new Message({
+                user_id: socket.userId,
+                message: payload.message,
+            });
             await new_message.save();
+
+            // Ajouter le message au canal et sauvegarder
             channel.messages.push(new_message._id);
             await channel.save();
-            //utile ou non ? 
-            // const room = channel._id;    
-            // socket.join(room);
-    
-            socket.broadcast.emit('message received', {message: payload.message});
-        }
-    })
 
+            // Émettre le message aux autres clients
+            socket.to(channel._id).emit('message received', { message: payload.message });
+        }
+    });
 });
+
+
 
 
 

@@ -109,7 +109,7 @@ router.get('/passions', async (req, res) => {
 router.get('/users', async (req, res) => {
     try {
         // Filtrer pour ne récupérer que les utilisateurs ayant un nom
-        const users = await User.find({ name: { $ne: null } })
+        const users = await User.find({ uri: { $ne: null } })
             .select('email name birthdate location bio uri gender isConnected _id')
             .populate('userPassion', 'name emoji')
             .exec();

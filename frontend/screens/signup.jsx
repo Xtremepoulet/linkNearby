@@ -1,12 +1,13 @@
 import React, { useState } from "react"
-import { StyleSheet, Text, TextInput, View, TouchableOpacity, KeyboardAvoidingView, Platform, Pressable, SafeAreaView, Image } from 'react-native';
+import { StyleSheet, Text, TextInput, View, TouchableOpacity, KeyboardAvoidingView, Platform, Pressable, SafeAreaView, Image, Dimensions } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import Constants from 'expo-constants';
 import { useDispatch, useSelector } from "react-redux";
-import { addToken } from "../reducers/users";
+import { addToken, addEmail } from "../reducers/users";
 import logoLinkNearby from '../assets/linkNearbyBackNone.webp';
 
 const CONNECTION_BACKEND = Constants.expoConfig?.extra?.CONNECTION_BACKEND;
+const { width, height } = Dimensions.get('window'); // Recupere la dimension de l'écran
 
 const Signup = ({ navigation }) => {
 
@@ -41,7 +42,6 @@ const Signup = ({ navigation }) => {
         })
 
         const user_response = await fetching_data.json();
-
         if (user_response.result) {
             dispatch(addToken(user_response.token))
             dispatch(addEmail(email))
@@ -49,15 +49,14 @@ const Signup = ({ navigation }) => {
         }
     }
 
-    const Container = Platform.OS === 'ios' ? SafeAreaView : View;
     return (
 
         <KeyboardAvoidingView
             behavior={Platform.OS === "ios" ? "padding" : "height"}
             style={styles.container}
-            keyboardVerticalOffset={Platform.OS === "ios" ? 90 : 20} // Ajusté pour iOS
+            keyboardVerticalOffset={Platform.OS === "ios" ? height * 0 : height * 0.10}
         >
-            <Container style={styles.container}>
+            <SafeAreaView style={styles.container} edges={['top']} styleAndroid={{ flex: 1 }}>
                 {/* top section */}
                 <View style={styles.header}>
                     <Image source={logoLinkNearby} style={styles.logo} />
@@ -85,7 +84,7 @@ const Signup = ({ navigation }) => {
                         <Text style={styles.text_button}>Signup</Text>
                     </TouchableOpacity>
                 </View>
-            </Container>
+            </SafeAreaView>
         </KeyboardAvoidingView>
 
     );
@@ -99,7 +98,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: 'white',
-        // justifyContent: 'space-between',
+
     },
     logo: {
         width: 100,

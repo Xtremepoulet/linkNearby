@@ -35,27 +35,30 @@ export default function HomeScreen({ navigation }) {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        getUsers();
         const socket = io(CONNECTION_BACKEND, {
             query: { token: infoUser.token },
             transports: ['websocket'],
         });
 
-        // socket.on('connect', () => {
-        //     console.log('Connected to Socket.IO server');
-        // });
+        // Écouter l'événement de connexion pour confirmer que le socket est connecté
+        socket.on('connect', () => {
+            console.log('Connecté au serveur Socket.IO');
+        });
 
-        socket.on('userStatusChanged', ({ userId, isConnected }) => {
-            console.log(`User ${userId} is now ${isConnected ? 'online' : 'offline'}`);
-           // Rafraîchir la liste des utilisateurs chaque fois qu'un changement d'état est détecté
+        // Assumer que chaque connexion est un nouvel utilisateur connecté
+        // Mettez à jour votre application en conséquence ici
+
+        socket.on('disconnect', () => {
+            console.log('Déconnecté du serveur Socket.IO');
+            // Mettre à jour l'état de l'application pour refléter la déconnexion de l'utilisateur
         });
 
         return () => {
             socket.off('connect');
-            socket.off('userStatusChanged');
+            socket.off('disconnect');
             socket.disconnect();
         };
-    }, []);
+    }, [infoUser.token]);
 
 
     // Fonction pour rafraichir la liste des utilisateurs en tirant vers le bas
@@ -130,7 +133,6 @@ export default function HomeScreen({ navigation }) {
         const { status } = await Location.requestForegroundPermissionsAsync();
 
         if (status === 'granted') {
-            // const location = await Location.getCurrentPositionAsync({});
             Location.watchPositionAsync({ distanceInterval: 10 },
                 (location) => {
                     dispatch(turnOnLocation(true));
