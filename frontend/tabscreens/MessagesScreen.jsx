@@ -11,6 +11,7 @@ const CONNECTION_BACKEND = Constants.expoConfig?.extra?.CONNECTION_BACKEND;
 
 export default function MessagesScreen({ navigation }) {
     const user_token = useSelector((state) => state.users.value.token);
+    const user_email = useSelector((state) => state.users.value.email);
     const [users, setUsers] = useState([]);
     const [refreshing, setRefreshing] = useState(false);
     const [searchName, setSearchName] = useState('');
@@ -38,7 +39,9 @@ export default function MessagesScreen({ navigation }) {
     const filteredUsers = users.filter(user => user.name.toLowerCase().includes(searchName.toLowerCase()));
 
     const message_card = filteredUsers.map((user, i) => {
-        return <MessageCard key={i} name={user.name} uri={user.uri} userId={user._id}></MessageCard>;
+        if (user.email !== user_email) {
+            return <MessageCard key={i} name={user.name} uri={user.uri} userId={user._id}></MessageCard>;
+        }
     });
 
     return (

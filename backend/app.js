@@ -10,6 +10,7 @@ const cors = require('cors');
 const fileUpload = require('express-fileupload');
 
 
+
 //import des bases de données 
 const Channels = require('./models/channel');
 const Message = require('./models/messages');
@@ -74,32 +75,58 @@ io.on('connection', (socket) => {
 });
 
 io.on('connection', (socket) => {
+    console.log(`User connected: ${socket.userId}`);
+
     // Écouter les messages privés et les stocker en BDD
     socket.on('send private message', async (payload) => {
-        console.log(payload.message);
+        const { token, distant_user_id, message } = payload;
 
-        // Trouver le canal de chat basé sur les utilisateurs impliqués
-        const channel = await Channels.findOne({
-            users: { $all: [socket.userId, payload.distant_user_id] }
-        });
+        jwt.verify(token, process.env.TOKEN_SECRET, async (err, decoded) => {
+            if (err) {
+                console.error("Erreur de vérification du token:", err);
+                return;
+            }
 
-        if (channel) {
-            // Créer et sauvegarder le nouveau message
-            const new_message = new Message({
-                user_id: socket.userId,
-                message: payload.message,
+            const userId = decoded.userId;
+
+            // Création du nouveau message
+            const newMessage = new Message({
+                user_id: userId,
+                message: message,
             });
-            await new_message.save();
+            await newMessage.save();
 
-            // Ajouter le message au canal et sauvegarder
-            channel.messages.push(new_message._id);
+            // Trouver ou créer le canal de chat entre les deux utilisateurs
+            let channel = await Channels.findOne({ users: { $all: [userId, distant_user_id] } });
+
+            if (!channel) {
+                // Si le canal n'existe pas, créez-en un nouveau
+                channel = new Channels({
+                    users: [userId, distant_user_id],
+                    messages: [newMessage._id] // Inclure le nouveau message dans le canal
+                });
+            } else {
+                // Si le canal existe, ajoutez le nouveau message à la liste des messages du canal
+                channel.messages.push(newMessage._id);
+            }
+
+            // Sauvegarder les modifications apportées au canal
             await channel.save();
 
-            // Émettre le message aux autres clients
-            socket.to(channel._id).emit('message received', { message: payload.message });
-        }
+            const messageToEmit = {
+                id: newMessage._id,
+                user_id: userId,
+                message: newMessage.message,
+                toUserId: distant_user_id,  // ID de l'utilisateur destinataire
+            };
+
+            // Émettre le message à tous les clients sauf à l'expéditeur
+            socket.broadcast.emit('message received', messageToEmit);
+        });
     });
 });
+
+
 
 
 

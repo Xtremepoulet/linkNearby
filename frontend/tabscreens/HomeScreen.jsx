@@ -35,25 +35,7 @@ export default function HomeScreen({ navigation }) {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        const socket = io(CONNECTION_BACKEND, {
-            query: { token: infoUser.token },
-            transports: ['websocket'],
-        });
 
-        // socket.on('connect', () => {
-        //     console.log('Connected to Socket.IO server');
-        // });
-
-        socket.on('userStatusChanged', ({ userId, isConnected }) => {
-            console.log(`User ${userId} is now ${isConnected ? 'online' : 'offline'}`);
-            // Rafraîchir la liste des utilisateurs chaque fois qu'un changement d'état est détecté
-        });
-
-        return () => {
-            socket.off('connect');
-            socket.off('userStatusChanged');
-            socket.disconnect();
-        };
     }, []);
 
 
