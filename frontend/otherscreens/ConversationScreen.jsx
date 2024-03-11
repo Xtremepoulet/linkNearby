@@ -4,7 +4,10 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useSelector } from 'react-redux';
 import { useState } from 'react';
+import { RefreshControl } from 'react-native';
+import { useRef } from 'react';
 import Constants from 'expo-constants';
+import moment from 'moment/moment.js';
 //socket import 
 import { socket } from '../sockets.js';
 import { io } from 'socket.io-client';
@@ -18,9 +21,13 @@ export default function ConversationScreen({ navigation, route }) {
 
     const user_token = useSelector((state) => state.users.value.token);
 
+    const scrollViewRef = useRef();
 
     const [message, setMessage] = useState('');
     const [channelMessage, setChannelMessage] = useState([]);
+    const [messageReceived, setMessageReceived] = useState(false);
+
+    const [refreshing, setRefreshing] = useState(false);
 
 
     const socket = io(CONNECTION_BACKEND, {
@@ -29,14 +36,20 @@ export default function ConversationScreen({ navigation, route }) {
     });
 
 
-    // a voir si on en a l'utilité 
-    socket.on('message received', () => {
-        load_messages();
-    })
+
+    const handleContentSizeChange = () => {
+        // Scroll to the bottom whenever the content size changes
+        scrollViewRef.current.scrollToEnd({ animated: true });
+    };
 
 
 
     useEffect(() => {
+
+        scrollViewRef.current.scrollToEnd({ animated: true });
+        //permet de scroll tout en bas du composant quand le composant se load 
+
+        load_messages();//pas ouf mais fonctionne
 
         load_messages();
 
@@ -69,21 +82,25 @@ export default function ConversationScreen({ navigation, route }) {
 
 
 
+    const onRefresh = async () => {
+        setRefreshing(true);
+        await load_messages();
+        setRefreshing(false);
+    };
+
     const messages_to_display = channelMessage.map((user, i) => {
-
-
-
-        // return <View key={i} style={styles.alignRight} >
-        // <Text multiline={true} style={styles.msg}>{user.message}</Text>
-        // </View>
-        if (user._id === userId) {
+        if (user.user_id !== userId) {
             return <View key={i} style={styles.alignRight} >
                 <Text multiline={true} style={styles.msg}>{user.message}</Text>
+                <Text style={styles.date}>{moment(user.CreatedAt).calendar()}</Text>
             </View>
         } else {
-            return <View style={styles.alignLeft} >
+            return <View key={i} style={styles.alignLeft} >
                 <Image style={styles.image} source={{ uri: uri }} />
-                <Text multiline={true} style={styles.msg}>{user.message}</Text>
+                <View>
+                    <Text multiline={true} style={styles.distant_msg}>{user.message}</Text>
+                    <Text style={styles.date}>{moment(user.CreatedAt).calendar()}</Text>
+                </View>
             </View>
         }
     })
@@ -95,19 +112,21 @@ export default function ConversationScreen({ navigation, route }) {
                 <FontAwesome name="arrow-left" size={24} style={styles.arrowIcon} onPress={() => navigation.goBack()} />
                 <Image style={styles.image} source={{ uri: uri }} />
                 <Text style={styles.headerText}>{name}</Text>
-                <Text>{userId}</Text>
-
             </View>
 
-            <ScrollView contentContainerStyle={styles.container_messages}>
+            <ScrollView
+                ref={scrollViewRef}//ref to scrollViewRef with useRef
+                onContentSizeChange={handleContentSizeChange}//when the content size change, we call our function
+                contentContainerStyle={styles.container_messages}
+                refreshControl={
+                    <RefreshControl
+                        refreshing={refreshing}
+                        onRefresh={onRefresh}
+                    />
+                }
+            >
                 <View style={styles.containerScroll}>
-
-
                     {messages_to_display}
-                    {/* <View style={styles.alignRight} >
-                        <Text multiline={true} style={styles.msg}>Super bien et toi?</Text>
-                    </View> */}
-                    {/* Add other messages here */}
                 </View>
             </ScrollView>
 
@@ -128,7 +147,8 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         padding: 10,
-        borderBottomWidth: 1
+        backgroundColor: '#6567F010',
+        gap: 10,
     },
     arrowIcon: {
         paddingRight: 10,
@@ -146,7 +166,7 @@ const styles = StyleSheet.create({
     },
     container_messages: {
         flexGrow: 1,
-        justifyContent: 'flex-end'
+        justifyContent: 'flex-end',
     },
     containerScroll: {
         alignItems: 'center',
@@ -160,17 +180,35 @@ const styles = StyleSheet.create({
     imageMsg: {
         height: 35,
         width: 35,
+        shadowColor: '#000',
+        shadowOffset: { width: -30, height: 4 },
+        shadowOpacity: 0.2,
+        shadowRadius: 3,
     },
     footer: {
+        display: 'flex',
         flexDirection: 'row',
         alignItems: 'center',
-        paddingLeft: 5
+        justifyContent: 'space-evenly',
+        padding: 7,
+        gap: 5,
+        backgroundColor: '#6567F010',
     },
     msg: {
         borderWidth: 1,
-        borderColor: '#F98F22',
+        borderColor: '#FBA81E',
         borderRadius: 10,
-        backgroundColor: '#F98F22',
+        backgroundColor: '#FBA81E',
+        color: 'white',
+        padding: 5,
+        maxWidth: '75%',
+        overflow: 'hidden',
+    },
+    distant_msg: {
+        borderWidth: 1,
+        borderColor: '#6865F230',
+        borderRadius: 10,
+        backgroundColor: '#6865F290',
         color: 'white',
         padding: 5,
         maxWidth: '75%',
@@ -181,15 +219,19 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         padding: 5,
         width: '100%',
+        justifyContent: 'flex-start',
         backgroundColor: 'white',
-        justifyContent: 'flex-start'
     },
     alignRight: {
-        flexDirection: 'row',
-        alignItems: 'center',
+        flexDirection: 'column',
+        alignItems: 'flex-end',
         padding: 5,
         width: '100%',
+        justifyContent: 'flex-end',
         backgroundColor: 'white',
-        justifyContent: 'flex-end'
     },
+    date: {
+        fontSize: 11,
+        color: '#000000',
+    }
 });
