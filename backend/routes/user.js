@@ -108,14 +108,14 @@ router.get('/passions', async (req, res) => {
 
 router.get('/users', async (req, res) => {
     try {
-
-        const users = await User.find()
-            .select('email name birthdate location bio uri gender isConnected _id') // Sélection des champs à renvoyer
-            .populate('userPassion', 'name emoji') // Remplacez 'nomDeLaPropriétéDePassion' par les champs que vous souhaitez récupérer de 'userPassion'
-            .exec(); // Exécute la requête
-
+        // Filtrer pour ne récupérer que les utilisateurs ayant un nom
+        const users = await User.find({ name: { $ne: null } })
+            .select('email name birthdate location bio uri gender isConnected _id')
+            .populate('userPassion', 'name emoji')
+            .exec();
 
         const formattedUsers = users.map(user => {
+
             return {
                 email: user.email,
                 name: user.name,
@@ -123,7 +123,7 @@ router.get('/users', async (req, res) => {
                 location: user.location,
                 bio: user.bio,
                 uri: user.uri,
-                passions: user.userPassion.map(passion => ({ id: passion._id, name: passion.name, emoji: passion.emoji })), // Adaptez selon le schéma de 'Passion'
+                passions: user.userPassion.map(passion => ({ id: passion._id, name: passion.name, emoji: passion.emoji })),
                 gender: user.gender,
                 isConnected: user.isConnected,
                 userId: user._id,
@@ -249,8 +249,8 @@ router.post('/delete_user', authenticateToken, async (req, res, next) => {
 
 
 router.post('/update_user_infos', authenticateToken, async (req, res, next) => {
-    if(!checkBody(req.body, ['name', 'email', 'bio', 'gender'])){
-        return res.json({ result : false });
+    if (!checkBody(req.body, ['name', 'email', 'bio', 'gender'])) {
+        return res.json({ result: false });
     }
 
     if (req.user.userId) {
@@ -280,6 +280,6 @@ router.post('/update_user_infos', authenticateToken, async (req, res, next) => {
     }
 })
 
-    
+
 
 module.exports = router; 
