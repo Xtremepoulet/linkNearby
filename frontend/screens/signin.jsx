@@ -14,8 +14,8 @@ const Signin = ({ navigation }) => {
 
     const dispatch = useDispatch();
 
-    const [email, setEmail] = useState('cerisier.jeremy@gmail.com');
-    const [password, setPassword] = useState('123@Lagune');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
     const [password_is_valid, setPassword_is_valid] = useState(true);
     const [email_is_valid, setEmail_is_valid] = useState(true);
 
@@ -81,11 +81,17 @@ const Signin = ({ navigation }) => {
                 {/* bottom section */}
                 <View style={styles.body}>
                     <View style={styles.input_container}>
-                        <TextInput value={email} onChangeText={(value) => setEmail(value.toLocaleLowerCase())} style={styles.text_input} placeholder="Email..."></TextInput>
+                        <TextInput value={email} onChangeText={(value) => setEmail(value.toLocaleLowerCase())} style={styles.text_input} placeholder="Email..."
+                            keyboardType="email-address"
+                            autoCapitalize="none"
+                            autoCorrect={false}></TextInput>
                         {!email_is_valid && <Text style={styles.invalid_message}>Email non valide</Text>}
                     </View>
                     <View style={styles.input_container}>
-                        <TextInput value={password} onChangeText={(value) => setPassword(value)} style={styles.text_input} placeholder="password..."></TextInput>
+                        <TextInput value={password} onChangeText={(value) => setPassword(value)} style={styles.text_input} placeholder="Mot de passe..."
+                            secureTextEntry={true}
+                            autoCapitalize="none"
+                            autoCorrect={false}></TextInput>
                         {!password_is_valid && <Text style={styles.invalid_message}>Mot de passe incorrect</Text>}
                     </View>
                     <TouchableOpacity style={styles.signup_button} onPress={() => user_signin()}>

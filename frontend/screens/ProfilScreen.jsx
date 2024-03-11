@@ -57,7 +57,6 @@ export default function ProfilScreen({ route, navigation }) {
         const result = await fetching_data.json();
 
         if(result.result){
-            socket.emit('send message', {name, userEmail});
             navigation.navigate('ConversationScreen', { userId: userId, name: name});//il faudra aussi mettre l'uri
         }     
     }

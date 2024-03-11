@@ -32,7 +32,7 @@ export default function ParametersScreen({ navigation }) {
 
     const [isBioEditable, setIsBioEditable] = useState(false);
 
-    
+
     const [personal_informations, setPersonal_informations] = useState({});
 
 
@@ -51,22 +51,22 @@ export default function ParametersScreen({ navigation }) {
         })
 
         const result = await fetching_data.json();
-        if(result.result){
+        if (result.result) {
             setPersonal_informations(result.user)
 
             setGender(result.user.gender);
             setBio(result.user.bio);
             setName(result.user.name);
             setEmail(result.user.email);
-    
-            
+
+
         }
     }
 
 
     //enregistrement des modifications de l'utilisateurs
     const save_changes = async () => {
-        if(email_regex.test(email) && bio.length < 500){
+        if (email_regex.test(email) && bio.length < 500) {
 
             //le password et les passions devront etre aussi misent à jours 
             const user_infos = {
@@ -83,33 +83,33 @@ export default function ParametersScreen({ navigation }) {
             })
 
             const result = await fetching_data.json();
-            if(result.result){
+            if (result.result) {
                 setIsEditable(false);
                 setIsValidModification(true);
             }
-        }else{
+        } else {
             setIsValidModification(false);
         }
     }
 
-    
+
     //modal gestion 
     const handleClose = () => {
         setModalVisible(false);
-      };
+    };
 
 
-      //delete the user account 
+    //delete the user account 
     const delete_account = async () => {
         const fetching_data = await fetch(`${CONNECTION_BACKEND}/user/delete_user`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json', 'authorization': user_token },
-            body: JSON.stringify({password})
+            body: JSON.stringify({ password })
         })
         const result = await fetching_data.json();
 
         console.log(result)
-        if(result.result){
+        if (result.result) {
             dispatch(deleteReducerValue());
             navigation.navigate('signinScreen');
         }
@@ -120,22 +120,26 @@ export default function ParametersScreen({ navigation }) {
     //deconnecte l'utilisateur
     const user_deconnexion = () => {
         dispatch(handleDeconnexion());
-        navigation.navigate('signinScreen');
+        navigation.reset({
+            index: 0,
+            routes: [{ name: 'FirstLoginScreen' }],
+        });
+
     }
 
 
 
     const confirm_changes = <View style={styles.container_changes}>
-                                <TouchableOpacity onPress={() => save_changes()} style={styles.button} >
-                                    <Text  style={styles.text_button}>Enregistrer les modifications</Text>
-                                </TouchableOpacity>
-                                {isValidModification ? '' : <Text style={styles.error_message}>Certains champs ne sont pas valide</Text>}
-                            </View>
+        <TouchableOpacity onPress={() => save_changes()} style={styles.button} >
+            <Text style={styles.text_button}>Enregistrer les modifications</Text>
+        </TouchableOpacity>
+        {isValidModification ? '' : <Text style={styles.error_message}>Certains champs ne sont pas valide</Text>}
+    </View>
 
-                            
-                            
 
-{/* <View> 
+
+
+    {/* <View> 
 <TouchableOpacity onPress={() => setIsEditable(!isEditable)} style={styles.edit_button}>
     <FontAwesome name="user" size={24} color={'white'}/>
 </TouchableOpacity>
@@ -156,95 +160,95 @@ export default function ParametersScreen({ navigation }) {
                 </View>
             </View>
             <View style={styles.cardView}>
-                    <ScrollView
-                        showsVerticalScrollIndicator={false}
-                        showsHorizontalScrollIndicator={false}
-                        contentContainerStyle={styles.containerScroll}
-                    >   
+                <ScrollView
+                    showsVerticalScrollIndicator={false}
+                    showsHorizontalScrollIndicator={false}
+                    contentContainerStyle={styles.containerScroll}
+                >
 
-                        <View> 
-                            <TouchableOpacity onPress={() => setIsEditable(!isEditable)} style={styles.edit_button}>
-                                <FontAwesome name="user" size={24} color={'white'}/>
-                            </TouchableOpacity>
+                    <View>
+                        <TouchableOpacity onPress={() => setIsEditable(!isEditable)} style={styles.edit_button}>
+                            <FontAwesome name="user" size={24} color={'white'} />
+                        </TouchableOpacity>
+                    </View>
+
+                    <View style={styles.container_champ}>
+                        <View style={styles.section_description}>
+                            <Text style={styles.section_title}>Personal informations</Text>
                         </View>
 
-                        <View style={styles.container_champ}> 
-                            <View style={styles.section_description}>
-                                <Text style={styles.section_title}>Personal informations</Text>
+                        <View style={styles.user_champ}>
+                            <View style={styles.champ}>
+                                <Text style={styles.text_description}>Name</Text>
+                                <TextInput onChangeText={(value) => setName(value)} style={styles.input_champ} editable={isEditable}>{personal_informations.name}</TextInput>
                             </View>
 
-                            <View style={styles.user_champ}>
-                                <View style={styles.champ}>
-                                    <Text style={styles.text_description}>Name</Text>
-                                    <TextInput onChangeText={(value) => setName(value)} style={styles.input_champ} editable={isEditable}>{personal_informations.name}</TextInput>
-                                </View>
+                            <View style={styles.champ}>
+                                <Text style={styles.text_description}>Email</Text>
+                                <TextInput onChangeText={(value) => setEmail(value)} style={styles.input_champ} editable={isEditable}>{personal_informations.email}</TextInput>
+                            </View>
 
-                                <View style={styles.champ}>
-                                    <Text style={styles.text_description}>Email</Text>
-                                    <TextInput onChangeText={(value) => setEmail(value)} style={styles.input_champ} editable={isEditable}>{personal_informations.email}</TextInput>
-                                </View>
+                            <View style={styles.champ}>
+                                <Text style={styles.text_description}>Password</Text>
+                                <TextInput style={styles.input_champ} value='evidement le password nest pas clear' editable={isEditable}></TextInput>
+                            </View>
 
-                                <View style={styles.champ}>
-                                    <Text style={styles.text_description}>Password</Text>
-                                    <TextInput style={styles.input_champ} value='evidement le password nest pas clear' editable={isEditable}></TextInput>
-                                </View>
+                            <View style={styles.champ}>
+                                <Text style={styles.text_description}>Gender</Text>
+                                <View style={styles.gender_container}>
+                                    <TouchableOpacity onPress={() => setGender('homme')} style={gender === 'homme' ? styles.gender_selected_button : styles.gender_nonSelected_button} >
+                                        <Text style={styles.text_button}>Homme</Text>
+                                    </TouchableOpacity>
 
-                                <View style={styles.champ}>
-                                    <Text style={styles.text_description}>Gender</Text>
-                                    <View style={styles.gender_container}>
-                                        <TouchableOpacity onPress={() => setGender('homme')} style={gender === 'homme' ? styles.gender_selected_button : styles.gender_nonSelected_button} >
-                                            <Text style={styles.text_button}>Homme</Text>
-                                        </TouchableOpacity>
-
-                                        <TouchableOpacity onPress={() => setGender('femme')} style={gender === 'femme' ? styles.gender_selected_button : styles.gender_nonSelected_button} >
-                                            <Text style={styles.text_button}>Femme</Text>
-                                        </TouchableOpacity>
-                                    </View>
+                                    <TouchableOpacity onPress={() => setGender('femme')} style={gender === 'femme' ? styles.gender_selected_button : styles.gender_nonSelected_button} >
+                                        <Text style={styles.text_button}>Femme</Text>
+                                    </TouchableOpacity>
                                 </View>
                             </View>
                         </View>
+                    </View>
 
 
 
-                        {/* gestion de la biographie de lutilisateur */}
-                        <View style={styles.container_champ}> 
-                            <View style={styles.section_description}>
-                                <Text style={styles.section_title}>Biographie</Text>
+                    {/* gestion de la biographie de lutilisateur */}
+                    <View style={styles.container_champ}>
+                        <View style={styles.section_description}>
+                            <Text style={styles.section_title}>Biographie</Text>
+                        </View>
+
+                        <View style={styles.biographie_champ}>
+                            <View>
+                                <TextInput onChangeText={(value) => setBio(value)} editable={isEditable}>{personal_informations.bio}</TextInput>
                             </View>
-                            
-                            <View style={styles.biographie_champ}>
-                                <View>
-                                    <TextInput onChangeText={(value) => setBio(value)} editable={isEditable}>{personal_informations.bio}</TextInput>
-                                </View>
-                                {/* <View style={styles.edit_button_container}>
+                            {/* <View style={styles.edit_button_container}>
                                     <TouchableOpacity onPress={() => setIsBioEditable(!isBioEditable)} style={styles.edit_button} >
                                         <Text>edit</Text>
                                     </TouchableOpacity>
                                 </View> */}
-                            </View>
+                        </View>
+                    </View>
+
+
+                    {/* gestion des passions de lutilisateur */}
+                    <View style={styles.container_champ}>
+                        <View style={styles.section_description}>
+                            <Text style={styles.section_title}>Passions</Text>
                         </View>
 
+                        <View style={styles.passions_champ}>
 
-                        {/* gestion des passions de lutilisateur */}
-                        <View style={styles.container_champ}> 
-                            <View style={styles.section_description}>
-                                <Text style={styles.section_title}>Passions</Text>
-                            </View>
-                            
-                            <View style={styles.passions_champ}>
-            
-                            </View>
                         </View>
+                    </View>
 
-                        {isEditable ? confirm_changes : ''}
+                    {isEditable ? confirm_changes : ''}
 
-                        <TouchableOpacity onPress={() => user_deconnexion()} style={styles.button} >
-                                    <Text style={styles.text_button}>Deconnexion</Text>
-                        </TouchableOpacity>
-                                            
-                        <TouchableOpacity style={styles.button} >
-                                    <Text onPress={() => setModalVisible(true)} style={styles.text_button}>Supprimer le compte</Text>
-                        </TouchableOpacity>
+                    <TouchableOpacity onPress={() => user_deconnexion()} style={styles.button} >
+                        <Text style={styles.text_button}>Deconnexion</Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity style={styles.button} >
+                        <Text onPress={() => setModalVisible(true)} style={styles.text_button}>Supprimer le compte</Text>
+                    </TouchableOpacity>
 
                 </ScrollView>
             </View>
@@ -252,20 +256,20 @@ export default function ParametersScreen({ navigation }) {
 
 
 
-        <Modal visible={modalVisible} animationType="fade" transparent>
-            <View style={styles.centeredView}>
-            <View style={styles.modalView}>
-                <TextInput onChangeText={(value) => setPassword(value)} placeholder="Mot de passe" style={styles.input} />
-                <TouchableOpacity style={styles.modal_button} activeOpacity={0.8}>
-                    <Text onPress={() => delete_account()} style={styles.textButton}>Supprimer</Text>
-                </TouchableOpacity>
-                <TouchableOpacity onPress={() => handleClose()} style={styles.modal_button} activeOpacity={0.8}>
-                    <Text style={styles.textButton}>Fermer</Text>
-                </TouchableOpacity>
-            </View>
-            </View>
-        </Modal>
-        
+            <Modal visible={modalVisible} animationType="fade" transparent>
+                <View style={styles.centeredView}>
+                    <View style={styles.modalView}>
+                        <TextInput onChangeText={(value) => setPassword(value)} placeholder="Mot de passe" style={styles.input} />
+                        <TouchableOpacity style={styles.modal_button} activeOpacity={0.8}>
+                            <Text onPress={() => delete_account()} style={styles.textButton}>Supprimer</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={() => handleClose()} style={styles.modal_button} activeOpacity={0.8}>
+                            <Text style={styles.textButton}>Fermer</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            </Modal>
+
 
         </KeyboardAvoidingView>
     );
@@ -281,7 +285,7 @@ const styles = StyleSheet.create({
     h1: {
         fontSize: 22,
     },
-                    
+
     top_container: {
         width: '100%',
         height: '30%',
@@ -311,7 +315,7 @@ const styles = StyleSheet.create({
         padding: 5,
     },
 
-    image : {
+    image: {
         width: '30%',
         height: '85%',
         borderRadius: 50,
@@ -331,7 +335,7 @@ const styles = StyleSheet.create({
         gap: 20,
     },
 
-    button : {
+    button: {
         width: '70%',
         display: 'flex',
         alignItems: 'center',
@@ -342,16 +346,16 @@ const styles = StyleSheet.create({
         padding: 5,
     },
 
-    text_button : {
+    text_button: {
         color: 'white',
     },
 
-    logo : {
+    logo: {
         width: 30,
         height: 30,
         borderRadius: 5,
     },
-     
+
     cardView: {
         width: width,
         height: '70%',
@@ -363,7 +367,7 @@ const styles = StyleSheet.create({
         gap: 40,
         // backgroundColor: 'purple',
         padding: 30,
-    },  
+    },
 
     container_champ: {
         // backgroundColor: 'red',
@@ -425,7 +429,7 @@ const styles = StyleSheet.create({
     },
 
     champ: {
-        width: '80%', 
+        width: '80%',
         display: 'flex',
     },
 
@@ -513,23 +517,23 @@ const styles = StyleSheet.create({
         elevation: 5,
         width: '80%',
         height: '40%',
-      },
+    },
 
-      input: {
+    input: {
         width: 150,
         borderBottomColor: '#ec6e5b',
         borderBottomWidth: 1,
         fontSize: 16,
-      },
+    },
 
-      textButton: {
+    textButton: {
         color: '#ffffff',
         height: 24,
         fontWeight: '600',
         fontSize: 15,
-      },
+    },
 
-      modal_button : {
+    modal_button: {
         width: '60%',
         display: 'flex',
         alignItems: 'center',
@@ -540,5 +544,5 @@ const styles = StyleSheet.create({
         padding: 5,
     },
 
-    
+
 })

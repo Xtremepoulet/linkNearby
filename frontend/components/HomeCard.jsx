@@ -1,6 +1,7 @@
 import { View, Text, Pressable, Image, StyleSheet, Dimensions } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useNavigation } from '@react-navigation/native';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 const { width, height } = Dimensions.get('window');
 
@@ -55,7 +56,11 @@ function Card(props) {
 
                     <View style={styles.informationProfile}>
                         <Text style={styles.informationPrenom}>{props.name}, {props.age}</Text>
-                        <Text style={styles.informationLocalisation}>📍 à 1 km</Text>
+                        <Text style={styles.informationLocalisation}>
+                            <View style={styles.arrowIcon}>
+                                <FontAwesome name="location-arrow" size={16} style={styles.arrowIcon} />
+                            </View>
+                            à {props.distance}</Text>
                     </View>
                 </Pressable>
             </View>
@@ -142,7 +147,10 @@ const styles = StyleSheet.create({
     passionContainer: {
         marginBottom: 20,
         marginTop: 3,
-    }
+    },
+    arrowIcon: {
+        color: 'white',
+    },
 
 });
 export default Card;

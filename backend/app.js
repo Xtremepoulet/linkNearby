@@ -32,6 +32,7 @@ const app = express();
 const server = http.createServer(app);
 const io = socketIo(server); // Attachez Socket.IO au serveur HTTP
 
+
 // Middlewares
 app.use(cors());
 app.use(fileUpload());
@@ -61,28 +62,22 @@ io.use((socket, next) => {
 });
 
 io.on('connection', (socket) => {
-    console.log(`User connected: ${socket.userId}`);
 
     // Mettre à jour l'état de connexion de l'utilisateur dans la base de données
-    updateUserStatus(socket.userId, true);
-    socket.broadcast.emit('userStatusChanged', { userId: socket.userId, isConnected: true });
+    // updateUserStatus(socket.userId, true);
+    // socket.broadcast.emit('userStatusChanged', { userId: socket.userId, isConnected: true });
 
-    socket.on('disconnect', () => {
-        console.log(`User disconnected: ${socket.userId}`);
+    // socket.on('disconnect', () => {
+    //     console.log(`User disconnected: ${socket.userId}`);
 
-        // Mettre à jour l'état de connexion de l'utilisateur dans la base de données
-        updateUserStatus(socket.userId, false);
-        socket.broadcast.emit('userStatusChanged', { userId: socket.userId, isConnected: false });
-    });
-
-
-
+    //     // Mettre à jour l'état de connexion de l'utilisateur dans la base de données
+    //     updateUserStatus(socket.userId, false);
+    //     socket.broadcast.emit('userStatusChanged', { userId: socket.userId, isConnected: false });
+    // });
 
     //reception du message + stockage en BDD. C'est le user socket.userId qui envoie systématiquement le message
     socket.on('send private message', async (payload) => {
         console.log(payload.message);
-
-        //ATTENTION MESSAGE NE PROVIENT PAS DE L'UTILISATEUR DISTANT MAIS DE NOUS MEME !!!! 
 
         const channel = await Channels.findOne({ users: { $all: [socket.userId, payload.distant_user_id]}})
     
@@ -95,17 +90,22 @@ io.on('connection', (socket) => {
             await new_message.save();
             channel.messages.push(new_message._id);
             await channel.save();
-
-
             //utile ou non ? 
-            // const room = channel._id;
+            // const room = channel._id;    
             // socket.join(room);
     
-            socket.emit('message received');
+            socket.broadcast.emit('message received', {message: payload.message});
         }
     })
 
 });
+
+
+
+io.on('chat channel', (socket) => {
+    console.log('connected to the right channel')
+    socket.emit('chat channel', 'fuck off')
+})
 
 
 

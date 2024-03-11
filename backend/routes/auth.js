@@ -5,6 +5,8 @@ require('../models/connection');
 
 //modules cheackBody
 const { checkBody } = require('../modules/checkBody');
+//middleware
+const { authenticateToken } = require('../middleware/auth');
 
 
 
@@ -37,7 +39,7 @@ router.post('/signin', async (req, res) => {
     }
 });
 
-    
+
 
 router.post('/signup', async (req, res, next) => {
     if (!checkBody(req.body, ['email', 'password'])) {
@@ -45,7 +47,7 @@ router.post('/signup', async (req, res, next) => {
     }
 
     const { email, password } = req.body;
-    
+
     try {
         const password_regex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
         const email_regex = /^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})$/;
@@ -69,6 +71,13 @@ router.post('/signup', async (req, res, next) => {
         return res.status(500).json({ result: false, message: 'Internal server error' });
     }
 });
+
+router.get('/verifyToken', authenticateToken, (req, res) => {
+    res.json({ result: true, message: 'Token is valid' });
+});
+
+
+
 
 
 module.exports = router;

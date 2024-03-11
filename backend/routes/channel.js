@@ -106,6 +106,11 @@ router.post('/messages', authenticateToken, async(req, res, next) => {
 
     if(req.user.userId){
         try{
+            
+            if(!checkBody(req.body, ['distant_user_id'])){
+                return res.json({ result: false, message: 'Missing or invalid champs' });
+            }
+
             const { distant_user_id } = req.body;
             
             console.log(req.user.userId)
