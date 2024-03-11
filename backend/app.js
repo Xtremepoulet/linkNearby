@@ -10,6 +10,11 @@ const cors = require('cors');
 const fileUpload = require('express-fileupload');
 
 
+//import des bases de données 
+const Channels = require('./models/channel');
+const Message = require('./models/messages');
+
+
 // Fonctions
 const updateUserStatus = require('./modules/updateUserStatus');
 
@@ -18,6 +23,8 @@ const indexRouter = require('./routes/index');
 const authRouter = require('./routes/auth');
 const userRouter = require('./routes/user');
 const heartbeatRouter = require('./routes/heartbeat');
+const channelRouter = require('./routes/channel');
+const { channel } = require('diagnostics_channel');
 
 const app = express();
 
@@ -39,6 +46,7 @@ app.use('/', indexRouter);
 app.use('/auth', authRouter);
 app.use('/user', userRouter);
 app.use('/heartbeat', heartbeatRouter);
+app.use('/channel', channelRouter);
 
 
 // Configuration de Socket.IO
@@ -47,6 +55,7 @@ io.use((socket, next) => {
     jwt.verify(token, process.env.TOKEN_SECRET, (err, decoded) => { // Utilisez la clé secrète environnementale
         if (err) return next(new Error('Authentication error'));
         socket.userId = decoded.userId; // Stockez l'ID de l'utilisateur dans l'objet socket pour une utilisation ultérieure
+        //decoded.userId correspond à l'id unique du token JWT de l'utilisateur
         next();
     });
 });
@@ -65,6 +74,36 @@ io.on('connection', (socket) => {
         updateUserStatus(socket.userId, false);
         socket.broadcast.emit('userStatusChanged', { userId: socket.userId, isConnected: false });
     });
+
+
+
+
+    //reception du message + stockage en BDD. C'est le user socket.userId qui envoie systématiquement le message
+    socket.on('send private message', async (payload) => {
+        console.log(payload.message);
+
+        //ATTENTION MESSAGE NE PROVIENT PAS DE L'UTILISATEUR DISTANT MAIS DE NOUS MEME !!!! 
+
+        const channel = await Channels.findOne({ users: { $all: [socket.userId, payload.distant_user_id]}})
+    
+        if(channel){
+            const new_message = new Message({
+                user_id: socket.userId, 
+                message: payload.message, //message is from us not the distant user but i make it inside the payload dont know why 
+            })
+
+            await new_message.save();
+            channel.messages.push(new_message._id);
+            await channel.save();
+
+
+            //utile ou non ? 
+            // const room = channel._id;
+            // socket.join(room);
+    
+            socket.emit('message received');
+        }
+    })
 
 });
 

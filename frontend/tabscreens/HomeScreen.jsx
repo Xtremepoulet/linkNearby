@@ -21,6 +21,8 @@ const { width, height } = Dimensions.get('window'); // Recupere la dimension de 
 
 export default function HomeScreen({ navigation }) {
 
+    const token = useSelector((state) => state.users.value.token)
+
     const [refreshing, setRefreshing] = useState(false);
 
     const [users, setUsers] = useState([])
@@ -51,8 +53,6 @@ export default function HomeScreen({ navigation }) {
     }, [infoUser.token, getUsers]);
 
 
-
-
     // Fonction pour rafraichir la liste des utilisateurs en tirant vers le bas
     const onRefresh = useCallback(async () => {
         setRefreshing(true);
@@ -76,6 +76,7 @@ export default function HomeScreen({ navigation }) {
             headers: { 'Content-Type': 'application/json' },
         });
         const result = await response.json();
+
         if (result.result) {
             const currentUserEmail = infoUser.email;
             const filteredUsers = result.users.filter(user => user.email !== currentUserEmail);
@@ -102,11 +103,12 @@ export default function HomeScreen({ navigation }) {
                 passions={user.passions}
                 email={user.email}
                 bio={user.bio}
+                userId={user.userId}
             />
         );
     });
 
-
+                                
 
     return (
         <KeyboardAvoidingView
