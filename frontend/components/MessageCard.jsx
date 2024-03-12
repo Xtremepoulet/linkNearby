@@ -33,6 +33,7 @@ const styles = StyleSheet.create({
     card: {
         flexDirection: 'row',
         backgroundColor: 'white',
+        alignItems: 'center',
         marginTop: 5,
         borderRadius: 8,
         height: 80
@@ -43,11 +44,9 @@ const styles = StyleSheet.create({
         padding: 10,
         width: '100%',
     },
-
     nope: {
         padding: 6
     },
-
     message_preview: {
         width: '100%',
         display: 'flex',
