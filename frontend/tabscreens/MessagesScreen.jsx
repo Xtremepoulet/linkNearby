@@ -8,7 +8,7 @@ import { useSelector } from 'react-redux';
 import { RefreshControl } from 'react-native';
 
 const CONNECTION_BACKEND = Constants.expoConfig?.extra?.CONNECTION_BACKEND;
-
+    
 export default function MessagesScreen({ navigation }) {
     const user_token = useSelector((state) => state.users.value.token);
     const user_email = useSelector((state) => state.users.value.email);
