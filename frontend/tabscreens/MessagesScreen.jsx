@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Pressable, StyleSheet, Text, View, Image, TextInput, KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
+import { Pressable, StyleSheet, Text, View, Image, TextInput, KeyboardAvoidingView, Platform, ScrollView, Dimensions } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import MessageCard from '../components/MessageCard';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -7,8 +7,9 @@ import Constants from 'expo-constants';
 import { useSelector } from 'react-redux';
 import { RefreshControl } from 'react-native';
 
+const { width, height } = Dimensions.get('window'); // Recupere la dimension de l'écran
 const CONNECTION_BACKEND = Constants.expoConfig?.extra?.CONNECTION_BACKEND;
-    
+
 export default function MessagesScreen({ navigation }) {
     const user_token = useSelector((state) => state.users.value.token);
     const user_email = useSelector((state) => state.users.value.email);
@@ -57,24 +58,23 @@ export default function MessagesScreen({ navigation }) {
 
     return (
         <SafeAreaView style={styles.container} edges={['top']} styleAndroid={{ flex: 1 }}>
-            <Text style={styles.textTitle}>Discussions <FontAwesome name="comment" size={24} /></Text>
-            <View style={styles.stretch}>
+            <View style={styles.header}>
+                <Text style={styles.textTitle}>Messages <FontAwesome name="comment" size={24} color={'#f0eae9'}/></Text>
                 <TextInput
-                    style={styles.border}
-                    placeholder="Rechercher un utilisateur"
-                    value={searchName}
-                    onChangeText={(text) => setSearchName(text)}
+                        style={styles.input}
+                        placeholder="Rechercher un utilisateur"
+                        value={searchName}
+                        onChangeText={(text) => setSearchName(text)}
                 />
             </View>
             <ScrollView
-                style={styles.oui}
+                style={styles.scroll_container}
                 refreshControl={
                     <RefreshControl
                         refreshing={refreshing}
                         onRefresh={onRefresh}
                     />
                 }>
-                <Text style={styles.textBody}>Messages</Text>
                 {message_card}
             </ScrollView>
         </SafeAreaView>
@@ -83,24 +83,33 @@ export default function MessagesScreen({ navigation }) {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
+        width: width,
+        height: height,
         alignItems: 'center',
+        gap: 15,
     },
-    oui: {
-        flex: 1,
-        width: '95%',
+    header: {
+        width: '100%',
         height: '20%',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: '#F98F22',
+        gap: 5,
     },
-    border: {
+    scroll_container: {
+        width: '95%',
+    },
+    input: {
+        height: 40,
+        width: '80%',
         borderRadius: 5,
-        height: '85%',
-        width: 300,
-        backgroundColor: 'white'
+        padding: 5,
+        backgroundColor: '#f0eae9',
+        
     },
-    stretch: {
-        height: '6%',
-        width: 300,
-    },
+
     textBody: {
         fontSize: 25,
         fontWeight: 'bold',
