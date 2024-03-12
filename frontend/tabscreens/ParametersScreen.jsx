@@ -35,7 +35,7 @@ export default function ParametersScreen({ navigation }) {
 
     const [personal_informations, setPersonal_informations] = useState({});
 
-
+    console.log(user_token)
     const email_regex = /^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})$/;
     // Minimum eight characters, at least one letter, one number and one special character:
     const password_regex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;

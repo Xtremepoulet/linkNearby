@@ -144,4 +144,47 @@ router.post('/messages', authenticateToken, async(req, res, next) => {
 
 
 
+//post channel id 
+//post user distant 
+//update channel pour l'utilisateur distant  distant user message to true 
+//mettre a true tout ce qui n'est pas egal au distant user id 
+
+router.post('/notifications', authenticateToken, async (req, res, next) => {
+
+    if(req.user.userId){
+
+        try{
+            const { distant_user_id } = req.body;
+
+            if(!checkBody(req.body, ['distant_user_id'])){
+                return res.json({ result: false, message: 'Missing or invalid champs' });
+            }
+    
+            const user = await User.findOne({ _id: req.user.userId });
+            const channel = await Channels.findOne({ users: {$all: [user.id, distant_user_id]} })
+    
+            const messages = await channel.populate('messages')
+    
+            
+    
+            for (const message of channel.messages) {
+                if (message.user_id.toString() !== user.id) {
+                    message.isRead = true;
+                    await message.save();
+                }
+            }
+        
+    
+            if(channel){
+                res.json({ result: true, message: messages.messages})
+            }else{
+                res.json({ result: false, error: 'missing or invalid channel'})
+            }
+        }catch(error){
+            return res.status(500).json({ result: false, message: 'Internal server error' });
+        }
+    }
+})
+
+
 module.exports = router;
