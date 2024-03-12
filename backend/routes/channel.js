@@ -149,7 +149,7 @@ router.post('/messages', authenticateToken, async(req, res, next) => {
 //update channel pour l'utilisateur distant  distant user message to true 
 //mettre a true tout ce qui n'est pas egal au distant user id 
 
-router.post('/notifications', authenticateToken, async (req, res, next) => {
+router.post('/update_notifications', authenticateToken, async (req, res, next) => {
 
     if(req.user.userId){
 

@@ -27,7 +27,7 @@ export default function ConversationScreen({ navigation, route }) {
     const [channelMessage, setChannelMessage] = useState([]);
     const [messageReceived, setMessageReceived] = useState(false);
 
-
+    
 
     const [refreshing, setRefreshing] = useState(false);
 
@@ -46,7 +46,7 @@ export default function ConversationScreen({ navigation, route }) {
         scrollViewRef.current.scrollToEnd({ animated: true });
         //permet de scroll tout en bas du composant quand le composant se load 
         load_messages();//pas ouf mais fonctionne
-
+        update_notifications();
 
         const handleMessageReceived = (message) => {
             if (message.toUserId !== userId.toString()) {
@@ -80,6 +80,23 @@ export default function ConversationScreen({ navigation, route }) {
         if (result.result) {
             setChannelMessage(result.messages)
         }
+    }
+
+
+    const update_notifications = async () => {
+
+        const informations_to_send = {
+            distant_user_id: userId,
+        }
+        const fetching_data = await fetch(`${CONNECTION_BACKEND}/channel/update_notifications`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'authorization': user_token },
+            body: JSON.stringify(informations_to_send)
+        })
+
+        const result = await fetching_data.json();
+
+        console.log(result);
     }
 
 
