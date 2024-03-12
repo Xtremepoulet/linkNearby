@@ -32,7 +32,7 @@ export default function MessagesScreen({ navigation }) {
         const result = await fetching_data.json();
         setLastMessage(result.channelLastMessages)
         setUsers(result.users);
-        console.log(result.channelLastMessages[0].unreadMessagesCount);
+        // console.log(result.channelLastMessages[0].unreadMessagesCount);
     };
 
     const onRefresh = async () => {
@@ -47,10 +47,10 @@ export default function MessagesScreen({ navigation }) {
         if (user.email !== user_email) {
             const lastMessageInfo = lastMessage.find(item => item.channel.users.includes(user._id));
             //on trouve le dernier message si l'utilisateur est bien dans la meme room. De ce fait on recupére le message de la room dans laquel le message se trouve
-
+            console.log(lastMessageInfo)
             //si l'un des messages est egal a null on return rien. cela fait office de sécurité en cas d'erreur en BDD 
             if (lastMessageInfo.lastMessage !== null) {
-                return <MessageCard key={i} name={user.name} uri={user.uri} userId={user._id} lastMessage={lastMessageInfo.lastMessage} ></MessageCard>;
+                return <MessageCard key={i} name={user.name} uri={user.uri} userId={user._id} lastMessage={lastMessageInfo.lastMessage} messageCount={lastMessageInfo.unreadMessagesCount}></MessageCard>;
             }
 
 

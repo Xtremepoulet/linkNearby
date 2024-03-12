@@ -17,6 +17,7 @@ function MessageCard(props) {
                     <Text style={styles.txtcolor} >{props.lastMessage.message.substring(0, 20)}...</Text>
                     <Text> - </Text>
                     <Text style={styles.date}>{moment(props.lastMessage.CreatedAt).fromNow()}</Text>
+                    {props.messageCount > 0 ? <Text>{props.messageCount}</Text> : ''}
                 </View>
             </View>
         </Pressable>
