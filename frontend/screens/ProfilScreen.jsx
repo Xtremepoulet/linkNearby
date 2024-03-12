@@ -27,7 +27,7 @@ export default function ProfilScreen({ route, navigation }) {
         transports: ['websocket'],
     });
 
-
+    
 
     const [modalVisible, setModalVisible] = useState(false);
     const { userEmail, name, birthdate, location, bio, gender, passions, picture, isConnected, userId } = route.params;
@@ -55,10 +55,11 @@ export default function ProfilScreen({ route, navigation }) {
         });
 
         const result = await fetching_data.json();
-        console.log(result)
 
-        console.log('userId ' + userId)
-        navigation.navigate('ConversationScreen', { distant_userId: userId, name: name});//il faudra aussi mettre l'uri
+        if(result.result){
+            navigation.navigate('ConversationScreen', { userId: userId, name: name});//il faudra aussi mettre l'uri
+        }
+        
           
     }
 

@@ -17,7 +17,7 @@ const CONNECTION_BACKEND = Constants.expoConfig?.extra?.CONNECTION_BACKEND;
 
 export default function ConversationScreen({ navigation, route }) {
 
-    const { distant_userId, name, uri } = route.params; //route.param nous permet de passer des props lors du chargement de la navigation
+    const { userId, name, uri } = route.params; //route.param nous permet de passer des props lors du chargement de la navigation
 
     const user_token = useSelector((state) => state.users.value.token);
 
@@ -54,7 +54,7 @@ export default function ConversationScreen({ navigation, route }) {
         load_messages();//pas ouf mais fonctionne
 
         const handleMessageReceived = (message) => {
-            if (message.toUserId !== distant_userId.toString()) {
+            if (message.toUserId !== userId.toString()) {
                 setChannelMessage((currentMessages) => [...currentMessages, message]);
             }
         };
@@ -66,13 +66,13 @@ export default function ConversationScreen({ navigation, route }) {
         return () => {
             socket.off('message received', handleMessageReceived);
         };
-    }, [distant_userId]);
+    }, [userId]);
 
 
     const load_messages = async () => {
 
         const user_informations_to_send = {
-            distant_user_id: distant_userId,
+            distant_user_id: userId,
         }
 
         const fetching_data = await fetch(`${CONNECTION_BACKEND}/channel/messages`, {
@@ -94,7 +94,7 @@ export default function ConversationScreen({ navigation, route }) {
         }
         const messageData = {
             token: user_token,
-            distant_user_id: distant_userId,
+            distant_user_id: userId,
             message: message,
         };
 
@@ -120,7 +120,7 @@ export default function ConversationScreen({ navigation, route }) {
     };
 
     const messages_to_display = channelMessage.map((messageData, index) => {
-        const isUserMessage = messageData.user_id === distant_userId;
+        const isUserMessage = messageData.user_id === userId;
         const messageStyle = isUserMessage ? styles.msg : styles.distant_msg;
         const containerStyle = isUserMessage ? styles.alignLeft : styles.alignRight;
         const key = messageData.id || `msg-${index}`;
