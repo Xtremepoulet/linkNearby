@@ -19,7 +19,7 @@ const CONNECTION_BACKEND = Constants.expoConfig?.extra?.CONNECTION_BACKEND;
 
 const { width, height } = Dimensions.get('window'); // Recupere la dimension de l'écran
 
-import { addLatitude, addLongitude, turnOnLocation } from "../reducers/users";
+import { addLatitude, addLongitude, turnOnLocation, addNoReadMessages } from "../reducers/users";
 
 
 
@@ -59,6 +59,7 @@ export default function HomeScreen({ navigation }) {
     const onRefresh = useCallback(async () => {
         setRefreshing(true);
         await getUsers();
+        await getUnreadmessagescount()
         setRefreshing(false);
     }, []);
 
@@ -70,7 +71,23 @@ export default function HomeScreen({ navigation }) {
         })
         getUsers()
         getLocation()
+        getUnreadmessagescount()
     }, [])
+
+
+    const getUnreadmessagescount = async () => {
+        const response = await fetch(`${CONNECTION_BACKEND}/user/unreadmessagescount`, {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json', 'authorization': infoUser.token },
+        });
+        const result = await response.json();
+
+        if (result.result) {
+            dispatch(addNoReadMessages(result.unreadMessagesCount));
+
+        }
+    }
+
 
     // Recuperation les utilisateurs
     const getUsers = async () => {
