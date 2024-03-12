@@ -60,7 +60,8 @@ export default function HomeScreen({ navigation }) {
     const getUsers = async () => {
         const response = await fetch(`${CONNECTION_BACKEND}/user/users`, {
             method: 'GET',
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 'Content-Type': 'application/json', 'authorization': infoUser.token },
+
         });
         const result = await response.json();
 
@@ -88,7 +89,7 @@ export default function HomeScreen({ navigation }) {
         if (m < 0 || (m === 0 && today.getDate() < birthdate.getDate())) {
             age--;
         }
-    
+
         return (
             <Card
                 key={user.email}

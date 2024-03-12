@@ -106,7 +106,7 @@ router.get('/passions', async (req, res) => {
     }
 })
 
-router.get('/users', async (req, res) => {
+router.get('/users', authenticateToken, async (req, res) => {
     try {
         // Filtrer pour ne récupérer que les utilisateurs ayant un nom
         const users = await User.find({ uri: { $ne: null } })
@@ -139,10 +139,10 @@ router.get('/users', async (req, res) => {
 
 
 //get the users positions from database if they are logged
-router.get('/users_position', async (req, res, next) => {
+router.get('/users_position', authenticateToken, async (req, res, next) => {
     try {
         const users = await User.find({ isConnected: true })
-            .select('location name birthdate uri')
+            .select('location name birthdate uri idUser')
             .populate('userPassion', 'name emoji') // Sélection des champs à renvoyer
             .exec(); // Exécute la requête
 
@@ -154,6 +154,7 @@ router.get('/users_position', async (req, res, next) => {
                 birthdate: user.birthdate,
                 passions: user.userPassion.map(passion => ({ id: passion._id, name: passion.name, emoji: passion.emoji })),
                 uri: user.uri,
+                idUser: user._id,
             };
         });
 
