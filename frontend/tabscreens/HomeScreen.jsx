@@ -88,6 +88,9 @@ export default function HomeScreen({ navigation }) {
         }
     };
 
+
+
+
     const usersList = users.map((user) => {
         let distance = user.location[0] ? getDistance(
             { latitude: infoUser.latitude, longitude: infoUser.longitude },

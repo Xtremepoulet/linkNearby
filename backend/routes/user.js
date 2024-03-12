@@ -6,6 +6,8 @@ const { checkBody } = require('../modules/checkBody');
 
 const User = require('../models/user.js');
 const Passion = require('../models/Passion.js');
+const Channels = require('../models/channel.js');
+const Message = require('../models/messages.js');
 const bcrypt = require('bcrypt');
 
 //cloudinary import 
@@ -282,6 +284,36 @@ router.post('/update_user_infos', authenticateToken, async (req, res, next) => {
 
     }
 })
+
+
+router.get('/unreadmessagescount', authenticateToken, async (req, res) => {
+    try {
+        // Récupérer l'ID de l'utilisateur depuis les données du token JWT
+        const userId = req.user.userId;
+
+        // Trouver tous les canaux où l'utilisateur est présent
+        const channels = await Channels.find({ users: userId }).populate({
+            path: 'messages',
+            match: { user_id: { $ne: userId }, isRead: false },
+        });
+
+        let totalUnreadCount = 0;
+
+        // Parcourir chaque canal et compter les messages non lus
+        for (const channel of channels) {
+            // Ajouter le nombre de messages non lus dans ce canal au total
+            totalUnreadCount += channel.messages.length;
+        }
+
+        // Renvoyer le nombre total de messages non lus
+        res.json({ result: true, unreadMessagesCount: totalUnreadCount });
+    } catch (error) {
+        console.error("Erreur lors de la récupération du nombre de messages non lus:", error);
+        res.status(500).json({ message: "Erreur interne du serveur" });
+    }
+});
+
+
 
 
 

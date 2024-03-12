@@ -1,7 +1,7 @@
 import { Pressable, StyleSheet, Text, View, Image, TextInput, KeyboardAvoidingView, Platform, SafeAreaView } from 'react-native';
 import logoLinkNearby from '../assets/linkNearbyBackNone.webp';
 import { useDispatch, useSelector } from 'react-redux';
-import { deleteReducerValue } from '../reducers/users';
+import { deleteReducerValue, addNoReadMessages } from '../reducers/users';
 import { useEffect } from 'react';
 import Constants from 'expo-constants';
 const CONNECTION_BACKEND = Constants.expoConfig?.extra?.CONNECTION_BACKEND;
@@ -17,6 +17,7 @@ export default function FirstLoginScreen({ navigation }) {
 
     useEffect(() => {
         verifyToken()
+
     }, [])
 
     const verifyToken = async () => {
@@ -36,6 +37,7 @@ export default function FirstLoginScreen({ navigation }) {
 
             if (result.result) {
                 console.log('Token est toujours valide');
+                getUnreadmessagescount()
                 navigation.reset({
                     index: 0,
                     routes: [{ name: 'TabNavigator' }],
@@ -45,6 +47,19 @@ export default function FirstLoginScreen({ navigation }) {
             console.error('Erreur lors de la vérification du token:', error);
         }
     };
+
+    const getUnreadmessagescount = async () => {
+        const response = await fetch(`${CONNECTION_BACKEND}/user/unreadmessagescount`, {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json', 'authorization': infoUser.token },
+        });
+        const result = await response.json();
+
+        if (result.result) {
+            dispatch(addNoReadMessages(result.unreadMessagesCount));
+
+        }
+    }
 
 
 

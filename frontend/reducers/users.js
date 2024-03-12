@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-  value: { email: null, token: null, birthdate: null, bio: null, gender: null, passions: [], name: null, uri: null, location: false, longitude: null, latitude: null },
+  value: { email: null, token: null, birthdate: null, bio: null, gender: null, passions: [], name: null, uri: null, location: false, longitude: null, latitude: null, noReadMessages: 0 },
 };
 
 export const usersSlice = createSlice({
@@ -11,6 +11,7 @@ export const usersSlice = createSlice({
     addToken: (state, action) => {
       state.value.token = action.payload;
     },
+
 
     deleteToken: (state, action) => {
       state.value.token = null;
@@ -65,9 +66,13 @@ export const usersSlice = createSlice({
     //delete le token de l'utilisateur si il se deconnecte
     handleDeconnexion: (state, action) => {
       state.value.token = null;
-    }
+    },
+    addNoReadMessages: (state, action) => {
+      state.value.noReadMessages = action.payload;
+    },
+
   },
 });
 
-export const { addEmail, addToken, deleteToken, defineName, defineGender, defineBirthdate, addPassions, removePassions, defineBiography, defineUri, turnOnLocation, addLatitude, addLongitude, deleteReducerValue, handleDeconnexion } = usersSlice.actions;
+export const { addNoReadMessages, addEmail, addToken, deleteToken, defineName, defineGender, defineBirthdate, addPassions, removePassions, defineBiography, defineUri, turnOnLocation, addLatitude, addLongitude, deleteReducerValue, handleDeconnexion } = usersSlice.actions;
 export default usersSlice.reducer;

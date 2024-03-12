@@ -38,9 +38,11 @@ const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
 
+import { useSelector } from 'react-redux';
 
 
-const TabNavigator = (unreadMessagesCount) => {
+const TabNavigator = () => {
+  const unreadMessagesCount = useSelector((state) => state.users.value.noReadMessages);
   return (
     <Tab.Navigator screenOptions={({ route }) => ({
       tabBarIcon: ({ color, size }) => {
