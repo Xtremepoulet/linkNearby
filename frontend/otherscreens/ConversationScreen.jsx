@@ -44,7 +44,7 @@ export default function ConversationScreen({ navigation, route }) {
         scrollViewRef.current.scrollToEnd({ animated: true });
     };
 
-
+    
 
     useEffect(() => {
 
@@ -153,7 +153,7 @@ export default function ConversationScreen({ navigation, route }) {
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.header}>
-                <FontAwesome name="arrow-left" size={24} style={styles.arrowIcon} onPress={() => navigation.goBack()} />
+                <FontAwesome name="arrow-left" size={24} style={styles.arrowIcon} onPress={() => navigation.navigate('Messages')} />
                 <Image style={styles.image} source={{ uri: uri }} />
                 <Text style={styles.headerText}>{name}</Text>
             </View>

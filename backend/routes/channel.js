@@ -96,7 +96,7 @@ router.get('/load_user_channel', authenticateToken, async (req, res, next) => {
 
                 return { channel, lastMessage };
             }))
-
+                
 
             //on retire chaque ID 
             const uniqueUserIds = [...new Set(users_id)];
