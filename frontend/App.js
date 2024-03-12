@@ -40,7 +40,7 @@ const Tab = createBottomTabNavigator();
 
 
 
-const TabNavigator = () => {
+const TabNavigator = (unreadMessagesCount) => {
   return (
     <Tab.Navigator screenOptions={({ route }) => ({
       tabBarIcon: ({ color, size }) => {
@@ -58,13 +58,13 @@ const TabNavigator = () => {
 
         return <FontAwesome name={iconName} size={size} color={color} />;
       },
-      tabBarActiveTintColor: '#ec6e5b',
+      tabBarActiveTintColor: '#F98F22',
       tabBarInactiveTintColor: '#335561',
       headerShown: false,
     })}>
       <Tab.Screen name="Home" component={HomeScreen} />
       <Tab.Screen name="Map" component={MapScreen} />
-      <Tab.Screen name="Messages" component={MessagesScreen} />
+      <Tab.Screen name="Messages" component={MessagesScreen} options={{ tabBarBadge: unreadMessagesCount > 0 ? unreadMessagesCount : null }} />
       <Tab.Screen name="Parameters" component={ParametersScreen} />
     </Tab.Navigator>
   );
