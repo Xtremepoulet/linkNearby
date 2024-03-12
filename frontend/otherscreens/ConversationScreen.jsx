@@ -47,7 +47,6 @@ export default function ConversationScreen({ navigation, route }) {
         //permet de scroll tout en bas du composant quand le composant se load 
         load_messages();//pas ouf mais fonctionne
 
-        socket.emit('authenticate', { token: user_token });
 
         const handleMessageReceived = (message) => {
             if (message.toUserId !== userId.toString()) {

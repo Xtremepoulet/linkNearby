@@ -62,70 +62,63 @@ io.use((socket, next) => {
     });
 });
 
-const activeConnections = new Map();
 io.on('connection', (socket) => {
+    updateUserStatus(socket.userId, true)
 
-    // Ajouter la connexion à la structure de suivi
-    activeConnections.set(socket.userId, socket);
+    socket.on('disconnect', () => {
+        updateUserStatus(socket.userId, false)
+    });
 
-    // Authentifier et attribuer socket.userId
-    socket.on('authenticate', ({ token }) => {
-        jwt.verify(token, process.env.TOKEN_SECRET, (err, decoded) => {
-            if (!err) {
-                socket.userId = decoded.userId;
-                console.log(`Utilisateur ${socket.userId} authentifié.`);
 
-                // Informer les autres utilisateurs de la connexion
-                socket.broadcast.emit('userStatusChanged', { userId: socket.userId, isConnected: true });
-                updateUserStatus(socket.userId, true) // Mettre à jour le statut de l'utilisateur dans la base de données
-                // Écouter les messages privés
-                socket.on('send private message', async (payload) => {
-                    const { distant_user_id, message } = payload;
-                    const newMessage = new Message({
-                        user_id: socket.userId,
-                        message: message,
-                    });
-                    await newMessage.save();
+    // Écouter les messages privés et les stocker en BDD
 
-                    let channel = await Channels.findOne({ users: { $all: [socket.userId, distant_user_id] } });
-                    if (!channel) {
-                        channel = new Channels({ users: [socket.userId, distant_user_id], messages: [newMessage._id] });
-                    } else {
-                        channel.messages.push(newMessage._id);
-                    }
-                    await channel.save();
+    socket.on('send private message', async (payload) => {
+        const { token, distant_user_id, message } = payload;
 
-                    const messageToEmit = { id: newMessage._id, user_id: socket.userId, message: message, toUserId: distant_user_id };
-                    socket.broadcast.emit('message received', messageToEmit);
+        jwt.verify(token, process.env.TOKEN_SECRET, async (err, decoded) => {
+            if (err) {
+                console.error("Erreur de vérification du token:", err);
+                return;
+            }
+
+            const userId = decoded.userId;
+
+            // Création du nouveau message
+            const newMessage = new Message({
+                user_id: userId,
+                message: message,
+            });
+            await newMessage.save();
+
+            // Trouver ou créer le canal de chat entre les deux utilisateurs
+            let channel = await Channels.findOne({ users: { $all: [userId, distant_user_id] } });
+
+            if (!channel) {
+                // Si le canal n'existe pas, créez-en un nouveau
+                channel = new Channels({
+                    users: [userId, distant_user_id],
+                    messages: [newMessage._id] // Inclure le nouveau message dans le canal
                 });
             } else {
-                console.error("Erreur de vérification du token:", err);
+                // Si le canal existe, ajoutez le nouveau message à la liste des messages du canal
+                channel.messages.push(newMessage._id);
             }
+
+            // Sauvegarder les modifications apportées au canal
+            await channel.save();
+
+            const messageToEmit = {
+                id: newMessage._id,
+                user_id: userId,
+                message: newMessage.message,
+                toUserId: distant_user_id,  // ID de l'utilisateur destinataire
+            };
+
+            // Émettre le message à tous les clients sauf à l'expéditeur
+            socket.broadcast.emit('message received', messageToEmit);
         });
     });
-
-    // Gérer la déconnexion
-    socket.on('disconnect', () => {
-        if (socket.userId) {
-            socket.broadcast.emit('userStatusChanged', { userId: socket.userId, isConnected: false });
-            updateUserStatus(socket.userId, false)
-            activeConnections.delete(socket.userId);
-        }
-    });
 });
-
-
-
-
-
-
-
-
-io.on('chat channel', (socket) => {
-    console.log('connected to the right channel')
-    socket.emit('chat channel', 'fuck off')
-})
-
 
 
 //Export de app et server Io

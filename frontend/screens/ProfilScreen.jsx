@@ -6,7 +6,7 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { useNavigation } from '@react-navigation/native';
 import Card from '../components/HomeCard';
 import { useState } from 'react';
-import Constants from 'expo-constants'; 
+import Constants from 'expo-constants';
 
 import { socket } from '../sockets.js';
 import { io } from 'socket.io-client';
@@ -21,13 +21,12 @@ export default function ProfilScreen({ route, navigation }) {
 
     const user_token = useSelector((state) => state.users.value.token);
 
-    //initialisation du socket
     const socket = io(CONNECTION_BACKEND, {
         query: { token: user_token },
         transports: ['websocket'],
     });
 
-    
+
 
     const [modalVisible, setModalVisible] = useState(false);
     const { userEmail, name, birthdate, location, bio, gender, passions, picture, isConnected, userId } = route.params;
@@ -48,6 +47,9 @@ export default function ProfilScreen({ route, navigation }) {
             distant_user_email: userEmail,
         }
 
+
+
+
         const fetching_data = await fetch(`${CONNECTION_BACKEND}/channel/create_channel`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json', 'authorization': user_token },
@@ -56,11 +58,11 @@ export default function ProfilScreen({ route, navigation }) {
 
         const result = await fetching_data.json();
 
-        if(result.result){
-            navigation.navigate('ConversationScreen', { userId: userId, name: name});//il faudra aussi mettre l'uri
+        if (result.result) {
+            navigation.navigate('ConversationScreen', { userId: userId, name: name });//il faudra aussi mettre l'uri
         }
-        
-          
+
+
     }
 
 
