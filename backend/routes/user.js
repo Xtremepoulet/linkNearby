@@ -142,7 +142,8 @@ router.get('/users', async (req, res) => {
 router.get('/users_position', async (req, res, next) => {
     try {
         const users = await User.find({ isConnected: true })
-            .select('location name') // Sélection des champs à renvoyer
+            .select('location name birthdate uri')
+            .populate('userPassion', 'name emoji') // Sélection des champs à renvoyer
             .exec(); // Exécute la requête
 
         const formattedUsers = users.map(user => {
@@ -150,6 +151,9 @@ router.get('/users_position', async (req, res, next) => {
                 location: user.location,
                 isConnected: user.isConnected,
                 name: user.name,
+                birthdate: user.birthdate,
+                passions: user.userPassion.map(passion => ({ id: passion._id, name: passion.name, emoji: passion.emoji })),
+                uri: user.uri,
             };
         });
 
