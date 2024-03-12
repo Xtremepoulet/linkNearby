@@ -12,9 +12,10 @@ function MessageCard(props) {
             </View>
             <View style={styles.msg}>
                 <Text>{props.name}</Text>
-                <Text style={styles.txtcolor} >last message... • il y a 2min</Text>
+                <Text style={styles.txtcolor} >{props.lastMessage.message}</Text>
+               {/* {console.log(props.lastMessage)} */}
+               
             </View>
-
         </Pressable>
     );
 }

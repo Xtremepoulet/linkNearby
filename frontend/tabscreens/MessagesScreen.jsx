@@ -16,17 +16,20 @@ export default function MessagesScreen({ navigation }) {
     const [refreshing, setRefreshing] = useState(false);
     const [searchName, setSearchName] = useState('');
 
+    const [lastMessage, setLastMessage] = useState([]);
+
     useEffect(() => {
         load_channels();
     }, []);
 
     const load_channels = async () => {
-        const fetching_data = await fetch(`${CONNECTION_BACKEND}/channel/load_user_channel`, {
+            const fetching_data = await fetch(`${CONNECTION_BACKEND}/channel/load_user_channel`, {
             method: 'GET',
             headers: { 'authorization': user_token },
         });
 
         const result = await fetching_data.json();
+        setLastMessage(result.channelLastMessages)
         setUsers(result.users);
     };
 
@@ -40,7 +43,15 @@ export default function MessagesScreen({ navigation }) {
 
     const message_card = filteredUsers.map((user, i) => {
         if (user.email !== user_email) {
-            return <MessageCard key={i} name={user.name} uri={user.uri} userId={user._id}></MessageCard>;
+            const lastMessageInfo = lastMessage.find(item => item.channel.users.includes(user._id));
+            //on trouve le dernier message si l'utilisateur est bien dans la meme room. De ce fait on recupére le message de la room dans laquel le message se trouve
+            
+            //si l'un des messages est egal a null on return rien. cela fait office de sécurité en cas d'erreur en BDD 
+            if(lastMessageInfo.lastMessage !== null){
+                return <MessageCard key={i} name={user.name} uri={user.uri} userId={user._id} lastMessage={lastMessageInfo.lastMessage} ></MessageCard>;
+            }
+
+           
         }
     });
 

@@ -15,6 +15,7 @@ const jwt = require('jsonwebtoken');
 //Database
 const User = require('../models/user');
 const Channels = require('../models/channel');
+const Message = require('../models/messages')
 const { authenticateToken } = require('../middleware/auth');
 
 
@@ -79,17 +80,31 @@ router.get('/load_user_channel', authenticateToken, async (req, res, next) => {
                 return acc;
             }, []);
 
-          
+            
+
+            // const channelLastMessages = channels.map(async (channel) => {
+            //     const lastMessage = await Message.findOne({ _id : channel._id }).sort({ createdAt: -1 });
+            //     return { channel, lastMessage };
+            // }));
+
+            const channelLastMessages = await Promise.all(channels.map(async (channel) => {
+                const chan = await Channels.findOne({ _id: channel._id });
+                // const messages = chan.messages[chan.messages.length - 1];
+                const messages = chan.messages[chan.messages.length - 1];
+
+                const lastMessage = await Message.findOne({ _id: messages }).populate('message')
+
+                return { channel, lastMessage };
+            }))
+
+
             //on retire chaque ID 
             const uniqueUserIds = [...new Set(users_id)];
-      
-
             // Fetch user details for all unique user IDs
             const users = await User.find({ _id: { $in: uniqueUserIds } });
 
-
             // Send the user details to the frontend
-            res.json({ result: true, users });
+            res.json({ result: false, users, channelLastMessages});
 
         }catch (error){
             return res.status(500).json({ result: false, message: 'Internal server error' });
