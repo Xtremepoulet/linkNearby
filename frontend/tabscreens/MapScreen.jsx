@@ -3,14 +3,14 @@ import React, { useEffect, useState } from 'react';
 import { KeyboardAvoidingView, Image, StyleSheet, Text, View, Platform } from 'react-native';
 import Constants from 'expo-constants';
 import MapView from 'react-native-maps';
-import { Marker } from 'react-native-maps';
+import { Marker, Callout } from 'react-native-maps';
 import { Dimensions } from 'react-native';
 import { useSelector } from 'react-redux';
 
-
+const { width, height } = Dimensions.get('window'); // Recupere la dimension de l'écran
 const CONNECTION_BACKEND = Constants.expoConfig?.extra?.CONNECTION_BACKEND;
 
-const ProfileScreen = ({ navigation }) => {
+export default function ProfileScreen({ navigation }) {
 
     const latitude = useSelector((state) => state.users.value.latitude);
     const longitude = useSelector((state) => state.users.value.longitude);
@@ -26,6 +26,8 @@ const ProfileScreen = ({ navigation }) => {
     const load_users_position = async () => {
         const fetching_data = await fetch(`${CONNECTION_BACKEND}/user/users_position`);
         const result = await fetching_data.json();
+
+        console.log(result.users)
 
         setUsers_positions(result.users);
     }
@@ -53,14 +55,48 @@ const ProfileScreen = ({ navigation }) => {
     }
 
 
+
     const users_positions_to_display = users_positions.map((user, i) => {
-        let distance = calcCrow(user.location[0].latitude, user.location[0].longitude, latitude, longitude).toFixed(2)
-        //distance inferior of 5 km or 500meters ? 
+        let distance = calcCrow(user.location[0].latitude, user.location[0].longitude, latitude, longitude).toFixed(2);
+
+        const birthdate = new Date(user.birthdate);
+        const today = new Date();
+        let age = today.getFullYear() - birthdate.getFullYear();
+        const m = today.getMonth() - birthdate.getMonth();
+        if (m < 0 || (m === 0 && today.getDate() < birthdate.getDate())) {
+            age--;
+        }
+
 
         if (distance < 0.50) {
-            return <Marker key={i} title={user.name} description={`à ${distance}m`} coordinate={{ latitude: user.location[0].latitude, longitude: user.location[0].longitude }} />
+            return (
+                <Marker
+                    key={i}
+                    coordinate={{ latitude: user.location[0].latitude, longitude: user.location[0].longitude }}
+                >
+                    <Callout>
+                        <View style={styles.descriptionContainer}>
+                            <Image source={{ uri: user.uri }} style={styles.imageUser} />
+                            <View style={styles.descriptionUser}>
+                                <Text style={styles.descriptionName}>{user.name}, {age}</Text>
+                                <View style={styles.descriptionPassionsContainer}>
+                                    {user.passions.slice(0, 3).map((passion, i) => {
+                                        return (
+                                            <View key={i} style={styles.passionBody}>
+                                                <Text style={styles.passionText}>{passion.name} {passion.emoji}</Text>
+                                            </View>
+                                        );
+                                    })}
+
+
+                                </View>
+                            </View>
+                        </View>
+                    </Callout>
+                </Marker>
+            );
         }
-    })
+    });
 
 
     return (
@@ -85,7 +121,7 @@ const ProfileScreen = ({ navigation }) => {
 }
 
 
-export default ProfileScreen;
+
 
 
 const styles = StyleSheet.create({
@@ -94,16 +130,66 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
     },
-
-    img: {
-        width: '100%',
-        height: '100%'
+    map: {
+        width: width,
+        height: height
+    },
+    descriptionContainer: {
+        flexDirection: 'row',
+        // alignItems: 'center',
+        padding: 5,
+        height: height * 0.13,
+        width: width * 0.60,
+        // backgroundColor: 'blue',
+        // justifyContent: 'space-between'
+        alignItems: 'center',
 
     },
+    imageUser: {
+        width: width * 0.18,
+        height: height * 0.09,
+        borderRadius: 50,
+        // width: '30%',
+        // height: '100%',
+        resizeMode: 'cover',
 
-    map: {
-        width: Dimensions.get('window').width,
-        height: Dimensions.get('window').height
+
+        // backgroundColor: 'red'
+    },
+    descriptionUser: {
+        marginLeft: 15,
+        // backgroundColor: 'red',
+        width: '65%',
+        height: '100%',
+
+    },
+    descriptionName: {
+        fontSize: 16,
+        fontWeight: 'bold',
+        height: '20%',
+    },
+    descriptionPassionsContainer: {
+        flexDirection: 'row',
+        width: '100%',
+        height: '80%',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        // backgroundColor: 'yellow',
+        flexWrap: 'wrap',
+        paddingTop: 5
+    },
+    passionText: {
+        fontSize: 10,
+        paddingHorizontal: 5,
+        paddingVertical: 4,
+    },
+    passionBody: {
+        backgroundColor: '#F98F22',
+        alignSelf: 'flex-start',
+        borderRadius: 20,
+        margin: 1,
+
     },
 
 })
+
