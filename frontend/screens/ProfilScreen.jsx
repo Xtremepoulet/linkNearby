@@ -117,7 +117,7 @@ export default function ProfilScreen({ route, navigation }) {
                                     title="Go to message"
                                     onPress={() => handleMessage()}
                                 >
-                                    <Text style={styles.texteButtonMessage}>Envoi un message</Text>
+                                    <FontAwesome name="android-messages" size={24} style={styles.arrowIcon} color={'white'}/>
                                 </Pressable>
                             </View>
                         </View>
@@ -246,6 +246,7 @@ const styles = StyleSheet.create({
     bioText: {
         fontSize: 14,
         paddingHorizontal: 5,
+        padding: 5,
         width: '100%',
         height: '80%',
         textAlignVertical: 'top',
@@ -275,16 +276,17 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     buttonMessage: {
-        width: '70%',
-        height: 30,
+        width: 50,
+        height: 50,
+        padding: 5,
         backgroundColor: '#F98F22',
         justifyContent: 'center',
         alignItems: 'center',
-        borderRadius: 10,
+        borderRadius: 50,
         textAlign: 'center',
     },
     texteButtonMessage: {
-        color: 'black',
+        color: 'white',
         fontSize: 14,
     },
     fullScreenContainer: {
