@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import { KeyboardAvoidingView, Image, StyleSheet, Text, View, Platform } from 'react-native';
+import { KeyboardAvoidingView, Image, StyleSheet, Text, View, Platform, Pressable } from 'react-native';
 import Constants from 'expo-constants';
 import MapView from 'react-native-maps';
 import { Marker, Callout } from 'react-native-maps';
@@ -14,7 +14,7 @@ export default function ProfileScreen({ navigation }) {
 
     const latitude = useSelector((state) => state.users.value.latitude);
     const longitude = useSelector((state) => state.users.value.longitude);
-
+    const token = useSelector((state) => state.users.value.token)
 
     const [users_positions, setUsers_positions] = useState([]);
 
@@ -24,11 +24,11 @@ export default function ProfileScreen({ navigation }) {
     }, [])
 
     const load_users_position = async () => {
-        const fetching_data = await fetch(`${CONNECTION_BACKEND}/user/users_position`);
+        const fetching_data = await fetch(`${CONNECTION_BACKEND}/user/users_position`, {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json', 'authorization': token },
+        });
         const result = await fetching_data.json();
-
-        console.log(result.users)
-
         setUsers_positions(result.users);
     }
 
@@ -66,8 +66,7 @@ export default function ProfileScreen({ navigation }) {
         if (m < 0 || (m === 0 && today.getDate() < birthdate.getDate())) {
             age--;
         }
-
-
+        //navigation.navigate('ProfilScreen', { userId: user.idUser })
         if (distance < 0.50) {
             return (
                 <Marker
@@ -75,23 +74,25 @@ export default function ProfileScreen({ navigation }) {
                     coordinate={{ latitude: user.location[0].latitude, longitude: user.location[0].longitude }}
                 >
                     <Callout>
-                        <View style={styles.descriptionContainer}>
-                            <Image source={{ uri: user.uri }} style={styles.imageUser} />
-                            <View style={styles.descriptionUser}>
-                                <Text style={styles.descriptionName}>{user.name}, {age}</Text>
-                                <View style={styles.descriptionPassionsContainer}>
-                                    {user.passions.slice(0, 3).map((passion, i) => {
-                                        return (
-                                            <View key={i} style={styles.passionBody}>
-                                                <Text style={styles.passionText}>{passion.name} {passion.emoji}</Text>
-                                            </View>
-                                        );
-                                    })}
+                        <Pressable onPress={() => console.log('outch!')}>
+                            <View style={styles.descriptionContainer}>
+                                <Image source={{ uri: user.uri }} style={styles.imageUser} />
+                                <View style={styles.descriptionUser}>
+                                    <Text style={styles.descriptionName}>{user.name}, {age}</Text>
+                                    <View style={styles.descriptionPassionsContainer}>
+                                        {user.passions.slice(0, 3).map((passion, i) => {
+                                            return (
+                                                <View key={i} style={styles.passionBody}>
+                                                    <Text style={styles.passionText}>{passion.name} {passion.emoji}</Text>
+                                                </View>
+                                            );
+                                        })}
 
 
+                                    </View>
                                 </View>
                             </View>
-                        </View>
+                        </Pressable>
                     </Callout>
                 </Marker>
             );
