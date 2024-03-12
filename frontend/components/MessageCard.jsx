@@ -1,5 +1,6 @@
 import { View, Text, Pressable, Image, StyleSheet, Dimensions } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import moment from 'moment/moment.js';
 const { width, height } = Dimensions.get('window');
 
 function MessageCard(props) {
@@ -12,9 +13,11 @@ function MessageCard(props) {
             </View>
             <View style={styles.msg}>
                 <Text>{props.name}</Text>
-                <Text style={styles.txtcolor} >{props.lastMessage.message}</Text>
-               {/* {console.log(props.lastMessage)} */}
-               
+                <View style={styles.message_preview}>
+                    <Text style={styles.txtcolor} >{props.lastMessage.message.substring(0, 20)}...</Text>
+                    <Text> - </Text>
+                    <Text style={styles.date}>{moment(props.lastMessage.CreatedAt).fromNow()}</Text>
+                </View>
             </View>
         </Pressable>
     );
@@ -37,14 +40,27 @@ const styles = StyleSheet.create({
     msg: {
         flexDirection: "column",
         justifyContent: 'space-evenly',
-        padding: 10
+        padding: 10,
+        width: '100%',
     },
 
     nope: {
         padding: 6
     },
+
+    message_preview: {
+        width: '100%',
+        display: 'flex',
+        flexDirection: 'row',
+        gap: 10,
+    },
+
     txtcolor: {
-        color: '#a3a3a3'
-    }
+        color: '#a3a3a3',
+    },
+
+    date: {
+        color: '#00000040',
+    },
 });
 export default MessageCard;
