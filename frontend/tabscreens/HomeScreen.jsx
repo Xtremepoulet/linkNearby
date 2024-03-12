@@ -134,6 +134,7 @@ export default function HomeScreen({ navigation }) {
 
                     <View style={styles.header}>
                         <View style={styles.containerFiltre}>
+
                             <Pressable onPress={() => console.log('aie!')}>
                                 <FontAwesome name="binoculars" size={24} style={styles.arrowIcon} />
                             </Pressable>
