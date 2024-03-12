@@ -88,7 +88,7 @@ export default function HomeScreen({ navigation }) {
         if (m < 0 || (m === 0 && today.getDate() < birthdate.getDate())) {
             age--;
         }
-
+    
         return (
             <Card
                 key={user.email}
@@ -100,6 +100,7 @@ export default function HomeScreen({ navigation }) {
                 email={user.email}
                 bio={user.bio}
                 distance={distanceDisplay}
+                userId={user.userId}
             />
         );
     });
