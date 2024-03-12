@@ -55,10 +55,11 @@ export default function ProfilScreen({ route, navigation }) {
         });
 
         const result = await fetching_data.json();
+        console.log(result)
 
-        if(result.result){
-            navigation.navigate('ConversationScreen', { userId: userId, name: name});//il faudra aussi mettre l'uri
-        }     
+        console.log('userId ' + userId)
+        navigation.navigate('ConversationScreen', { distant_userId: userId, name: name});//il faudra aussi mettre l'uri
+          
     }
 
 
