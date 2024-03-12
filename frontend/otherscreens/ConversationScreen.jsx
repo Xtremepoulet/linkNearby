@@ -27,7 +27,7 @@ export default function ConversationScreen({ navigation, route }) {
     const [channelMessage, setChannelMessage] = useState([]);
     const [messageReceived, setMessageReceived] = useState(false);
 
-    
+
 
     const [refreshing, setRefreshing] = useState(false);
 
@@ -93,10 +93,7 @@ export default function ConversationScreen({ navigation, route }) {
             headers: { 'Content-Type': 'application/json', 'authorization': user_token },
             body: JSON.stringify(informations_to_send)
         })
-
         const result = await fetching_data.json();
-
-        console.log(result);
     }
 
 

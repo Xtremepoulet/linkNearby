@@ -24,7 +24,7 @@ export default function MessagesScreen({ navigation }) {
     }, []);
 
     const load_channels = async () => {
-            const fetching_data = await fetch(`${CONNECTION_BACKEND}/channel/load_user_channel`, {
+        const fetching_data = await fetch(`${CONNECTION_BACKEND}/channel/load_user_channel`, {
             method: 'GET',
             headers: { 'authorization': user_token },
         });
@@ -32,6 +32,7 @@ export default function MessagesScreen({ navigation }) {
         const result = await fetching_data.json();
         setLastMessage(result.channelLastMessages)
         setUsers(result.users);
+        console.log(result.channelLastMessages[0].unreadMessagesCount);
     };
 
     const onRefresh = async () => {
@@ -46,25 +47,25 @@ export default function MessagesScreen({ navigation }) {
         if (user.email !== user_email) {
             const lastMessageInfo = lastMessage.find(item => item.channel.users.includes(user._id));
             //on trouve le dernier message si l'utilisateur est bien dans la meme room. De ce fait on recupére le message de la room dans laquel le message se trouve
-            
+
             //si l'un des messages est egal a null on return rien. cela fait office de sécurité en cas d'erreur en BDD 
-            if(lastMessageInfo.lastMessage !== null){
+            if (lastMessageInfo.lastMessage !== null) {
                 return <MessageCard key={i} name={user.name} uri={user.uri} userId={user._id} lastMessage={lastMessageInfo.lastMessage} ></MessageCard>;
             }
 
-           
+
         }
     });
 
     return (
         <SafeAreaView style={styles.container} edges={['top']} styleAndroid={{ flex: 1 }}>
             <View style={styles.header}>
-                <Text style={styles.textTitle}>Messages <FontAwesome name="comment" size={24} color={'#f0eae9'}/></Text>
+                <Text style={styles.textTitle}>Messages <FontAwesome name="comment" size={24} color={'#f0eae9'} /></Text>
                 <TextInput
-                        style={styles.input}
-                        placeholder="Rechercher un utilisateur"
-                        value={searchName}
-                        onChangeText={(text) => setSearchName(text)}
+                    style={styles.input}
+                    placeholder="Rechercher un utilisateur"
+                    value={searchName}
+                    onChangeText={(text) => setSearchName(text)}
                 />
             </View>
             <ScrollView
@@ -107,7 +108,7 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         padding: 5,
         backgroundColor: '#f0eae9',
-        
+
     },
 
     textBody: {
