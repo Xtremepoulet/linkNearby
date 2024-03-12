@@ -13,7 +13,6 @@ import { getDistance } from 'geolib';
 import { SafeAreaView } from 'react-native-safe-area-context'; // composant pour gérer les zones safe sur ios et android
 import { ScrollView } from 'react-native';
 
-import { socket } from '../sockets.js';
 import { io } from 'socket.io-client';
 
 const CONNECTION_BACKEND = Constants.expoConfig?.extra?.CONNECTION_BACKEND;
@@ -31,12 +30,29 @@ export default function HomeScreen({ navigation }) {
 
     const infoUser = useSelector((state) => state.users.value);
     // const token = useSelector((state) => state.users.value.token);
-
     const dispatch = useDispatch();
 
-    useEffect(() => {
 
+    const socket = io(CONNECTION_BACKEND, {
+        query: { token: infoUser.token },
+        transports: ['websocket'],
+    });
+
+
+
+    useEffect(() => {
+        socket.emit('authenticate', { token: infoUser.token });
+        // Écouter les changements de statut d'utilisateur
+        socket.on('userStatusChanged', ({ userId, isConnected }) => {
+            // Mettre à jour l'état de l'application ici si nécessaire
+        });
+
+        // Nettoyer l'écouteur d'événements lors du démontage du composant
+        return () => {
+            socket.off('userStatusChanged');
+        };
     }, []);
+
 
 
     // Fonction pour rafraichir la liste des utilisateurs en tirant vers le bas

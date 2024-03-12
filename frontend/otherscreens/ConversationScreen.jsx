@@ -31,27 +31,23 @@ export default function ConversationScreen({ navigation, route }) {
 
     const [refreshing, setRefreshing] = useState(false);
 
+    const handleContentSizeChange = () => {
+        // Scroll to the bottom whenever the content size changes
+        scrollViewRef.current.scrollToEnd({ animated: true });
+    };
 
     const socket = io(CONNECTION_BACKEND, {
         query: { token: user_token },
         transports: ['websocket'],
     });
 
-
-
-    const handleContentSizeChange = () => {
-        // Scroll to the bottom whenever the content size changes
-        scrollViewRef.current.scrollToEnd({ animated: true });
-    };
-
-    
-
     useEffect(() => {
 
         scrollViewRef.current.scrollToEnd({ animated: true });
         //permet de scroll tout en bas du composant quand le composant se load 
-
         load_messages();//pas ouf mais fonctionne
+
+        socket.emit('authenticate', { token: user_token });
 
         const handleMessageReceived = (message) => {
             if (message.toUserId !== userId.toString()) {

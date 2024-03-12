@@ -205,7 +205,6 @@ router.get('/user_personnal', authenticateToken, async (req, res, next) => {
                 .select('name email password gender bio uri') // Sélection des champs à renvoyer
                 .exec(); // Exécute la requête
 
-            console.log(user.name)
 
             if (user) {
                 const user_infos = {
@@ -239,7 +238,6 @@ router.post('/delete_user', authenticateToken, async (req, res, next) => {
             const user = await User.findOne({ _id: req.user.userId })
             if (user && await bcrypt.compare(req.body.password, user.hash)) {
 
-                console.log(req.body)
                 const delete_user = await User.deleteOne({ _id: req.user.userId })
                 res.json({ result: true, message: 'user deleted' })
             } else {

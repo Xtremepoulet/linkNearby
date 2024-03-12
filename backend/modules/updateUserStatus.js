@@ -8,12 +8,11 @@ const updateUserStatus = async (userId, isConnected) => {
             {
                 $set: {
                     isConnected: isConnected,
-                    lastHeartbeat: isConnected ? Date.now() : null // Mettez à jour lastHeartbeat uniquement si l'utilisateur est connecté
+                    lastHeartbeat: isConnected ? Date.now() : null // Met à jour lastHeartbeat uniquement si l'utilisateur est connecté
                 }
             },
-            { new: true } // Renvoie le document modifié
+            { new: true }
         );
-        console.log(`Statut de connexion mis à jour pour l'utilisateur ${userId}`);
     } catch (error) {
         console.error(`Erreur lors de la mise à jour du statut de connexion pour l'utilisateur`, error);
     }
