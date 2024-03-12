@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { Pressable, StyleSheet, Text, View, Image, TextInput, KeyboardAvoidingView, Platform, Dimensions } from 'react-native';
+import { Pressable, StyleSheet, Text, View, Image, TextInput, KeyboardAvoidingView, Platform, Dimensions, StatusBar } from 'react-native';
 import { UseSelector, useDispatch, useSelector } from 'react-redux';
 import Constants from 'expo-constants';
 import logoLinkNearby from '../assets/linkNearbyBackNone.webp';
@@ -123,52 +123,57 @@ export default function HomeScreen({ navigation }) {
 
 
     return (
-        <KeyboardAvoidingView
-            behavior={Platform.OS === "ios" ? "padding" : "height"}
-            style={styles.container}
-            keyboardVerticalOffset={Platform.OS === "ios" ? height * 0 : height * -0.01}
-        >
-            <SafeAreaView style={styles.container} edges={['top']} styleAndroid={{ flex: 1 }}>
+        <>
+            <StatusBar barStyle='dark-content' />
+            <KeyboardAvoidingView
+                behavior={Platform.OS === "ios" ? "padding" : "height"}
+                style={styles.container}
+                keyboardVerticalOffset={Platform.OS === "ios" ? height * 0 : height * -0.01}
+            >
+                <SafeAreaView style={styles.container} edges={['top']} styleAndroid={{ flex: 1 }}>
 
-                <View style={styles.header}>
-                    <View style={styles.containerFiltre}>
-                        <Pressable onPress={() => console.log('aie!')}>
-                            <FontAwesome name="bars" size={24} style={styles.arrowIcon} />
-                        </Pressable>
+                    <View style={styles.header}>
+                        <View style={styles.containerFiltre}>
+                            <Pressable onPress={() => console.log('aie!')}>
+                                <FontAwesome name="binoculars" size={24} style={styles.arrowIcon} />
+                            </Pressable>
+                        </View>
+                        <View style={styles.logoMarque}>
+                            <Image source={logoLinkNearby} style={styles.logo} />
+                            <Text style={styles.headerText}>LINK NEARBY</Text>
+                        </View>
                     </View>
-                    <View style={styles.logoMarque}>
-                        <Image source={logoLinkNearby} style={styles.logo} />
-                        <Text style={styles.headerText}>LINK NEARBY</Text>
-                    </View>
-                </View>
-                <View style={styles.body}>
-                    <View style={styles.containertextBody}>
-                        <Text style={styles.textBody}>Linkers</Text>
-                    </View>
+                    <View style={styles.body}>
+                        <View style={styles.containertextBody}>
+                            <Text style={styles.textBody}>Linkers</Text>
+                        </View>
 
-                    <View style={styles.cardView}>
-                        <ScrollView
-                            showsVerticalScrollIndicator={false}
-                            showsHorizontalScrollIndicator={false}
-                            contentContainerStyle={styles.containerScroll}
-                            refreshControl={
-                                <RefreshControl
-                                    refreshing={refreshing}
-                                    onRefresh={onRefresh}
-                                />
-                            }
-                        >
-                            {usersList}
+                        <View style={styles.cardView}>
+                            <ScrollView
+                                showsVerticalScrollIndicator={false}
+                                showsHorizontalScrollIndicator={false}
+                                contentContainerStyle={styles.containerScroll}
+                                refreshControl={
+                                    <RefreshControl
+                                        refreshing={refreshing}
+                                        onRefresh={onRefresh}
+                                    />
+                                }
+                            >
+                                {usersList}
 
-                        </ScrollView>
+                            </ScrollView>
+                        </View>
+
                     </View>
 
-                </View>
 
 
+                </SafeAreaView>
 
-            </SafeAreaView>
-        </KeyboardAvoidingView >
+            </KeyboardAvoidingView >
+        </>
+
     );
 }
 
