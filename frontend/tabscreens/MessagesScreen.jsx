@@ -13,6 +13,7 @@ const CONNECTION_BACKEND = Constants.expoConfig?.extra?.CONNECTION_BACKEND;
 export default function MessagesScreen({ navigation }) {
     const user_token = useSelector((state) => state.users.value.token);
     const user_email = useSelector((state) => state.users.value.email);
+    const isLoaded = useSelector((state) => state.users.value.isLoaded);
     const [users, setUsers] = useState([]);
     const [refreshing, setRefreshing] = useState(false);
     const [searchName, setSearchName] = useState('');
@@ -21,7 +22,7 @@ export default function MessagesScreen({ navigation }) {
 
     useEffect(() => {
         load_channels();
-    }, []);
+    }, [isLoaded]);
 
     const load_channels = async () => {
         const fetching_data = await fetch(`${CONNECTION_BACKEND}/channel/load_user_channel`, {

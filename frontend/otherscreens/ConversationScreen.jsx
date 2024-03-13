@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { StyleSheet, Text, View, TextInput, Dimensions, ScrollView, Image, KeyboardAvoidingView, Platform } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { useState } from 'react';
 import { RefreshControl } from 'react-native';
 import { useRef } from 'react';
@@ -11,16 +11,19 @@ import moment from 'moment/moment.js';
 //socket import 
 import { socket } from '../sockets.js';
 import { io } from 'socket.io-client';
+import { updateIsLoaded } from '../reducers/users';
 
 const { width, height } = Dimensions.get('window');
 const CONNECTION_BACKEND = Constants.expoConfig?.extra?.CONNECTION_BACKEND;
 
 export default function ConversationScreen({ navigation, route }) {
 
+    const dispatch = useDispatch();
+
     const { userId, name, uri } = route.params; //route.param nous permet de passer des props lors du chargement de la navigation
 
     const user_token = useSelector((state) => state.users.value.token);
-
+    const isLoaded = useSelector((state) => state.users.value.isLoaded);
     const scrollViewRef = useRef();
 
     const [message, setMessage] = useState('');
@@ -161,7 +164,11 @@ export default function ConversationScreen({ navigation, route }) {
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.header}>
-                <FontAwesome name="arrow-left" size={24} style={styles.arrowIcon} onPress={() => navigation.navigate('Messages')} />
+                <FontAwesome name="arrow-left" size={24} style={styles.arrowIcon} onPress={() => {
+                    dispatch(updateIsLoaded(!isLoaded))
+                    navigation.navigate('Messages')
+
+                }} />
                 <Image style={styles.image} source={{ uri: uri }} />
                 <Text style={styles.headerText}>{name}</Text>
             </View>

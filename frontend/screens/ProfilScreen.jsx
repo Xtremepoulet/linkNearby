@@ -10,7 +10,8 @@ import Constants from 'expo-constants';
 
 import { socket } from '../sockets.js';
 import { io } from 'socket.io-client';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { updateIsLoaded } from '../reducers/users';
 
 
 const { width, height } = Dimensions.get('window'); // Recupere la dimension de l'écran
@@ -18,9 +19,9 @@ const CONNECTION_BACKEND = Constants.expoConfig?.extra?.CONNECTION_BACKEND;
 
 
 export default function ProfilScreen({ route, navigation }) {
-
+    const dispatch = useDispatch();
     const user_token = useSelector((state) => state.users.value.token);
-
+    const isLoaded = useSelector((state) => state.users.value.isLoaded);
     const socket = io(CONNECTION_BACKEND, {
         query: { token: user_token },
         transports: ['websocket'],
@@ -76,7 +77,10 @@ export default function ProfilScreen({ route, navigation }) {
 
                 <View style={styles.header}>
                     <View style={styles.containerFiltre}>
-                        <Pressable onPress={() => navigation.goBack()}>
+                        <Pressable onPress={() => {
+                            dispatch(updateIsLoaded(!isLoaded))
+                            navigation.goBack()
+                        }}>
                             <FontAwesome name="arrow-left" size={24} style={styles.arrowIcon} />
                         </Pressable>
                     </View>

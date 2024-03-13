@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-  value: { email: null, token: null, birthdate: null, bio: null, gender: null, passions: [], name: null, uri: null, location: false, longitude: null, latitude: null, noReadMessages: 0 },
+  value: { email: null, token: null, birthdate: null, bio: null, gender: null, passions: [], name: null, uri: null, location: false, longitude: null, latitude: null, noReadMessages: 0, isLoaded: false },
 };
 
 export const usersSlice = createSlice({
@@ -70,9 +70,12 @@ export const usersSlice = createSlice({
     addNoReadMessages: (state, action) => {
       state.value.noReadMessages = action.payload;
     },
+    updateIsLoaded: (state, action) => {
+      state.value.isLoaded = action.payload;
+    },
 
   },
 });
 
-export const { addNoReadMessages, addEmail, addToken, deleteToken, defineName, defineGender, defineBirthdate, addPassions, removePassions, defineBiography, defineUri, turnOnLocation, addLatitude, addLongitude, deleteReducerValue, handleDeconnexion } = usersSlice.actions;
+export const { updateIsLoaded, addNoReadMessages, addEmail, addToken, deleteToken, defineName, defineGender, defineBirthdate, addPassions, removePassions, defineBiography, defineUri, turnOnLocation, addLatitude, addLongitude, deleteReducerValue, handleDeconnexion } = usersSlice.actions;
 export default usersSlice.reducer;

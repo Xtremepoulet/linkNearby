@@ -72,7 +72,7 @@ export default function HomeScreen({ navigation }) {
         getUsers()
         getLocation()
         getUnreadmessagescount()
-    }, [])
+    }, [infoUser.isLoaded])
 
 
     const getUnreadmessagescount = async () => {
