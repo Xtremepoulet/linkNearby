@@ -315,6 +315,37 @@ router.get('/unreadmessagescount', authenticateToken, async (req, res) => {
     }
 });
 
+router.post('/setLocation', authenticateToken, async (req, res) => {
+    if (!checkBody(req.body, ['latitude', 'longitude'])) {
+        return res.status(400).json({ result: false, message: 'Missing informations' });
+    }
+
+
+
+    try {
+        const user = await User.findOne({ _id: req.user.userId });
+        if (user) {
+            const result = await User.updateOne(
+                { _id: req.user.userId },
+                {
+                    $set: {
+                        location: {
+                            latitude: req.body.latitude,
+                            longitude: req.body.longitude,
+                        },
+                    },
+                }
+            );
+
+            res.json({ result: true });
+        }
+    } catch (error) {
+        console.error("Erreur lors de la mise à jour de la position de l'utilisateur:", error);
+        res.status(500).json({ message: "Erreur interne du serveur" });
+    }
+}
+);
+
 
 
 

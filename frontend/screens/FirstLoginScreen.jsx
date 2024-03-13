@@ -4,14 +4,16 @@ import { useDispatch, useSelector } from 'react-redux';
 import { deleteReducerValue } from '../reducers/users';
 import { useEffect } from 'react';
 import Constants from 'expo-constants';
+import * as Location from 'expo-location';
+import { addLatitude, addLongitude } from '../reducers/users';
+
 const CONNECTION_BACKEND = Constants.expoConfig?.extra?.CONNECTION_BACKEND;
 
 
-export default function FirstLoginScreen({ navigation }) {
 
+export default function FirstLoginScreen({ navigation }) {
     const Container = Platform.OS === 'ios' ? SafeAreaView : View;
     const dispatch = useDispatch();
-
     const infoUser = useSelector((state) => state.users.value);
 
 
@@ -19,9 +21,20 @@ export default function FirstLoginScreen({ navigation }) {
         verifyToken()
     }, [])
 
+
     const verifyToken = async () => {
         if (!infoUser.token) {
             return;
+        }
+        const getLocation = async () => {
+            const { status } = await Location.requestForegroundPermissionsAsync();
+            if (status !== 'granted') {
+                console.log('Permission to access location was denied');
+                return;
+            }
+            const location = await Location.getCurrentPositionAsync({});
+            dispatch(addLatitude(location.coords.latitude))
+            dispatch(addLongitude(location.coords.longitude))
         }
 
         try {
@@ -36,6 +49,8 @@ export default function FirstLoginScreen({ navigation }) {
 
             if (result.result) {
                 console.log('Token est toujours valide');
+                getLocation()
+                setLocation()
                 navigation.reset({
                     index: 0,
                     routes: [{ name: 'TabNavigator' }],
@@ -46,6 +61,24 @@ export default function FirstLoginScreen({ navigation }) {
         }
     };
 
+    const setLocation = async () => {
+        const response = await fetch(`${CONNECTION_BACKEND}/user/setLocation`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `${infoUser.token}`
+            },
+            body: JSON.stringify({
+                latitude: infoUser.latitude,
+                longitude: infoUser.longitude
+            })
+        })
+
+        const result = await response.json();
+        if (!result.result) {
+            console.log('Erreur lors de la mise à jour de la localisation');
+        }
+    }
 
 
 

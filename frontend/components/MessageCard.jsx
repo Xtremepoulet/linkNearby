@@ -9,12 +9,19 @@ function MessageCard(props) {
 
 
     const display_message_count = <View style={styles.messages_count_container}>
-                                    <View style={styles.message_count_circle}>
-                                        <Text style={styles.statusIndicator}>{props.messageCount}</Text>
-                                    </View>
-                                </View>
+        <View style={styles.message_count_circle}>
+            <Text style={styles.statusIndicator}>{props.messageCount}</Text>
+        </View>
+    </View>
 
-
+    const calendarFormat = {
+        lastDay: '[Hier à] HH:mm',  // Format pour hier
+        sameDay: 'HH:mm',  // Format pour aujourd'hui
+        nextDay: '[Demain à] HH:mm',  // Format pour demain
+        lastWeek: '[le] dddd [à] HH:mm',  // Format pour la semaine dernière
+        nextWeek: 'dddd [à] HH:mm',  // Format pour la semaine prochaine
+        sameElse: 'DD/MM/YYYY [à] HH:mm'  // Format pour toutes les autres dates
+    };
 
     return (
         <Pressable onPress={() => navigation.navigate('ConversationScreen', { userId: props.userId, name: props.name, uri: props.uri })} style={styles.card}>
@@ -23,12 +30,12 @@ function MessageCard(props) {
             </View>
             <View style={styles.msg}>
                 {props.messageCount > 0 ? display_message_count : ''}
-                <Text>{props.name}</Text>
+                <Text style={styles.message_nameUser}>{props.name}</Text>
                 <View style={styles.message_preview}>
-                    <Text style={styles.txtcolor} >{props.lastMessage.message.substring(0, 20)}...</Text>
-                    <Text> - </Text>
-                    <Text style={styles.date}>{moment(props.lastMessage.CreatedAt).fromNow()}</Text>
-                </View>               
+                    <Text style={styles.txtcolor} numberOfLines={1} ellipsizeMode='tail' >{props.lastMessage.message}...</Text>
+                    <Text>·</Text>
+                    <Text style={styles.date}>{moment(props.lastMessage.CreatedAt).calendar(null, calendarFormat)}</Text>
+                </View>
             </View>
         </Pressable>
     );
@@ -59,50 +66,48 @@ const styles = StyleSheet.create({
         padding: 6
     },
     message_preview: {
-        width: '100%',
+        width: width * 0.60,
         display: 'flex',
         flexDirection: 'row',
-        gap: 10,
+        gap: 5,
     },
 
     txtcolor: {
         color: '#a3a3a3',
+        fontSize: 13,
+        maxWidth: width * 0.43,
     },
-
     date: {
         color: '#00000040',
+        fontSize: 11
     },
-
     messages_count_container: {
         width: '75%',
         display: 'flex',
         alignItems: 'flex-end',
-    }, 
-
-    // message_count_circle: {
-    //     display: 'flex',
-    //     alignItems: 'center',
-    //     justifyContent: 'center',
-    //     width: '10%',
-    //     height: 25,
-    //     borderRadius: 50,
-    //     backgroundColor: 'red',
-    // },
-
-    // message_count: {
-    //     color: 'white',
-    // },
+    },
     statusIndicator: {
         display: 'flex',
         textAlign: 'center',
+        color: 'white',
+    },
+    message_count_circle: {
+        display: 'flex',
+        justifyContent: 'center',
         position: 'absolute',
-        top: 0,
-        right: 0,
+        top: -17,
+        right: width * -0.05,
         width: 20,
         height: 20,
         borderRadius: 50,
         backgroundColor: 'red',
-        color: 'white',
+        width: 20,
+        height: 20,
+        borderRadius: 50,
+    },
+    message_nameUser: {
+        fontWeight: '600',
+        fontSize: 17,
     },
 });
 export default MessageCard;

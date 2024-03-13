@@ -45,6 +45,7 @@ export default function MessagesScreen({ navigation }) {
     const filteredUsers = users.filter(user => user.name.toLowerCase().includes(searchName.toLowerCase()));
 
     const message_card = filteredUsers.map((user, i) => {
+
         if (user.email !== user_email) {
             const lastMessageInfo = lastMessage.find(item => item.channel.users.includes(user._id));
             //on trouve le dernier message si l'utilisateur est bien dans la meme room. De ce fait on recupére le message de la room dans laquel le message se trouve
