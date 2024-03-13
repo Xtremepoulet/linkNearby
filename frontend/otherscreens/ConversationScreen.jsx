@@ -51,6 +51,7 @@ export default function ConversationScreen({ navigation, route }) {
         update_notifications();
 
         const handleMessageReceived = (message) => {
+
             if (message.toUserId !== userId.toString()) {
                 setChannelMessage((currentMessages) => [...currentMessages, message]);
             }
