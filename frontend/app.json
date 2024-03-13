@@ -29,15 +29,15 @@
     "extra": {
       "CONNECTION_BACKEND": "http://10.9.1.124:3000",
       "eas": {
-        "projectId": "ed278c16-9099-41cb-841c-8a0ff40621a0"
+        "projectId": "d72b891e-9e7b-43e0-a3e9-cfd660d5bc99"
       }
     },
-    "owner": "multimedis",
+    "owner": "devandco",
     "runtimeVersion": {
       "policy": "appVersion"
     },
     "updates": {
-      "url": "https://u.expo.dev/ed278c16-9099-41cb-841c-8a0ff40621a0"
+      "url": "https://u.expo.dev/d72b891e-9e7b-43e0-a3e9-cfd660d5bc99"
     }
   }
 }
