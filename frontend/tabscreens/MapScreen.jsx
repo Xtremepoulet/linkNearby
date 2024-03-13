@@ -13,12 +13,10 @@ const CONNECTION_BACKEND = Constants.expoConfig?.extra?.CONNECTION_BACKEND;
 
 export default function ProfileScreen({ navigation }) {
 
-    // const latitude = useSelector((state) => state.users.value.latitude);
-    // const longitude = useSelector((state) => state.users.value.longitude);
+    const latitude = useSelector((state) => state.users.value.latitude);
+    const longitude = useSelector((state) => state.users.value.longitude);
     const token = useSelector((state) => state.users.value.token)
 
-    const [latitude, setLatitude] = useState('');
-    const [longitude, setLongitude] = useState('');
 
     const [users_positions, setUsers_positions] = useState([]);
 
@@ -35,7 +33,7 @@ export default function ProfileScreen({ navigation }) {
         setUsers_positions(result.users);
     }
 
-
+    
 
     //calculate the position of the users
     function calcCrow(lat1, lon1, lat2, lon2) {

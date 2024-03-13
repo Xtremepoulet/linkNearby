@@ -110,7 +110,7 @@ export default function ParametersScreen({ navigation }) {
 
         console.log(result)
         if (result.result) {
-            dispatch(deleteReducerValue());
+            // dispatch(deleteReducerValue());
             navigation.navigate('signinScreen');
         }
     }
@@ -241,7 +241,7 @@ export default function ParametersScreen({ navigation }) {
                     </View>
 
                     {isEditable ? confirm_changes : ''}
-
+                    
                     <TouchableOpacity onPress={() => user_deconnexion()} style={styles.button} >
                         <Text style={styles.text_button}>Deconnexion</Text>
                     </TouchableOpacity>
@@ -250,10 +250,11 @@ export default function ParametersScreen({ navigation }) {
                         <Text onPress={() => setModalVisible(true)} style={styles.text_button}>Supprimer le compte</Text>
                     </TouchableOpacity>
 
+                    <View></View>
                 </ScrollView>
             </View>
 
-
+        
 
 
             <Modal visible={modalVisible} animationType="fade" transparent>
@@ -293,9 +294,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         paddingTop: 20,
         padding: 5,
-        backgroundColor: 'orange',
-        borderBottomColor: '#000',
-        borderBottomWidth: 1,
+        backgroundColor: '#F98F22',
     },
 
     header: {
@@ -340,7 +339,7 @@ const styles = StyleSheet.create({
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: 'orange',
+        backgroundColor: '#F98F22',
         height: 40,
         borderRadius: 5,
         padding: 5,
@@ -365,12 +364,10 @@ const styles = StyleSheet.create({
         display: 'flex',
         alignItems: 'center',
         gap: 40,
-        // backgroundColor: 'purple',
         padding: 30,
     },
 
     container_champ: {
-        // backgroundColor: 'red',
         width: '100%',
         display: 'flex',
         gap: 15,
@@ -393,7 +390,7 @@ const styles = StyleSheet.create({
         flexWrap: 'wrap',
         padding: 5,
         borderRadius: 5,
-        borderColor: 'orange',
+        borderColor: '#F98F22',
         gap: 30,
     },
 
@@ -407,7 +404,7 @@ const styles = StyleSheet.create({
         flexWrap: 'wrap',
         padding: 5,
         borderRadius: 5,
-        borderColor: 'orange',
+        borderColor: '#F98F22',
         gap: 30,
     },
 
@@ -422,7 +419,7 @@ const styles = StyleSheet.create({
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: 'orange',
+        backgroundColor: '#F98F22',
         height: 40,
         borderRadius: 50,
         padding: 5,
@@ -440,12 +437,12 @@ const styles = StyleSheet.create({
 
     section_title: {
         fontSize: 16,
-        color: 'orange',
+        color: '#F98F22',
     },
 
     input_champ: {
         width: '100%',
-        borderBottomColor: 'orange',
+        borderBottomColor: '#F98F22',
         borderBottomWidth: 1,
     },
 
@@ -454,7 +451,7 @@ const styles = StyleSheet.create({
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: 'orange',
+        backgroundColor: '#F98F22',
         height: 40,
         borderRadius: 5,
         padding: 5,
@@ -471,7 +468,7 @@ const styles = StyleSheet.create({
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: 'orange',
+        backgroundColor: '#F98F22',
         height: 30,
         borderRadius: 5,
         padding: 5,
