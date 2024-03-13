@@ -32,7 +32,7 @@ export default function ProfilScreen({ route, navigation }) {
     const [modalVisible, setModalVisible] = useState(false);
     const { userEmail, name, birthdate, location, bio, gender, passions, picture, isConnected, userId } = route.params;
 
-
+    console.log(passions)
     const passionsUser = passions.map((passion) => {
         return (
             <View key={passion.id} style={styles.passionBody}>

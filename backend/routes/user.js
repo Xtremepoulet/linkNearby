@@ -205,6 +205,7 @@ router.get('/user_personnal', authenticateToken, async (req, res, next) => {
         try {
             const user = await User.findOne({ _id: req.user.userId })
                 .select('name email password gender bio uri') // Sélection des champs à renvoyer
+                .populate('userPassion', 'name emoji')
                 .exec(); // Exécute la requête
 
 
@@ -213,6 +214,7 @@ router.get('/user_personnal', authenticateToken, async (req, res, next) => {
                     name: user.name,
                     email: user.email,
                     password: user.password,
+                    passions: user.userPassion.map(passion => ({ id: passion._id, name: passion.name, emoji: passion.emoji })),
                     gender: user.gender,
                     bio: user.bio,
                     uri: user.uri,
