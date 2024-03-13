@@ -6,19 +6,29 @@ const { width, height } = Dimensions.get('window');
 function MessageCard(props) {
     const navigation = useNavigation()
     //va faloir load ca avec des props 
+
+
+    const display_message_count = <View style={styles.messages_count_container}>
+                                    <View style={styles.message_count_circle}>
+                                        <Text style={styles.message_count}>{props.messageCount}</Text>
+                                    </View>
+                                </View>
+
+
+
     return (
         <Pressable onPress={() => navigation.navigate('ConversationScreen', { userId: props.userId, name: props.name, uri: props.uri })} style={styles.card}>
             <View style={styles.nope}>
                 <Image style={styles.image} source={{ uri: props.uri }}></Image>
             </View>
             <View style={styles.msg}>
+                {props.messageCount > 0 ? display_message_count : ''}
                 <Text>{props.name}</Text>
                 <View style={styles.message_preview}>
                     <Text style={styles.txtcolor} >{props.lastMessage.message.substring(0, 20)}...</Text>
                     <Text> - </Text>
                     <Text style={styles.date}>{moment(props.lastMessage.CreatedAt).fromNow()}</Text>
-                    {props.messageCount > 0 ? <Text>{props.messageCount}</Text> : ''}
-                </View>
+                </View>               
             </View>
         </Pressable>
     );
@@ -62,5 +72,26 @@ const styles = StyleSheet.create({
     date: {
         color: '#00000040',
     },
+
+    messages_count_container: {
+        width: '75%',
+        display: 'flex',
+        alignItems: 'flex-end',
+        height: 0,
+    }, 
+
+    message_count_circle: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: '10%',
+        height: 25,
+        borderRadius: 50,
+        backgroundColor: 'red',
+    },
+
+    message_count: {
+        color: 'white',
+    }
 });
 export default MessageCard;
