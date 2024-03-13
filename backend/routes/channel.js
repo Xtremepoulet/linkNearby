@@ -76,7 +76,11 @@ router.get('/load_user_channel', authenticateToken, async (req, res, next) => {
             const channels = await Channels.find({ users: user._id });
 
             const channelLastMessages = await Promise.all(channels.map(async (channel) => {
-                const lastMessage = await Message.findOne({ _id: { $in: channel.messages } }).sort({ createdAt: -1 });
+                const chan = await Channels.findOne({ _id: channel._id });
+                // const messages = chan.messages[chan.messages.length - 1];
+                const messages = chan.messages[chan.messages.length - 1];
+
+                const lastMessage = await Message.findOne({ _id: messages }).populate('message')
 
                 // Calculer le nombre de messages non lus dans le canal pour l'utilisateur actuel
                 const unreadMessagesCount = await Message.countDocuments({
