@@ -117,7 +117,7 @@ export default function ProfilScreen({ route, navigation }) {
                                     title="Go to message"
                                     onPress={() => handleMessage()}
                                 >
-                                    <FontAwesome name="android-messages" size={24} style={styles.arrowIcon} color={'white'}/>
+                                    <FontAwesome name="commenting" size={24} style={styles.arrowIcon} color={'white'} />
                                 </Pressable>
                             </View>
                         </View>
