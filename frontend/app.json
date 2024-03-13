@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "LinkNearby",
-    "slug": "frontend",
+    "slug": "linknearby",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -27,7 +27,17 @@
       "favicon": "./assets/favicon.png"
     },
     "extra": {
-      "CONNECTION_BACKEND": "http://10.9.1.124:3000"
+      "CONNECTION_BACKEND": "http://10.9.1.124:3000",
+      "eas": {
+        "projectId": "ed278c16-9099-41cb-841c-8a0ff40621a0"
+      }
+    },
+    "owner": "multimedis",
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/ed278c16-9099-41cb-841c-8a0ff40621a0"
     }
   }
 }
