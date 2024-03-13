@@ -28,7 +28,6 @@ export default function ConversationScreen({ navigation, route }) {
     const [messageReceived, setMessageReceived] = useState(false);
 
 
-
     const [refreshing, setRefreshing] = useState(false);
 
     const handleContentSizeChange = () => {

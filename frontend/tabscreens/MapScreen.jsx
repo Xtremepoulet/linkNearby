@@ -4,6 +4,7 @@ import { KeyboardAvoidingView, Image, StyleSheet, Text, View, Platform, Pressabl
 import Constants from 'expo-constants';
 import MapView from 'react-native-maps';
 import { Marker, Callout } from 'react-native-maps';
+import * as Location from 'expo-location';
 import { Dimensions } from 'react-native';
 import { useSelector } from 'react-redux';
 
@@ -12,12 +13,14 @@ const CONNECTION_BACKEND = Constants.expoConfig?.extra?.CONNECTION_BACKEND;
 
 export default function ProfileScreen({ navigation }) {
 
-    const latitude = useSelector((state) => state.users.value.latitude);
-    const longitude = useSelector((state) => state.users.value.longitude);
+    // const latitude = useSelector((state) => state.users.value.latitude);
+    // const longitude = useSelector((state) => state.users.value.longitude);
     const token = useSelector((state) => state.users.value.token)
 
-    const [users_positions, setUsers_positions] = useState([]);
+    const [latitude, setLatitude] = useState('');
+    const [longitude, setLongitude] = useState('');
 
+    const [users_positions, setUsers_positions] = useState([]);
 
     useEffect(() => {
         load_users_position();
@@ -31,7 +34,6 @@ export default function ProfileScreen({ navigation }) {
         const result = await fetching_data.json();
         setUsers_positions(result.users);
     }
-
 
 
 

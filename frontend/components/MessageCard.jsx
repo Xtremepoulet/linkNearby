@@ -10,7 +10,7 @@ function MessageCard(props) {
 
     const display_message_count = <View style={styles.messages_count_container}>
                                     <View style={styles.message_count_circle}>
-                                        <Text style={styles.message_count}>{props.messageCount}</Text>
+                                        <Text style={styles.statusIndicator}>{props.messageCount}</Text>
                                     </View>
                                 </View>
 
@@ -77,21 +77,32 @@ const styles = StyleSheet.create({
         width: '75%',
         display: 'flex',
         alignItems: 'flex-end',
-        height: 0,
     }, 
 
-    message_count_circle: {
+    // message_count_circle: {
+    //     display: 'flex',
+    //     alignItems: 'center',
+    //     justifyContent: 'center',
+    //     width: '10%',
+    //     height: 25,
+    //     borderRadius: 50,
+    //     backgroundColor: 'red',
+    // },
+
+    // message_count: {
+    //     color: 'white',
+    // },
+    statusIndicator: {
         display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        width: '10%',
-        height: 25,
+        textAlign: 'center',
+        position: 'absolute',
+        top: 0,
+        right: 0,
+        width: 20,
+        height: 20,
         borderRadius: 50,
         backgroundColor: 'red',
-    },
-
-    message_count: {
         color: 'white',
-    }
+    },
 });
 export default MessageCard;
