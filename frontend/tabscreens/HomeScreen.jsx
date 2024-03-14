@@ -20,7 +20,7 @@ const CONNECTION_BACKEND = Constants.expoConfig?.extra?.CONNECTION_BACKEND;
 const { width, height } = Dimensions.get('window'); // Recupere la dimension de l'écran
 
 import { addLatitude, addLongitude, turnOnLocation, addNoReadMessages } from "../reducers/users";
-    
+
 
 
 export default function HomeScreen({ navigation }) {
@@ -173,7 +173,7 @@ export default function HomeScreen({ navigation }) {
                     <View style={styles.header}>
                         <View style={styles.containerFiltre}>
 
-                            <Pressable onPress={() => console.log('aie!')}>
+                            <Pressable>
                                 <FontAwesome name="binoculars" size={24} style={styles.arrowIcon} />
                             </Pressable>
                         </View>

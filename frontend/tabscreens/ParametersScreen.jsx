@@ -130,8 +130,7 @@ export default function ParametersScreen({ navigation }) {
             body: JSON.stringify({ password })
         })
         const result = await fetching_data.json();
-
-        console.log(result)
+        
         if (result.result) {
             dispatch(deleteReducerValue());
             navigation.reset({
