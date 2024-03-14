@@ -27,7 +27,7 @@
       "favicon": "./assets/favicon.png"
     },
     "extra": {
-      "CONNECTION_BACKEND": "http://10.9.1.124:3000",
+      "CONNECTION_BACKEND": "https://backdevandco.ddns.net",
       "eas": {
         "projectId": "d72b891e-9e7b-43e0-a3e9-cfd660d5bc99"
       }
