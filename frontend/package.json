@@ -13,6 +13,7 @@
     "@fortawesome/free-solid-svg-icons": "^6.5.1",
     "@fortawesome/react-fontawesome": "^0.2.0",
     "@gorhom/bottom-sheet": "^4",
+    "@miblanchard/react-native-slider": "^2.3.1",
     "@react-native-async-storage/async-storage": "1.21.0",
     "@react-native-community/datetimepicker": "^7.6.2",
     "@react-native-community/hooks": "^3.0.0",

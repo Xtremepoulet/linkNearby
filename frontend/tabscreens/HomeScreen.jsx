@@ -1,9 +1,10 @@
 import { useCallback, useEffect, useState, useMemo, useRef } from 'react';
-import { Pressable, StyleSheet, Text, View, Image, TextInput, KeyboardAvoidingView, Platform, Dimensions, StatusBar, Button } from 'react-native';
+import { Pressable, StyleSheet, Text, View, Image, TextInput, KeyboardAvoidingView, Platform, Dimensions, StatusBar, Button, TouchableOpacity } from 'react-native';
 import { UseSelector, useDispatch, useSelector } from 'react-redux';
 import Constants from 'expo-constants';
 import logoLinkNearby from '../assets/linkNearbyBackNone.webp';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import {Slider} from '@miblanchard/react-native-slider';
 import Card from '../components/HomeCard';
 import { RefreshControl } from 'react-native';
 import * as Location from 'expo-location';
@@ -29,12 +30,16 @@ import { addLatitude, addLongitude, turnOnLocation, addNoReadMessages } from "..
 
 export default function HomeScreen({ navigation }) {
 
+    const dispatch = useDispatch();
+
     const [refreshing, setRefreshing] = useState(false);
     const [users, setUsers] = useState([])
     const [sheetIndex, setSheetIndex] = useState(-1);
     const infoUser = useSelector((state) => state.users.value);
+    const [gender, setGender] = useState(null);
     // const token = useSelector((state) => state.users.value.token);
-    const dispatch = useDispatch();
+    const [ageValueSlider, setAgeValueSlider] = useState(18);
+    const [distanceValueSlider, setDistanceValueSlider] = useState(500);
 
 
     const socket = io(CONNECTION_BACKEND, {
@@ -224,6 +229,7 @@ export default function HomeScreen({ navigation }) {
 
             </KeyboardAvoidingView>
 
+
             <BottomSheet
                 snapPoints={snapPoints}
                 onChange={handleSheetChange}
@@ -232,35 +238,58 @@ export default function HomeScreen({ navigation }) {
             >
                 <BottomSheetView style={styles.contentBottomContainer}>
                     <View style={styles.BottomContainerTitle}>
-                        <Text style={styles.BottomTitle}>Linkers idéal</Text>
-                        <FontAwesome name="binoculars" size={24} style={styles.arrowIcon} />
+                        <Text style={styles.BottomTitle}>trouve les linkers parfait</Text>
                     </View>
                     <View style={styles.BottomContainerAllFiltrer}>
-                        <View style={styles.BottomContainerGenre}>
-                            <Text style={styles.BottomGenreTitle}>Je recherche...</Text>
-                            <View>
-                                <Text>Homme</Text>
-                                <Text>Femme</Text>
-                                <Text>Tout le monde</Text>
-                            </View>
-                        </View>
-                        <View style={styles.BottomContainerAge}>
-                            <Text>Age</Text>
-                            <Text>25 ans</Text>
-                            <View>
-                                <Text>BAR</Text>
-                            </View>
+                    <View style={styles.gender_container}>
+                                    <TouchableOpacity onPress={() => setGender('homme')} style={gender === 'homme' ? styles.gender_selected_button : styles.gender_nonSelected_button} >
+                                        <Text style={styles.text_button}>Homme</Text>
+                                    </TouchableOpacity>
+
+                                    <TouchableOpacity onPress={() => setGender('femme')} style={gender === 'femme' ? styles.gender_selected_button : styles.gender_nonSelected_button} >
+                                        <Text style={styles.text_button}>Femme</Text>
+                                    </TouchableOpacity>
+
+                                    <TouchableOpacity onPress={() => setGender('all')} style={gender === 'all' ? styles.gender_selected_button : styles.gender_nonSelected_button} >
+                                        <Text style={styles.text_button}>All</Text>
+                                    </TouchableOpacity>
+                                </View>
+                        <View style={styles.age_container}>
+                            <Text>{`Age < ${ageValueSlider}ans`}</Text>
+        
+                                  <Slider
+                                    style={styles.slider}
+                                    minimumValue={18}
+                                    maximumValue={99}
+                                    minimumTrackTintColor="#F98F22"
+                                    maximumTrackTintColor="#000000"
+                                    thumbTintColor="#F98F22"
+                                    step={10}
+                                    value={ageValueSlider}
+                                    onValueChange={value => setAgeValueSlider(value)}
+                                />
+                          
                         </View>
                         <View style={styles.BottomContainerDistance}>
-                            <Text>Distance</Text>
-                            <Text>120km</Text>
-                            <View>
-                                <Text>BAR</Text>
-                            </View>
+                            <Text>{`distance ${'<'} ${distanceValueSlider}m`}</Text>
+                            <Slider
+                                    style={styles.slider}
+                                    minimumValue={500}
+                                    maximumValue={2000}//2000 km 
+                                    minimumTrackTintColor="orange"
+                                    maximumTrackTintColor="#000000"
+                                    thumbTintColor="orange"
+                                    step={250}
+                                    value={distanceValueSlider}
+                                    onValueChange={value => setDistanceValueSlider(value)}
+                                />
+                           
                         </View>
-                    </View>
 
-                    <Text>FILTRER</Text>
+                        <   TouchableOpacity style={styles.filter_button}>
+                                <Text style={styles.text_button}>Filtrer</Text>
+                            </TouchableOpacity>
+                    </View>
                 </BottomSheetView>
             </BottomSheet>
 
@@ -330,7 +359,6 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     cardView: {
-        // backgroundColor: 'orange',
         width: width * 0.90,
         height: '97%',
     },
@@ -345,8 +373,9 @@ const styles = StyleSheet.create({
     contentBottomContainer: {
         flex: 1,
         alignItems: 'center',
-        backgroundColor: 'gray',
+        backgroundColor: '#F98F2210',
         borderRadius: 20,
+        gap: 50,
     },
     BottomContainerTitle: {
         width: width,
@@ -354,6 +383,68 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-around',
+    },
+    BottomTitle : {
+        fontSize: 18,
+        fontWeight: 'bold',
+        color: '#F98F22',
+    },
+
+    BottomContainerAllFiltrer: {
+        width: '90%',
+        height: '80%',
+        display: 'flex',
+        alignItems: 'center',
+        gap: 30,
+    },
+    gender_container: {
+        width: '100%',
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+    },
+
+    gender_selected_button: {
+        width: '30%',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: '#F98F22',
+        height: 30,
+        borderRadius: 5,
+        padding: 5,
+    },
+
+    gender_nonSelected_button: {
+        width: '30%',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: 'gray',
+        height: 30,
+        borderRadius: 5,
+        padding: 5,
+    },
+    age_container : {
+        width: '80%',
+    }, 
+    BottomContainerDistance : {
+        width: '80%'
+    },
+
+    filter_button: {
+        width: '40%',
+        height: 40,
+        alignSelf: 'center',
+        backgroundColor: '#F98F22',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderRadius: 30,
+    },
+
+    text_button: {
+        color: 'white',
     },
 
 
