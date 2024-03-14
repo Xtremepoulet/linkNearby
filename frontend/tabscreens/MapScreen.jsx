@@ -4,7 +4,6 @@ import { KeyboardAvoidingView, Image, StyleSheet, Text, View, Platform, Pressabl
 import Constants from 'expo-constants';
 import MapView from 'react-native-maps';
 import { Marker, Callout } from 'react-native-maps';
-import * as Location from 'expo-location';
 import { Dimensions } from 'react-native';
 import { useSelector } from 'react-redux';
 
@@ -33,9 +32,6 @@ export default function ProfileScreen({ navigation }) {
         setUsers_positions(result.users);
     }
 
-    
-
-    //calculate the position of the users
     function calcCrow(lat1, lon1, lat2, lon2) {
         var R = 6371; // km
         var dLat = toRad(lat2 - lat1);
@@ -54,8 +50,6 @@ export default function ProfileScreen({ navigation }) {
         return Value * Math.PI / 180;
     }
 
-
-
     const users_positions_to_display = users_positions.map((user, i) => {
         let distance = calcCrow(user.location[0].latitude, user.location[0].longitude, latitude, longitude).toFixed(2);
 
@@ -66,7 +60,6 @@ export default function ProfileScreen({ navigation }) {
         if (m < 0 || (m === 0 && today.getDate() < birthdate.getDate())) {
             age--;
         }
-        //navigation.navigate('ProfilScreen', { userId: user.idUser })
         if (distance < 0.50) {
             return (
                 <Marker
@@ -111,17 +104,13 @@ export default function ProfileScreen({ navigation }) {
                     longitudeDelta: 0.0421,
                 }}
                 style={styles.map}
-
             >
                 {users_positions_to_display}
             </MapView>
-
         </KeyboardAvoidingView>
 
     );
 }
-
-
 
 
 
@@ -137,32 +126,21 @@ const styles = StyleSheet.create({
     },
     descriptionContainer: {
         flexDirection: 'row',
-        // alignItems: 'center',
         padding: 5,
         height: height * 0.13,
         width: width * 0.60,
-        // backgroundColor: 'blue',
-        // justifyContent: 'space-between'
         alignItems: 'center',
-
     },
     imageUser: {
         width: width * 0.18,
         height: height * 0.09,
         borderRadius: 50,
-        // width: '30%',
-        // height: '100%',
         resizeMode: 'cover',
-
-
-        // backgroundColor: 'red'
     },
     descriptionUser: {
         marginLeft: 15,
-        // backgroundColor: 'red',
         width: '65%',
         height: '100%',
-
     },
     descriptionName: {
         fontSize: 16,
@@ -175,7 +153,6 @@ const styles = StyleSheet.create({
         height: '80%',
         alignItems: 'center',
         justifyContent: 'space-between',
-        // backgroundColor: 'yellow',
         flexWrap: 'wrap',
         paddingTop: 5
     },
@@ -189,7 +166,6 @@ const styles = StyleSheet.create({
         alignSelf: 'flex-start',
         borderRadius: 20,
         margin: 1,
-
     },
 
 })

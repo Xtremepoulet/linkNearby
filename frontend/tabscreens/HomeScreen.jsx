@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState, useMemo, useRef } from 'react';
 import { Pressable, StyleSheet, Text, View, Image, TextInput, KeyboardAvoidingView, Platform, Dimensions, StatusBar, Button, TouchableOpacity } from 'react-native';
-import { UseSelector, useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Constants from 'expo-constants';
 import logoLinkNearby from '../assets/linkNearbyBackNone.webp';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -12,22 +12,15 @@ import { getDistance } from 'geolib';
 
 import * as Notifications from 'expo-notifications';
 
-
 import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-
-
-import { SafeAreaView } from 'react-native-safe-area-context'; // composant pour gérer les zones safe sur ios et android
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScrollView } from 'react-native';
-
 import { io } from 'socket.io-client';
-
-const CONNECTION_BACKEND = Constants.expoConfig?.extra?.CONNECTION_BACKEND;
-
-const { width, height } = Dimensions.get('window'); // Recupere la dimension de l'écran
-
 import { addLatitude, addLongitude, turnOnLocation, addNoReadMessages } from "../reducers/users";
 
+const CONNECTION_BACKEND = Constants.expoConfig?.extra?.CONNECTION_BACKEND;
+const { width, height } = Dimensions.get('window');
 
 
 export default function HomeScreen({ navigation }) {
@@ -38,7 +31,6 @@ export default function HomeScreen({ navigation }) {
     const [users, setUsers] = useState([])
     const infoUser = useSelector((state) => state.users.value);
     const [gender, setGender] = useState('all');
-    // const token = useSelector((state) => state.users.value.token);
     const [ageValueSlider, setAgeValueSlider] = useState(58);
     const [distanceValueSlider, setDistanceValueSlider] = useState(1000);
     const [filteredUsers, setFilteredUsers] = useState([]);
@@ -50,15 +42,11 @@ export default function HomeScreen({ navigation }) {
     });
 
 
-
     useEffect(() => {
         socket.emit('authenticate', { token: infoUser.token });
-        // Écouter les changements de statut d'utilisateur
         socket.on('userStatusChanged', ({ userId, isConnected }) => {
-            // Mettre à jour l'état de l'application ici si nécessaire
         });
 
-        // Nettoyer l'écouteur d'événements lors du démontage du composant
         return () => {
             socket.off('userStatusChanged');
         };
@@ -96,20 +84,13 @@ export default function HomeScreen({ navigation }) {
             const { status } = await Notifications.requestPermissionsAsync();
             finalStatus = status;
         }
-
         if (finalStatus !== 'granted') {
             alert('Failed to get push token for push notification!');
             return;
         }
-
         const token = (await Notifications.getExpoPushTokenAsync()).data;
         postTokenNotification(token);
-
-        // Ici, vous pourriez envoyer le token à votre serveur pour le stocker et l'utiliser ultérieurement pour envoyer des notifications
     }
-
-    // N'oubliez pas d'appeler cette fonction pour démarrer le processus de récupération du token
-
 
 
     const getUnreadmessagescount = async () => {
@@ -139,7 +120,6 @@ export default function HomeScreen({ navigation }) {
         const response = await fetch(`${CONNECTION_BACKEND}/user/users`, {
             method: 'GET',
             headers: { 'Content-Type': 'application/json', 'authorization': infoUser.token },
-
         });
         const result = await response.json();
 
@@ -150,7 +130,6 @@ export default function HomeScreen({ navigation }) {
             setUsers(filteredUsers)
         }
     };
-
 
 
     const applyFilters = () => {
@@ -180,8 +159,6 @@ export default function HomeScreen({ navigation }) {
 
         setFilteredUsers(usersFiltered);
     };
-
-
 
     const usersList = filteredUsers.map((user) => {
         let distance = user.location[0] ? getDistance(
@@ -218,11 +195,8 @@ export default function HomeScreen({ navigation }) {
     });
 
 
-
-
     const getLocation = async () => {
         const { status } = await Location.requestForegroundPermissionsAsync();
-
         if (status === 'granted') {
             Location.watchPositionAsync({ distanceInterval: 10 },
                 (location) => {
@@ -234,11 +208,8 @@ export default function HomeScreen({ navigation }) {
     }
 
     const sheetRef = useRef(null);
-    // variables
+
     const snapPoints = useMemo(() => ["50%", "70%"], []);
-    // callbacks
-    // const handleSheetChange = useCallback((index) => {
-    // }, []);
     const handleSnapPress = useCallback((index) => {
         sheetRef.current?.snapToIndex(index);
     }, []);
@@ -311,7 +282,6 @@ export default function HomeScreen({ navigation }) {
                             <TouchableOpacity onPress={() => setGender('homme')} style={gender === 'homme' ? styles.gender_selected_button : styles.gender_nonSelected_button} >
                                 <Text style={styles.text_button}>Homme</Text>
                             </TouchableOpacity>
-
                             <TouchableOpacity onPress={() => setGender('femme')} style={gender === 'femme' ? styles.gender_selected_button : styles.gender_nonSelected_button} >
                                 <Text style={styles.text_button}>Femme</Text>
                             </TouchableOpacity>
@@ -322,7 +292,6 @@ export default function HomeScreen({ navigation }) {
                         </View>
                         <View style={styles.age_container}>
                             <Text>{`Age < ${ageValueSlider}ans`}</Text>
-
                             <Slider
                                 style={styles.slider}
                                 minimumValue={18}
@@ -334,7 +303,6 @@ export default function HomeScreen({ navigation }) {
                                 value={ageValueSlider}
                                 onValueChange={value => setAgeValueSlider(value)}
                             />
-
                         </View>
                         <View style={styles.BottomContainerDistance}>
                             <Text>{`distance ${'<'} ${distanceValueSlider}m`}</Text>
@@ -349,9 +317,7 @@ export default function HomeScreen({ navigation }) {
                                 value={distanceValueSlider}
                                 onValueChange={value => setDistanceValueSlider(value)}
                             />
-
                         </View>
-
                         <TouchableOpacity style={styles.filter_button} onPress={() => applyFilters()}>
                             <Text style={styles.text_button}>Filtrer</Text>
                         </TouchableOpacity>
@@ -372,13 +338,11 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
     },
     header: {
-        // backgroundColor: 'green',
         flexDirection: 'row',
         width: width,
         height: '8%',
         alignItems: 'center',
         justifyContent: 'center',
-        // paddingTop: 10,
     },
     logo: {
         width: 50,
@@ -389,12 +353,8 @@ const styles = StyleSheet.create({
         fontSize: 20,
         fontWeight: 'bold',
     },
-    arrowIcon: {
-
-    },
     containerFiltre: {
         width: '20%',
-        // backgroundColor: 'yellow',
         height: '100%',
         alignItems: 'center',
         justifyContent: 'center',
@@ -449,7 +409,6 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
-        // justifyContent: 'space-around',
         paddingLeft: 20,
         paddingTop: 20,
     },
@@ -458,7 +417,6 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         color: '#F98F22',
     },
-
     BottomContainerAllFiltrer: {
         width: '90%',
         height: '80%',
@@ -472,7 +430,6 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
     },
-
     gender_selected_button: {
         width: '30%',
         display: 'flex',
@@ -483,7 +440,6 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         padding: 5,
     },
-
     gender_nonSelected_button: {
         width: '30%',
         display: 'flex',
@@ -500,7 +456,6 @@ const styles = StyleSheet.create({
     BottomContainerDistance: {
         width: '80%'
     },
-
     filter_button: {
         width: '40%',
         height: 40,
@@ -511,10 +466,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         borderRadius: 30,
     },
-
     text_button: {
         color: 'white',
     },
-
-
 })

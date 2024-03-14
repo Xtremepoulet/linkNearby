@@ -5,7 +5,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { deleteReducerValue, handleDeconnexion } from '../reducers/users';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import { UseDispatch } from 'react-redux';
 
 const { width, height } = Dimensions.get('window'); // Recupere la dimension de l'écran
 const CONNECTION_BACKEND = Constants.expoConfig?.extra?.CONNECTION_BACKEND;
@@ -14,7 +13,6 @@ export default function ParametersScreen({ navigation }) {
 
     const dispatch = useDispatch();
     const user_token = useSelector((state) => state.users.value.token);
-    const passions = useSelector((state) => state.users.value.passions);//sous forme de tableau 
 
     //infos qui seront renvoyé au backend
     const [gender, setGender] = useState(null);
@@ -30,13 +28,9 @@ export default function ParametersScreen({ navigation }) {
     const [isEditable, setIsEditable] = useState(false);
     const [isValidModification, setIsValidModification] = useState(true);
 
-    const [isBioEditable, setIsBioEditable] = useState(false);
-
-
     const [personal_informations, setPersonal_informations] = useState({});
 
     const email_regex = /^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})$/;
-    // Minimum eight characters, at least one letter, one number and one special character:
     const password_regex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
 
 
@@ -51,7 +45,6 @@ export default function ParametersScreen({ navigation }) {
         })
 
         const result = await fetching_data.json();
-        console.log(result)
         if (result.result) {
             setPersonal_informations(result.user)
 
@@ -59,16 +52,12 @@ export default function ParametersScreen({ navigation }) {
             setBio(result.user.bio);
             setName(result.user.name);
             setEmail(result.user.email);
-
-
         }
     }
-
 
     //enregistrement des modifications de l'utilisateurs
     const save_changes = async () => {
         if (email_regex.test(email) && bio.length < 500) {
-
             //le password et les passions devront etre aussi misent à jours 
             const user_infos = {
                 name,
@@ -76,7 +65,6 @@ export default function ParametersScreen({ navigation }) {
                 bio,
                 gender,
             }
-
             const fetching_data = await fetch(`${CONNECTION_BACKEND}/user/update_user_infos`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json', 'authorization': user_token },
@@ -93,8 +81,6 @@ export default function ParametersScreen({ navigation }) {
         }
     }
 
-
-    //get all the passions from the backend
     const getPassions = async () => {
         try {
             const response = await fetch(`${CONNECTION_BACKEND}/user/passions`, {
@@ -114,15 +100,10 @@ export default function ParametersScreen({ navigation }) {
         }
     }
 
-
-
-    //modal gestion 
     const handleClose = () => {
         setModalVisible(false);
     };
 
-
-    //delete the user account 
     const delete_account = async () => {
         const fetching_data = await fetch(`${CONNECTION_BACKEND}/user/delete_user`, {
             method: 'POST',
@@ -130,17 +111,15 @@ export default function ParametersScreen({ navigation }) {
             body: JSON.stringify({ password })
         })
         const result = await fetching_data.json();
-        
+
         if (result.result) {
             dispatch(deleteReducerValue());
             navigation.reset({
                 index: 0,
                 routes: [{ name: 'FirstLoginScreen' }],
-            });                
+            });
         }
     }
-
-
 
     //deconnecte l'utilisateur
     const user_deconnexion = () => {
@@ -149,10 +128,7 @@ export default function ParametersScreen({ navigation }) {
             index: 0,
             routes: [{ name: 'FirstLoginScreen' }],
         });
-
     }
-
-
 
     const confirm_changes = <View style={styles.container_changes}>
         <TouchableOpacity onPress={() => save_changes()} style={styles.button} >
@@ -160,15 +136,6 @@ export default function ParametersScreen({ navigation }) {
         </TouchableOpacity>
         {isValidModification ? '' : <Text style={styles.error_message}>Certains champs ne sont pas valide</Text>}
     </View>
-
-
-
-
-    {/* <View> 
-<TouchableOpacity onPress={() => setIsEditable(!isEditable)} style={styles.edit_button}>
-    <FontAwesome name="user" size={24} color={'white'}/>
-</TouchableOpacity>
-</View> */}
 
     return (
         <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -190,18 +157,15 @@ export default function ParametersScreen({ navigation }) {
                     showsHorizontalScrollIndicator={false}
                     contentContainerStyle={styles.containerScroll}
                 >
-
                     <View>
                         <TouchableOpacity onPress={() => setIsEditable(!isEditable)} style={styles.edit_button}>
                             <FontAwesome name="user" size={24} color={'white'} />
                         </TouchableOpacity>
                     </View>
-
                     <View style={styles.container_champ}>
                         <View style={styles.section_description}>
                             <Text style={styles.section_title}>Personal informations</Text>
                         </View>
-
                         <View style={styles.user_champ}>
                             <View style={styles.champ}>
                                 <Text style={styles.text_description}>Name</Text>
@@ -233,8 +197,6 @@ export default function ParametersScreen({ navigation }) {
                         </View>
                     </View>
 
-
-
                     {/* gestion de la biographie de lutilisateur */}
                     <View style={styles.container_champ}>
                         <View style={styles.section_description}>
@@ -245,16 +207,11 @@ export default function ParametersScreen({ navigation }) {
                             <View>
                                 <TextInput onChangeText={(value) => setBio(value)} editable={isEditable}>{personal_informations.bio}</TextInput>
                             </View>
-                            {/* <View style={styles.edit_button_container}>
-                                    <TouchableOpacity onPress={() => setIsBioEditable(!isBioEditable)} style={styles.edit_button} >
-                                        <Text>edit</Text>
-                                    </TouchableOpacity>
-                                </View> */}
                         </View>
                     </View>
 
                     {isEditable ? confirm_changes : ''}
-                    
+
                     <TouchableOpacity onPress={() => user_deconnexion()} style={styles.button} >
                         <Text style={styles.text_button}>Deconnexion</Text>
                     </TouchableOpacity>
@@ -266,8 +223,6 @@ export default function ParametersScreen({ navigation }) {
                     <View></View>
                 </ScrollView>
             </View>
-
-        
 
 
             <Modal visible={modalVisible} animationType="fade" transparent>
@@ -299,7 +254,6 @@ const styles = StyleSheet.create({
     h1: {
         fontSize: 22,
     },
-
     top_container: {
         width: '100%',
         height: '30%',
@@ -309,7 +263,6 @@ const styles = StyleSheet.create({
         padding: 5,
         backgroundColor: '#F98F22',
     },
-
     header: {
         height: '30%',
         display: 'flex',
@@ -317,7 +270,6 @@ const styles = StyleSheet.create({
         gap: 5,
         alignItems: 'center',
     },
-
     photo_container: {
         height: '70%',
         display: 'flex',
@@ -326,18 +278,15 @@ const styles = StyleSheet.create({
         width: '100%',
         padding: 5,
     },
-
     image: {
         width: '30%',
         height: '85%',
         borderRadius: 50,
     },
-
     username: {
         fontSize: 18,
         color: 'white',
     },
-
     bottom_container: {
         width: '100%',
         height: '100%',
@@ -346,7 +295,6 @@ const styles = StyleSheet.create({
         padding: 20,
         gap: 20,
     },
-
     button: {
         width: '70%',
         display: 'flex',
@@ -357,35 +305,29 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         padding: 5,
     },
-
     text_button: {
         color: 'white',
     },
-
     logo: {
         width: 30,
         height: 30,
         borderRadius: 5,
     },
-
     cardView: {
         width: width,
         height: '70%',
     },
-
     containerScroll: {
         display: 'flex',
         alignItems: 'center',
         gap: 40,
         padding: 30,
     },
-
     container_champ: {
         width: '100%',
         display: 'flex',
         gap: 15,
     },
-
     user_champ: {
         width: '100%',
         display: 'flex',
@@ -393,7 +335,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         gap: 30,
     },
-
     passions_champ: {
         width: '100%',
         display: 'flex',
@@ -406,7 +347,6 @@ const styles = StyleSheet.create({
         borderColor: '#F98F22',
         gap: 30,
     },
-
     biographie_champ: {
         width: '100%',
         minHeight: 100,
@@ -420,13 +360,11 @@ const styles = StyleSheet.create({
         borderColor: '#F98F22',
         gap: 30,
     },
-
     edit_button_container: {
         width: '100%',
         display: 'flex',
         alignItems: 'flex-end',
     },
-
     edit_button: {
         width: 40,
         display: 'flex',
@@ -437,28 +375,23 @@ const styles = StyleSheet.create({
         borderRadius: 50,
         padding: 5,
     },
-
     champ: {
         width: '80%',
         display: 'flex',
     },
-
     text_description: {
         fontSize: 12,
         color: 'gray',
     },
-
     section_title: {
         fontSize: 16,
         color: '#F98F22',
     },
-
     input_champ: {
         width: '100%',
         borderBottomColor: '#F98F22',
         borderBottomWidth: 1,
     },
-
     button_champ: {
         width: '20%',
         display: 'flex',
@@ -469,13 +402,11 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         padding: 5,
     },
-
     gender_container: {
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'space-evenly',
     },
-
     gender_selected_button: {
         width: '30%',
         display: 'flex',
@@ -486,7 +417,6 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         padding: 5,
     },
-
     gender_nonSelected_button: {
         width: '30%',
         display: 'flex',
@@ -497,24 +427,20 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         padding: 5,
     },
-
     container_changes: {
         width: '100%',
         alignItems: 'center',
     },
-
     error_message: {
         color: 'red',
         fontSize: 12,
     },
-
     //modal gestion at this point for the css
     centeredView: {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
     },
-
     modalView: {
         backgroundColor: 'white',
         borderRadius: 20,
@@ -528,21 +454,18 @@ const styles = StyleSheet.create({
         width: '80%',
         height: '40%',
     },
-
     input: {
         width: 150,
         borderBottomColor: '#ec6e5b',
         borderBottomWidth: 1,
         fontSize: 16,
     },
-
     textButton: {
         color: '#ffffff',
         height: 24,
         fontWeight: '600',
         fontSize: 15,
     },
-
     modal_button: {
         width: '60%',
         display: 'flex',
@@ -553,6 +476,4 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         padding: 5,
     },
-
-
 })

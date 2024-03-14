@@ -1,18 +1,14 @@
 import { View, Text, Pressable, Image, StyleSheet, Dimensions, KeyboardAvoidingView, Platform, Modal, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { ScrollView } from 'react-native';
 import logoLinkNearby from '../assets/linkNearbyBackNone.webp';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import { useNavigation } from '@react-navigation/native';
-import Card from '../components/HomeCard';
+
 import { useState } from 'react';
 import Constants from 'expo-constants';
 
-import { socket } from '../sockets.js';
 import { io } from 'socket.io-client';
 import { useSelector, useDispatch } from 'react-redux';
 import { updateIsLoaded } from '../reducers/users';
-
 
 const { width, height } = Dimensions.get('window'); // Recupere la dimension de l'écran
 const CONNECTION_BACKEND = Constants.expoConfig?.extra?.CONNECTION_BACKEND;
@@ -32,7 +28,6 @@ export default function ProfilScreen({ route, navigation }) {
     const [modalVisible, setModalVisible] = useState(false);
     const { userEmail, name, birthdate, location, bio, gender, passions, picture, isConnected, userId } = route.params;
 
-    console.log(passions)
     const passionsUser = passions.map((passion) => {
         return (
             <View key={passion.id} style={styles.passionBody}>
@@ -53,13 +48,7 @@ export default function ProfilScreen({ route, navigation }) {
             headers: { 'Content-Type': 'application/json', 'authorization': user_token },
             body: JSON.stringify(data_to_send),
         });
-
-        const result = await fetching_data.json();
-
         navigation.navigate('ConversationScreen', { userId: userId, name: name });//il faudra aussi mettre l'uri
-        
-
-
     }
 
 
