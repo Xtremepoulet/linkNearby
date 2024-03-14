@@ -346,6 +346,31 @@ router.post('/setLocation', authenticateToken, async (req, res) => {
 }
 );
 
+router.post('/setTokenNotification', authenticateToken, async (req, res) => {
+    if (!checkBody(req.body, ['token'])) {
+        return res.status(400).json({ result: false, message: 'Missing informations' });
+    }
+
+    try {
+        const user = await User.findOne({ _id: req.user.userId });
+        if (user) {
+            const result = await User.updateOne(
+                { _id: req.user.userId },
+                {
+                    $set: {
+                        tokenNotification: req.body.token,
+                    },
+                }
+            );
+
+            res.json({ result: true });
+        }
+    } catch (error) {
+        console.error("Erreur lors de la mise à jour du token de notification de l'utilisateur:", error);
+        res.status(500).json({ message: "Erreur interne du serveur" });
+    }
+})
+
 
 
 

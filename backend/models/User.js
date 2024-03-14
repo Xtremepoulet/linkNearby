@@ -13,6 +13,7 @@ const userSchema = mongoose.Schema({
   isConnected: { type: Boolean, default: true },
   lastHeartbeat: { type: Date, default: Date.now },
   chatChannels: [{ type: mongoose.Schema.Types.ObjectId, ref: 'chatChannels' }],
+  tokenNotification: String,
 }, { timestamps: true }); //ajoute automatiquement createdAt et updatedAt
 
 const User = mongoose.model('users', userSchema);

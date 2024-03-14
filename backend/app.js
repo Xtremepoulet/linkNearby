@@ -14,6 +14,7 @@ const fileUpload = require('express-fileupload');
 //import des bases de données 
 const Channels = require('./models/channel');
 const Message = require('./models/messages');
+const User = require('./models/user');
 
 
 // Fonctions
@@ -114,11 +115,40 @@ io.on('connection', (socket) => {
                 toUserId: distant_user_id,  // ID de l'utilisateur destinataire
             };
 
+            // Trouver le token de notification de l'appareil du destinataire
+            const recipient = await User.findById(distant_user_id);
+            if (recipient && recipient.tokenNotification) {
+                sendPushNotification(recipient.tokenNotification, message, userId);
+            }
+
             // Émettre le message à tous les clients sauf à l'expéditeur
             socket.broadcast.emit('message received', messageToEmit);
         });
     });
 });
+
+// Fonction pour envoyer une notification push
+async function sendPushNotification(expoPushToken, message, senderId) {
+    const messageBody = {
+        to: expoPushToken,
+        sound: 'default',
+        title: 'Nouveau message',
+        body: message,
+        data: { senderId: senderId }, // Informations supplémentaires si nécessaire
+    };
+
+    await fetch('https://exp.host/--/api/v2/push/send', {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'Accept-encoding': 'gzip, deflate',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(messageBody),
+    });
+}
+
+
 
 
 //Export de app et server Io
