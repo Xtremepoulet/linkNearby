@@ -67,12 +67,12 @@ const Signin = ({ navigation }) => {
 
     return (
 
-        <KeyboardAvoidingView
-            behavior={Platform.OS === "ios" ? "padding" : "height"}
-            style={styles.container}
-            keyboardVerticalOffset={Platform.OS === "ios" ? height * 0.08 : height * 0.08} // Ajusté pour iOS
-        >
             <SafeAreaView style={styles.container} edges={['top']} styleAndroid={{ flex: 1 }}>
+                        <KeyboardAvoidingView
+                            behavior={Platform.OS === "ios" ? "padding" : "height"}
+                            style={styles.container}
+                            keyboardVerticalOffset={Platform.OS === "ios" ? height * 0 : height * 0.18} // Ajusté pour iOS
+                        >
                 {/* top section */}
                 <View style={styles.header}>
                     <Image source={logoLinkNearby} style={styles.logo} />
@@ -84,6 +84,7 @@ const Signin = ({ navigation }) => {
                         <TextInput value={email} onChangeText={(value) => setEmail(value.toLocaleLowerCase())} style={styles.text_input} placeholder="Email..."
                             keyboardType="email-address"
                             autoCapitalize="none"
+                            placeholderTextColor="#ffffff"
                             autoCorrect={false}></TextInput>
                         {!email_is_valid && <Text style={styles.invalid_message}>Email non valide</Text>}
                     </View>
@@ -91,16 +92,17 @@ const Signin = ({ navigation }) => {
                         <TextInput value={password} onChangeText={(value) => setPassword(value)} style={styles.text_input} placeholder="Mot de passe..."
                             secureTextEntry={true}
                             autoCapitalize="none"
+                            placeholderTextColor="#ffffff"
                             autoCorrect={false}></TextInput>
                         {!password_is_valid && <Text style={styles.invalid_message}>Mot de passe incorrect</Text>}
                     </View>
+
                     <TouchableOpacity style={styles.signup_button} onPress={() => user_signin()}>
-                        <Text style={styles.text_button}>Connect</Text>
+                            <Text style={styles.text_button}>Connect</Text>
                     </TouchableOpacity>
                 </View>
+                </KeyboardAvoidingView>
             </SafeAreaView>
-        </KeyboardAvoidingView>
-
     );
 }
 
@@ -110,7 +112,8 @@ export default Signin;
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
+        width: width,
+        height: height,
         backgroundColor: 'white',
 
     },
@@ -125,11 +128,12 @@ const styles = StyleSheet.create({
         color: 'black',
     },
     input_container: {
-        width: width * 0.80,
+        width: '80%',
+        display: 'flex',
         height: 50,
-        margin: 10,
         borderRadius: 20,
         backgroundColor: '#FFA53F',
+        // elevation: 10,
     },
     invalid_message: {
         color: '#b91414',
@@ -140,8 +144,11 @@ const styles = StyleSheet.create({
     body: {
         alignItems: 'center',
         // backgroundColor: 'yellow',
-        height: '40%',
+        display: 'flex',
+        gap: 20,
+        height: '30%',
     },
+    
     text_input: {
         width: '100%',
         height: '100%',
@@ -154,22 +161,18 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         height: '70%',
         width: '100%',
-
     },
     signup_button: {
-        marginTop: 20,
         width: '40%',
-        height: height * 0.05,
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
         padding: 10,
         backgroundColor: '#FFA53F',
         borderRadius: 20,
-
     },
     text_button: {
-        fontSize: height * 0.02,
+        fontSize: 16,
         fontWeight: 'bold',
         color: 'white'
     }

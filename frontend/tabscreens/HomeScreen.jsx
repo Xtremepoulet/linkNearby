@@ -20,7 +20,7 @@ const CONNECTION_BACKEND = Constants.expoConfig?.extra?.CONNECTION_BACKEND;
 const { width, height } = Dimensions.get('window'); // Recupere la dimension de l'écran
 
 import { addLatitude, addLongitude, turnOnLocation, addNoReadMessages } from "../reducers/users";
-
+    
 
 
 export default function HomeScreen({ navigation }) {

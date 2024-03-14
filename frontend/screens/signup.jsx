@@ -50,19 +50,15 @@ const Signup = ({ navigation }) => {
     }
 
     return (
-
-        <KeyboardAvoidingView
-            behavior={Platform.OS === "ios" ? "padding" : "height"}
-            style={styles.container}
-            keyboardVerticalOffset={Platform.OS === "ios" ? height * 0 : height * 0.10}
-        >
             <SafeAreaView style={styles.container} edges={['top']} styleAndroid={{ flex: 1 }}>
+                        <KeyboardAvoidingView
+                    behavior={Platform.OS === "ios" ? "padding" : "height"}
+                    keyboardVerticalOffset={Platform.OS === "ios" ? height * 0 : height * 0.15}
+                >
                 {/* top section */}
                 <View style={styles.header}>
                     <Image source={logoLinkNearby} style={styles.logo} />
-                    <Text onPress={() => {
-                        navigation.navigate('ChooseNameScreen')
-                    }} style={styles.h1}>LINKNEARBY</Text>
+                    <Text style={styles.h1}>LINKNEARBY</Text>
                 </View>
                 {/* bottom section */}
                 <View style={styles.body}>
@@ -70,6 +66,7 @@ const Signup = ({ navigation }) => {
                         <TextInput value={email} onChangeText={(value) => setEmail(value.toLocaleLowerCase())} style={styles.text_input} placeholder="Email..."
                             keyboardType="email-address"
                             autoCapitalize="none"
+                            placeholderTextColor="#ffffff" 
                             autoCorrect={false}></TextInput>
                         {!email_is_valid && <Text style={styles.invalid_message}>Email non valide</Text>}
                     </View>
@@ -77,16 +74,18 @@ const Signup = ({ navigation }) => {
                         <TextInput value={password} onChangeText={(value) => setPassword(value)} style={styles.text_input} placeholder="Mot de passe..."
                             secureTextEntry={true}
                             autoCapitalize="none"
+                            placeholderTextColor="#ffffff"
                             autoCorrect={false}></TextInput>
                         {!password_is_valid && <Text style={styles.invalid_message}>Mot de passe incorrect</Text>}
                     </View>
-                    <TouchableOpacity style={styles.signup_button} onPress={() => user_signup()}>
-                        <Text style={styles.text_button}>Signup</Text>
-                    </TouchableOpacity>
+                   
+                        <TouchableOpacity style={styles.signup_button} onPress={() => user_signup()}>
+                                <Text style={styles.text_button}>Signup</Text>
+                        </TouchableOpacity>
+                    
                 </View>
+                </KeyboardAvoidingView>
             </SafeAreaView>
-        </KeyboardAvoidingView>
-
     );
 }
 
@@ -96,9 +95,9 @@ export default Signup;
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
+        width: width,
+        height: height,
         backgroundColor: 'white',
-
     },
     logo: {
         width: 100,
@@ -115,8 +114,8 @@ const styles = StyleSheet.create({
     },
     input_container: {
         width: '80%',
+        display: 'flex',
         height: 50,
-        margin: 10,
         borderRadius: 20,
         backgroundColor: '#FFA53F',
         // elevation: 10,
@@ -130,7 +129,9 @@ const styles = StyleSheet.create({
     body: {
         alignItems: 'center',
         // backgroundColor: 'yellow',
-        height: '40%',
+        display: 'flex',
+        gap: 20,
+        height: '30%',
     },
     text_input: {
         width: '100%',
@@ -142,15 +143,11 @@ const styles = StyleSheet.create({
     header: {
         justifyContent: 'center',
         alignItems: 'center',
-        // marginTop: '50%',
         height: '70%',
         width: '100%',
-        // backgroundColor: 'green',
     },
     signup_button: {
-        marginTop: 20,
         width: '40%',
-        height: 60,
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -160,7 +157,7 @@ const styles = StyleSheet.create({
 
     },
     text_button: {
-        fontSize: 20,
+        fontSize: 16,
         fontWeight: 'bold',
         color: 'white'
     }

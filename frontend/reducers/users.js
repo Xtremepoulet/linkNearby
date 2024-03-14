@@ -57,7 +57,7 @@ export const usersSlice = createSlice({
     },
 
     deleteReducerValue: (state, action) => {
-      state.value = { email: null, token: null, birthdate: null, bio: null, gender: null, passions: [], name: null, uri: null, location: false, longitude: null, latitude: null };
+      state.value = { email: null, token: null, birthdate: null, bio: null, gender: null, passions: [], name: null, uri: null, location: false, longitude: 0, latitude: 0 };
     },
     addEmail: (state, action) => {
       state.value.email = action.payload;

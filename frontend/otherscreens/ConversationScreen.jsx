@@ -158,7 +158,10 @@ export default function ConversationScreen({ navigation, route }) {
     });
 
 
-
+    const handleGoBack = () => {
+        dispatch(updateIsLoaded(!isLoaded));
+        navigation.navigate('Messages');
+      };
 
 
 
@@ -166,9 +169,7 @@ export default function ConversationScreen({ navigation, route }) {
         <SafeAreaView style={styles.container}>
             <View style={styles.header}>
                 <FontAwesome name="arrow-left" size={24} style={styles.arrowIcon} onPress={() => {
-                    dispatch(updateIsLoaded(!isLoaded))
-                    navigation.navigate('Messages')
-
+                    handleGoBack();
                 }} />
                 <Image style={styles.image} source={{ uri: uri }} />
                 <Text style={styles.headerText}>{name}</Text>
