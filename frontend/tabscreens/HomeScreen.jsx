@@ -1,5 +1,5 @@
-import { useCallback, useEffect, useState } from 'react';
-import { Pressable, StyleSheet, Text, View, Image, TextInput, KeyboardAvoidingView, Platform, Dimensions, StatusBar } from 'react-native';
+import { useCallback, useEffect, useState, useMemo, useRef } from 'react';
+import { Pressable, StyleSheet, Text, View, Image, TextInput, KeyboardAvoidingView, Platform, Dimensions, StatusBar, Button } from 'react-native';
 import { UseSelector, useDispatch, useSelector } from 'react-redux';
 import Constants from 'expo-constants';
 import logoLinkNearby from '../assets/linkNearbyBackNone.webp';
@@ -8,6 +8,10 @@ import Card from '../components/HomeCard';
 import { RefreshControl } from 'react-native';
 import * as Location from 'expo-location';
 import { getDistance } from 'geolib';
+
+
+import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 
 import { SafeAreaView } from 'react-native-safe-area-context'; // composant pour gérer les zones safe sur ios et android
@@ -27,7 +31,7 @@ export default function HomeScreen({ navigation }) {
 
     const [refreshing, setRefreshing] = useState(false);
     const [users, setUsers] = useState([])
-
+    const [sheetIndex, setSheetIndex] = useState(-1);
     const infoUser = useSelector((state) => state.users.value);
     // const token = useSelector((state) => state.users.value.token);
     const dispatch = useDispatch();
@@ -158,22 +162,33 @@ export default function HomeScreen({ navigation }) {
         }
     }
 
-
+    const sheetRef = useRef(null);
+    // variables
+    const snapPoints = useMemo(() => ["70%"], []);
+    // callbacks
+    const handleSheetChange = useCallback((index) => {
+        console.log("handleSheetChange", index);
+    }, []);
+    const handleSnapPress = useCallback((index) => {
+        sheetRef.current?.snapToIndex(index);
+    }, []);
+    const handleClosePress = useCallback(() => {
+        sheetRef.current?.close();
+    }, []);
 
     return (
-        <>
+        <GestureHandlerRootView style={styles.modalContainer}>
             <StatusBar barStyle='dark-content' />
             <KeyboardAvoidingView
                 behavior={Platform.OS === "ios" ? "padding" : "height"}
                 style={styles.container}
-                keyboardVerticalOffset={Platform.OS === "ios" ? height * 0 : height * -0.01}
+                keyboardVerticalOffset={Platform.OS === "ios" ? 0 : height * -0.01}
             >
-                <SafeAreaView style={styles.container} edges={['top']} styleAndroid={{ flex: 1 }}>
+                <SafeAreaView style={[styles.container, Platform.OS === "android" && { flex: 1 }]} edges={['top']}>
 
                     <View style={styles.header}>
                         <View style={styles.containerFiltre}>
-
-                            <Pressable onPress={() => console.log('aie!')}>
+                            <Pressable onPress={() => handleSnapPress(0)}>
                                 <FontAwesome name="binoculars" size={24} style={styles.arrowIcon} />
                             </Pressable>
                         </View>
@@ -182,6 +197,7 @@ export default function HomeScreen({ navigation }) {
                             <Text style={styles.headerText}>LINK NEARBY</Text>
                         </View>
                     </View>
+
                     <View style={styles.body}>
                         <View style={styles.containertextBody}>
                             <Text style={styles.textBody}>Linkers</Text>
@@ -200,20 +216,57 @@ export default function HomeScreen({ navigation }) {
                                 }
                             >
                                 {usersList}
-
                             </ScrollView>
                         </View>
-
                     </View>
-
-
 
                 </SafeAreaView>
 
-            </KeyboardAvoidingView >
-        </>
+            </KeyboardAvoidingView>
 
+            <BottomSheet
+                snapPoints={snapPoints}
+                onChange={handleSheetChange}
+                ref={sheetRef}
+                enablePanDownToClose={true}
+            >
+                <BottomSheetView style={styles.contentBottomContainer}>
+                    <View style={styles.BottomContainerTitle}>
+                        <Text style={styles.BottomTitle}>Linkers idéal</Text>
+                        <FontAwesome name="binoculars" size={24} style={styles.arrowIcon} />
+                    </View>
+                    <View style={styles.BottomContainerAllFiltrer}>
+                        <View style={styles.BottomContainerGenre}>
+                            <Text style={styles.BottomGenreTitle}>Je recherche...</Text>
+                            <View>
+                                <Text>Homme</Text>
+                                <Text>Femme</Text>
+                                <Text>Tout le monde</Text>
+                            </View>
+                        </View>
+                        <View style={styles.BottomContainerAge}>
+                            <Text>Age</Text>
+                            <Text>25 ans</Text>
+                            <View>
+                                <Text>BAR</Text>
+                            </View>
+                        </View>
+                        <View style={styles.BottomContainerDistance}>
+                            <Text>Distance</Text>
+                            <Text>120km</Text>
+                            <View>
+                                <Text>BAR</Text>
+                            </View>
+                        </View>
+                    </View>
+
+                    <Text>FILTRER</Text>
+                </BottomSheetView>
+            </BottomSheet>
+
+        </GestureHandlerRootView>
     );
+
 }
 
 const styles = StyleSheet.create({
@@ -285,6 +338,22 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         flexWrap: 'wrap',
         justifyContent: 'space-between',
+    },
+    modalContainer: {
+        flex: 1,
+    },
+    contentBottomContainer: {
+        flex: 1,
+        alignItems: 'center',
+        backgroundColor: 'gray',
+        borderRadius: 20,
+    },
+    BottomContainerTitle: {
+        width: width,
+        height: '10%',
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-around',
     },
 
 
