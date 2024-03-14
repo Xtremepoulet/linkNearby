@@ -118,7 +118,7 @@ io.on('connection', (socket) => {
             // Trouver le token de notification de l'appareil du destinataire
             const recipient = await User.findById(distant_user_id);
             if (recipient && recipient.tokenNotification) {
-                sendPushNotification(recipient.tokenNotification, message, userId);
+                sendPushNotification(recipient.tokenNotification, message, userId, recipient.name);
             }
 
             // Émettre le message à tous les clients sauf à l'expéditeur
@@ -128,11 +128,11 @@ io.on('connection', (socket) => {
 });
 
 // Fonction pour envoyer une notification push
-async function sendPushNotification(expoPushToken, message, senderId) {
+async function sendPushNotification(expoPushToken, message, senderId, name) {
     const messageBody = {
         to: expoPushToken,
         sound: 'default',
-        title: 'Nouveau message',
+        title: 'Nouveau message de ' + name,
         body: message,
         data: { senderId: senderId }, // Informations supplémentaires si nécessaire
     };
