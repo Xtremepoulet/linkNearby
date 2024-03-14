@@ -4,7 +4,6 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
-
 import HomeScreen from './tabscreens/HomeScreen';
 import MapScreen from './tabscreens/MapScreen';
 import ParametersScreen from './tabscreens/ParametersScreen';
@@ -79,7 +78,7 @@ export default function App() {
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
         <NavigationContainer>
-          <Stack.Navigator screenOptions={{ headerShown: false }}>
+          <Stack.Navigator screenOptions={{ headerShown: false }} >
             <Stack.Screen name="FirstLoginScreen" component={FirstLoginScreen} />
             <Stack.Screen name="signinScreen" component={Signin} />
             <Stack.Screen name="signupScreen" component={Signup} />

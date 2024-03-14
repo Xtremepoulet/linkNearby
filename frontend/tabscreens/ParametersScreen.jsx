@@ -130,11 +130,13 @@ export default function ParametersScreen({ navigation }) {
             body: JSON.stringify({ password })
         })
         const result = await fetching_data.json();
-
-        console.log(result)
+        
         if (result.result) {
-            // dispatch(deleteReducerValue());
-            navigation.navigate('signinScreen');
+            dispatch(deleteReducerValue());
+            navigation.reset({
+                index: 0,
+                routes: [{ name: 'FirstLoginScreen' }],
+            });                
         }
     }
 
@@ -248,18 +250,6 @@ export default function ParametersScreen({ navigation }) {
                                         <Text>edit</Text>
                                     </TouchableOpacity>
                                 </View> */}
-                        </View>
-                    </View>
-
-
-                    {/* gestion des passions de lutilisateur */}
-                    <View style={styles.container_champ}>
-                        <View style={styles.section_description}>
-                            <Text style={styles.section_title}>Passions</Text>
-                        </View>
-
-                        <View style={styles.passions_champ}>
-
                         </View>
                     </View>
 

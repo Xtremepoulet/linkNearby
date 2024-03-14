@@ -48,9 +48,6 @@ export default function ProfilScreen({ route, navigation }) {
             distant_user_email: userEmail,
         }
 
-
-
-
         const fetching_data = await fetch(`${CONNECTION_BACKEND}/channel/create_channel`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json', 'authorization': user_token },
@@ -59,9 +56,8 @@ export default function ProfilScreen({ route, navigation }) {
 
         const result = await fetching_data.json();
 
-        if (result.result) {
-            navigation.navigate('ConversationScreen', { userId: userId, name: name });//il faudra aussi mettre l'uri
-        }
+        navigation.navigate('ConversationScreen', { userId: userId, name: name });//il faudra aussi mettre l'uri
+        
 
 
     }
