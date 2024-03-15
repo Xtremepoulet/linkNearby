@@ -119,17 +119,21 @@ export default function HomeScreen({ navigation }) {
 
     // Recuperation les utilisateurs
     const getUsers = async () => {
-        const response = await fetch(`${CONNECTION_BACKEND}/user/users`, {
-            method: 'GET',
-            headers: { 'Content-Type': 'application/json', 'authorization': infoUser.token },
-        });
-        const result = await response.json();
-        if (result.result) {
-
-            const currentUserEmail = infoUser.email;
-            const filteredUsers = result.users.filter(user => user.email !== currentUserEmail);
-            setFilteredUsers(filteredUsers);
-            setUsers(filteredUsers)
+        try {
+            const response = await fetch(`${CONNECTION_BACKEND}/user/users`, {
+                method: 'GET',
+                headers: { 'Content-Type': 'application/json', 'authorization': infoUser.token },
+            });
+            const result = await response.json();
+            if (result.result) {
+                const currentUserEmail = infoUser.email;
+                const filteredUsers = result.users.filter(user => user.email !== currentUserEmail);
+                setFilteredUsers(filteredUsers);
+                setUsers(filteredUsers)
+            }
+        }
+        catch (error) {
+            alert('erreur de chargement')
         }
     };
 
