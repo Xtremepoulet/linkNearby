@@ -196,6 +196,7 @@ export default function HomeScreen({ navigation }) {
                 bio={user.bio}
                 distance={distanceDisplay}
                 userId={user.userId}
+                uri={user.uri}
             />
         );
     });

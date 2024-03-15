@@ -24,9 +24,8 @@ export default function ProfilScreen({ route, navigation }) {
     });
 
 
-
     const [modalVisible, setModalVisible] = useState(false);
-    const { userEmail, name, birthdate, location, bio, gender, passions, picture, isConnected, userId } = route.params;
+    const { userEmail, name, birthdate, location, bio, gender, passions, picture, isConnected, userId, uri } = route.params;
 
     const passionsUser = passions.map((passion) => {
         return (
@@ -48,7 +47,7 @@ export default function ProfilScreen({ route, navigation }) {
             headers: { 'Content-Type': 'application/json', 'authorization': user_token },
             body: JSON.stringify(data_to_send),
         });
-        navigation.navigate('ConversationScreen', { userId: userId, name: name });//il faudra aussi mettre l'uri
+        navigation.navigate('ConversationScreen', { userId: userId, name: name, uri: uri });//il faudra aussi mettre l'uri
     }
 
 

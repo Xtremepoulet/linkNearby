@@ -20,7 +20,6 @@ function Card(props) {
         })
     }
     const handleProfileClick = () => {
-
         navigation.navigate('ProfilScreen', {
             userEmail: props.email,
             name: props.name,
@@ -32,6 +31,7 @@ function Card(props) {
             picture: props.picture,
             isConnected: props.isConnected,
             userId: props.userId,
+            uri: props.uri,
         });
     }
 
