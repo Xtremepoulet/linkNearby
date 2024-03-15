@@ -36,6 +36,8 @@ export default function HomeScreen({ navigation }) {
     const [filteredUsers, setFilteredUsers] = useState([]);
 
 
+
+
     const socket = io(CONNECTION_BACKEND, {
         query: { token: infoUser.token },
         transports: ['websocket'],
@@ -122,8 +124,8 @@ export default function HomeScreen({ navigation }) {
             headers: { 'Content-Type': 'application/json', 'authorization': infoUser.token },
         });
         const result = await response.json();
-
         if (result.result) {
+
             const currentUserEmail = infoUser.email;
             const filteredUsers = result.users.filter(user => user.email !== currentUserEmail);
             setFilteredUsers(filteredUsers);

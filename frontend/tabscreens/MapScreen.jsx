@@ -29,7 +29,8 @@ export default function ProfileScreen({ navigation }) {
             headers: { 'Content-Type': 'application/json', 'authorization': token },
         });
         const result = await fetching_data.json();
-        setUsers_positions(result.users);
+        if (result.result) { setUsers_positions(result.users); }
+
     }
 
     function calcCrow(lat1, lon1, lat2, lon2) {
@@ -51,44 +52,45 @@ export default function ProfileScreen({ navigation }) {
     }
 
     const users_positions_to_display = users_positions.map((user, i) => {
-        let distance = calcCrow(user.location[0].latitude, user.location[0].longitude, latitude, longitude).toFixed(2);
+        if (user.location[0]) {
+            let distance = calcCrow(user.location[0].latitude, user.location[0].longitude, latitude, longitude).toFixed(2);
+            const birthdate = new Date(user.birthdate);
+            const today = new Date();
+            let age = today.getFullYear() - birthdate.getFullYear();
+            const m = today.getMonth() - birthdate.getMonth();
+            if (m < 0 || (m === 0 && today.getDate() < birthdate.getDate())) {
+                age--;
+            }
+            if (distance < 0.50) {
+                return (
+                    <Marker
+                        key={i}
+                        coordinate={{ latitude: user.location[0].latitude, longitude: user.location[0].longitude }}
+                    >
+                        <Callout>
+                            <Pressable onPress={() => console.log('outch!')}>
+                                <View style={styles.descriptionContainer}>
+                                    <Image source={{ uri: user.uri }} style={styles.imageUser} />
+                                    <View style={styles.descriptionUser}>
+                                        <Text style={styles.descriptionName}>{user.name}, {age}</Text>
+                                        <View style={styles.descriptionPassionsContainer}>
+                                            {user.passions.slice(0, 3).map((passion, i) => {
+                                                return (
+                                                    <View key={i} style={styles.passionBody}>
+                                                        <Text style={styles.passionText}>{passion.name} {passion.emoji}</Text>
+                                                    </View>
+                                                );
+                                            })}
 
-        const birthdate = new Date(user.birthdate);
-        const today = new Date();
-        let age = today.getFullYear() - birthdate.getFullYear();
-        const m = today.getMonth() - birthdate.getMonth();
-        if (m < 0 || (m === 0 && today.getDate() < birthdate.getDate())) {
-            age--;
-        }
-        if (distance < 0.50) {
-            return (
-                <Marker
-                    key={i}
-                    coordinate={{ latitude: user.location[0].latitude, longitude: user.location[0].longitude }}
-                >
-                    <Callout>
-                        <Pressable onPress={() => console.log('outch!')}>
-                            <View style={styles.descriptionContainer}>
-                                <Image source={{ uri: user.uri }} style={styles.imageUser} />
-                                <View style={styles.descriptionUser}>
-                                    <Text style={styles.descriptionName}>{user.name}, {age}</Text>
-                                    <View style={styles.descriptionPassionsContainer}>
-                                        {user.passions.slice(0, 3).map((passion, i) => {
-                                            return (
-                                                <View key={i} style={styles.passionBody}>
-                                                    <Text style={styles.passionText}>{passion.name} {passion.emoji}</Text>
-                                                </View>
-                                            );
-                                        })}
 
-
+                                        </View>
                                     </View>
                                 </View>
-                            </View>
-                        </Pressable>
-                    </Callout>
-                </Marker>
-            );
+                            </Pressable>
+                        </Callout>
+                    </Marker>
+                );
+            }
         }
     });
 

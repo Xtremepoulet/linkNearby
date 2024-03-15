@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-  value: { email: null, token: null, birthdate: null, bio: null, gender: null, passions: [], name: null, uri: null, location: false, longitude: null, latitude: null, noReadMessages: 0, isLoaded: false },
+  value: { email: null, token: null, birthdate: null, bio: null, gender: null, passions: [], name: null, uri: null, location: false, longitude: 0, latitude: 0, noReadMessages: 0, isLoaded: false },
 };
 
 export const usersSlice = createSlice({
@@ -37,7 +37,7 @@ export const usersSlice = createSlice({
     },
     defineBiography: (state, action) => {
       state.value.bio = action.payload;
-      console.log(state.value.bio)
+
     },
 
     defineUri: (state, action) => {
