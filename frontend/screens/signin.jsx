@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react"
+import React, { useState } from "react"
 import { StyleSheet, Text, TextInput, View, TouchableOpacity, KeyboardAvoidingView, Platform, Image, Dimensions } from 'react-native';
 import Constants from 'expo-constants';
-import { UseDispatch, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import { addToken, addEmail } from "../reducers/users";
 const CONNECTION_BACKEND = Constants.expoConfig?.extra?.CONNECTION_BACKEND;
 import logoLinkNearby from '../assets/linkNearbyBackNone.webp';
@@ -67,12 +67,12 @@ const Signin = ({ navigation }) => {
 
     return (
 
-            <SafeAreaView style={styles.container} edges={['top']} styleAndroid={{ flex: 1 }}>
-                        <KeyboardAvoidingView
-                            behavior={Platform.OS === "ios" ? "padding" : "height"}
-                            style={styles.container}
-                            keyboardVerticalOffset={Platform.OS === "ios" ? height * 0 : height * 0.18} // Ajusté pour iOS
-                        >
+        <SafeAreaView style={styles.container} edges={['top']} styleAndroid={{ flex: 1 }}>
+            <KeyboardAvoidingView
+                behavior={Platform.OS === "ios" ? "padding" : "height"}
+                style={styles.container}
+                keyboardVerticalOffset={Platform.OS === "ios" ? height * 0 : height * 0.18} // Ajusté pour iOS
+            >
                 {/* top section */}
                 <View style={styles.header}>
                     <Image source={logoLinkNearby} style={styles.logo} />
@@ -98,11 +98,11 @@ const Signin = ({ navigation }) => {
                     </View>
 
                     <TouchableOpacity style={styles.signup_button} onPress={() => user_signin()}>
-                            <Text style={styles.text_button}>Connect</Text>
+                        <Text style={styles.text_button}>Connect</Text>
                     </TouchableOpacity>
                 </View>
-                </KeyboardAvoidingView>
-            </SafeAreaView>
+            </KeyboardAvoidingView>
+        </SafeAreaView>
     );
 }
 
@@ -148,7 +148,7 @@ const styles = StyleSheet.create({
         gap: 20,
         height: '30%',
     },
-    
+
     text_input: {
         width: '100%',
         height: '100%',

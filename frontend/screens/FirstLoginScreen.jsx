@@ -1,4 +1,4 @@
-import { Pressable, StyleSheet, Text, View, Image, TextInput, KeyboardAvoidingView, Platform, SafeAreaView } from 'react-native';
+import { Pressable, StyleSheet, Text, View, Image, KeyboardAvoidingView, Platform, SafeAreaView } from 'react-native';
 import logoLinkNearby from '../assets/linkNearbyBackNone.webp';
 import { useDispatch, useSelector } from 'react-redux';
 import { deleteReducerValue } from '../reducers/users';
@@ -12,7 +12,6 @@ const CONNECTION_BACKEND = Constants.expoConfig?.extra?.CONNECTION_BACKEND;
 
 
 export default function FirstLoginScreen({ navigation }) {
-    const Container = Platform.OS === 'ios' ? SafeAreaView : View;
     const dispatch = useDispatch();
     const infoUser = useSelector((state) => state.users.value);
 

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Pressable, StyleSheet, Text, View, Image, TextInput, KeyboardAvoidingView, Platform, ScrollView, Dimensions } from 'react-native';
+import {  StyleSheet, Text, View,  TextInput,  ScrollView, Dimensions } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import MessageCard from '../components/MessageCard';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';

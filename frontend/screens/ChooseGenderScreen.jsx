@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
-import { Pressable, StyleSheet, Text, View, TextInput, KeyboardAvoidingView, Platform, Dimensions } from 'react-native';
+import { Pressable, StyleSheet, Text, View, KeyboardAvoidingView, Platform } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { useDispatch } from 'react-redux';
 import { defineGender } from '../reducers/users';
 
-const windowHeight = Dimensions.get('window').height;
 
 export default function ChooseGenderScreen({ navigation }) {
     const dispatch = useDispatch();
@@ -34,7 +33,7 @@ export default function ChooseGenderScreen({ navigation }) {
                 <Text style={styles.headerText}>Quel est ton sexe ?</Text>
             </View>
             <View style={styles.bottom}>
-                <View style={styles.gender_container}> 
+                <View style={styles.gender_container}>
                     <Pressable
                         style={[styles.genderButton, selectedGender === 'femme' ? styles.selectedButton : null]}
                         title="choose femme"
@@ -128,7 +127,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#f27d3d',
     },
 
-    next_container : {
+    next_container: {
         width: '100%',
         display: 'flex',
         alignItems: 'center',

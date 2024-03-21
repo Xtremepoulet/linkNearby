@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Pressable, StyleSheet, Text, View, TextInput, KeyboardAvoidingView, Platform, Dimensions, ScrollView } from 'react-native';
+import { Pressable, StyleSheet, Text, View, KeyboardAvoidingView, Platform, Dimensions, ScrollView } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';

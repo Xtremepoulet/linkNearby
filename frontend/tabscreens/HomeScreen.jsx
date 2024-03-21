@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState, useMemo, useRef } from 'react';
-import { Pressable, StyleSheet, Text, View, Image, TextInput, KeyboardAvoidingView, Platform, Dimensions, StatusBar, Button, TouchableOpacity } from 'react-native';
+import { Pressable, StyleSheet, Text, View, Image, KeyboardAvoidingView, Platform, Dimensions, StatusBar,  TouchableOpacity } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import Constants from 'expo-constants';
 import logoLinkNearby from '../assets/linkNearbyBackNone.webp';

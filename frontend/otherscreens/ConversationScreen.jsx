@@ -9,11 +9,9 @@ import { useRef } from 'react';
 import Constants from 'expo-constants';
 import moment from 'moment/moment.js';
 //socket import 
-import { socket } from '../sockets.js';
 import { io } from 'socket.io-client';
 import { updateIsLoaded } from '../reducers/users';
 
-const { width, height } = Dimensions.get('window');
 const CONNECTION_BACKEND = Constants.expoConfig?.extra?.CONNECTION_BACKEND;
 
 export default function ConversationScreen({ navigation, route }) {
@@ -161,7 +159,7 @@ export default function ConversationScreen({ navigation, route }) {
     const handleGoBack = () => {
         dispatch(updateIsLoaded(!isLoaded));
         navigation.navigate('Messages');
-      };
+    };
 
 
 

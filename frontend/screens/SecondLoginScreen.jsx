@@ -1,4 +1,4 @@
-import { Pressable, StyleSheet, Text, View, Image, TextInput, KeyboardAvoidingView, Platform } from 'react-native';
+import { Pressable, StyleSheet, Text, KeyboardAvoidingView, Platform } from 'react-native';
 
 export default function SecondLoginScreen({ navigation }) {
     return (
@@ -6,7 +6,7 @@ export default function SecondLoginScreen({ navigation }) {
             style={styles.container}
         >
             <Text>Second Login Screen</Text>
-        
+
             <Pressable
                 style={styles.button}
                 title="Go to ChooseNameScreen"
