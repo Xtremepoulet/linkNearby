@@ -1,7 +1,7 @@
-import { Pressable, StyleSheet, Text, View, Image, TextInput, KeyboardAvoidingView, Platform } from 'react-native';
+import { Pressable, StyleSheet, Text, View, KeyboardAvoidingView, Platform } from 'react-native';
 import * as Location from 'expo-location';
 import { useEffect } from 'react';
-import users, { addLatitude, addLongitude, turnOnLocation } from '../reducers/users';
+import { addLatitude, addLongitude, turnOnLocation } from '../reducers/users';
 import { useDispatch, useSelector } from 'react-redux';
 import Constants from 'expo-constants';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';

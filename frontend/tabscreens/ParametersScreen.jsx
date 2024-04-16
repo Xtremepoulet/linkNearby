@@ -1,4 +1,4 @@
-import { Pressable, StyleSheet, Text, View, Image, TextInput, KeyboardAvoidingView, Platform, Dimensions, TouchableOpacity, Modal, ScrollView, RefreshControl } from 'react-native';
+import { StyleSheet, Text, View, Image, TextInput, KeyboardAvoidingView, Platform, Dimensions, TouchableOpacity, Modal, ScrollView, } from 'react-native';
 import Constants from 'expo-constants';
 import logoLinkNearby from '../assets/linkNearbyBackNone.webp';
 import { useDispatch, useSelector } from 'react-redux';

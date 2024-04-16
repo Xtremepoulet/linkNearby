@@ -1,6 +1,4 @@
-import { Pressable, KeyboardAvoidingView, StyleSheet, Text, View, TextInput, Platform } from 'react-native';
-
-
+import { KeyboardAvoidingView, StyleSheet, Text, Platform } from 'react-native';
 
 
 

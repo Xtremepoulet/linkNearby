@@ -5,13 +5,11 @@ import { useDispatch } from 'react-redux';
 import { useState } from 'react';
 import { defineBirthdate } from '../reducers/users';
 
-const windowHeight = Dimensions.get('window').height;
 
 export default function BirthdateScreen({ navigation }) {
     const dispatch = useDispatch();
     const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
     const [birthdate, setBirthdate] = useState();
-    const [birthdatea, setBirthdatea] = useState('');
     const [isBirthdateSelected, setIsBirthdateSelected] = useState(false);
 
 

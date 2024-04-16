@@ -1,11 +1,9 @@
 import React, { useState } from 'react';
-import { Pressable, StyleSheet, Text, View, TextInput, KeyboardAvoidingView, Platform, Dimensions, Image } from 'react-native';
+import { Pressable, StyleSheet, Text, View, TextInput, KeyboardAvoidingView, Platform } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { useDispatch } from 'react-redux';
-import logoLinkNearby from '../assets/linkNearbyBackNone.webp';
 import { defineName } from '../reducers/users';
 
-const windowHeight = Dimensions.get('window').height;
 
 export default function ChooseNameScreen({ navigation }) {
     const dispatch = useDispatch();
