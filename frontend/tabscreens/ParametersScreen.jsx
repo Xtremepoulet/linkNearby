@@ -38,6 +38,7 @@ export default function ParametersScreen({ navigation }) {
         get_personnal_infos();
     }, [])
 
+
     const get_personnal_infos = async () => {
         const fetching_data = await fetch(`${CONNECTION_BACKEND}/user/user_personnal`, {
             method: 'GET',

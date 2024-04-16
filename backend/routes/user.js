@@ -65,7 +65,7 @@ router.post('/user_informations', authenticateToken, async (req, res, next) => {
 })
 
 
-//authenticate with token, understand why its not working
+
 router.post('/upload_user_photo', authenticateToken, async (req, res, next) => {
     if (req.user.userId) {
         const user = await User.findOne({ _id: req.user.userId });
@@ -110,7 +110,6 @@ router.get('/passions', async (req, res) => {
 
 router.get('/users', authenticateToken, async (req, res) => {
     try {
-        // Filtrer pour ne récupérer que les utilisateurs ayant un nom
         const users = await User.find({ uri: { $ne: null } })
             .select('email name birthdate location bio uri gender isConnected _id')
             .populate('userPassion', 'name emoji')
@@ -345,7 +344,7 @@ router.post('/setLocation', authenticateToken, async (req, res) => {
     }
 }
 );
-
+    
 router.post('/setTokenNotification', authenticateToken, async (req, res) => {
     if (!checkBody(req.body, ['token'])) {
         return res.status(400).json({ result: false, message: 'Missing informations' });

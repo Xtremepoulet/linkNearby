@@ -88,7 +88,7 @@ router.get('/load_user_channel', authenticateToken, async (req, res, next) => {
                     isRead: false,
                     user_id: { $ne: req.user.userId }
                 });
-
+                        
                 return { channel, lastMessage, unreadMessagesCount };
             }));
 
